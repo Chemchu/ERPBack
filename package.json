@@ -1,7 +1,7 @@
 {
   "name": "erpback",
   "version": "1.0.0",
-  "description": "Backend of ERPWeb application",
+  "description": "Backend of ERPSolution application",
   "main": "index.js",
   "scripts": {
     "test": "test"
@@ -18,7 +18,7 @@
     "javascript"
   ],
   "author": "Gustavo Lee",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Chemchu/ERPBack/issues"
   },
