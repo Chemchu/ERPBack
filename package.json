@@ -1,0 +1,26 @@
+{
+  "name": "erpback",
+  "version": "1.0.0",
+  "description": "Backend of ERPWeb application",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chemchu/ERPBack.git"
+  },
+  "keywords": [
+    "back",
+    "backend",
+    "express",
+    "mongodb",
+    "javascript"
+  ],
+  "author": "Gustavo Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chemchu/ERPBack/issues"
+  },
+  "homepage": "https://github.com/Chemchu/ERPBack#readme"
+}
