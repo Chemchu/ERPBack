@@ -1,5 +1,5 @@
 module.exports = mongoose => {
-    const Product = mongoose.model(
+    const Producto = mongoose.model(
       "producto",
       mongoose.Schema(
         {
@@ -17,5 +17,5 @@ module.exports = mongoose => {
       )
     );
   
-    return Tutorial;
+    return Producto;
   };
