@@ -9,6 +9,6 @@ var db = {
     mongoose: mongoose,
     url: process.env.MONGO_URI == "" ? "mongodb://localhost/" : process.env.MONGO_URI,
     dbName: process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
-    verduras: productoModel_1.default
+    initialCollection: productoModel_1.default
 };
 module.exports = db;
