@@ -9,8 +9,10 @@ mongoose.Promise = global.Promise;
 const db = 
 {
 	mongoose : mongoose,
-	url: process.env.MONGO_URI!,
-	productos : Producto
+	url: process.env.MONGO_URI == "" ? "mongodb://localhost/" : process.env.MONGO_URI,
+	dbName : process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
+	//productos : Producto,
+	verduras : Producto
 };
 
 module.exports = db;

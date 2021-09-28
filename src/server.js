@@ -4,7 +4,7 @@ const app = express();
 const db = require('./database.js');
 
 db.mongoose
-  .connect(db.url, {
+  .connect(db.url + db.dbName, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
