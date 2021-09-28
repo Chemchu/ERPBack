@@ -1,9 +1,8 @@
 import mongoose = require('mongoose');
 
-export const mongooseConnection = (): void => {
+export const mongooseConnect = (): void => {
 	mongoose.Promise = global.Promise
 
-    let mongoURI: string = process.env.MONGO_URI!
 	let options: mongoose.ConnectOptions = {
 		minPoolSize: 1,
 		maxPoolSize: 20,
@@ -12,7 +11,7 @@ export const mongooseConnection = (): void => {
 		loggerLevel: 'error'
 	}
 
-	mongoose.connect(mongoURI, options);
+	mongoose.connect(process.env.MONGO_URI!, options);
 
 	mongoose.connection.on('connecting', () => console.info('database connecting'))
 	mongoose.connection.on('connected', () => console.info('database connected'))
