@@ -1,7 +1,7 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
 const app = express();
-const db = require("./models");
+const db = require('./models/index');
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
@@ -29,7 +29,7 @@ app.use(express.urlencoded());
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Bienvenido al API Restful de ERPSolution" });
 });
 
 // set port, listen for requests
