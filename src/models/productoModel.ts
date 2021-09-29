@@ -1,4 +1,4 @@
-import {Schema, model, Document} from 'mongoose';
+import {Schema, model, Document, Model} from 'mongoose';
 
 export interface IProduct extends Document {
   nombre: string
@@ -12,17 +12,26 @@ export interface IProduct extends Document {
   tag: string
 }
 
-const ProductSchema = new Schema({
-  nombre: {type: String, required: true},
-  descripcion: {type: String, required: false},
-  familia: {type: String, required: false},
-  precioVenta: {type: Number, required: true},
-  precioCompra: {type: Number, required: false},
-  IVA: {type: Number, required: false},
-  EAN: {type: [String], required: false},
-  alta: {type: Boolean, required: true},
-  tag: {type: String, required: false},
-});
+export class Producto {
+  private modelo: Model<IProduct>;
 
-const Producto = model<IProduct>('Producto', ProductSchema);
-export default Producto;
+  constructor(){
+      const ProductSchema = new Schema({
+        nombre: {type: String, required: true},
+        descripcion: {type: String, required: false},
+        familia: {type: String, required: false},
+        precioVenta: {type: Number, required: true},
+        precioCompra: {type: Number, required: false},
+        IVA: {type: Number, required: false},
+        EAN: {type: [String], required: false},
+        alta: {type: Boolean, required: true},
+        tag: {type: String, required: false},
+      });
+
+      this.modelo = model<IProduct>('Producto', ProductSchema);
+  }
+
+  public get Model(): Model<IProduct> {
+      return this.modelo;
+  }
+}
