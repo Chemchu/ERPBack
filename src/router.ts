@@ -29,12 +29,12 @@ export class Router {
 
         // parse requests of content-type - application/x-www-form-urlencoded
         this.app.use(express.urlencoded({extended: true}));
-
-        // Enlaza las rutas de las posibles llamadas a api
+        
+        // Enruta los diferentes componentes del api
         this.setRoutes();
     }
   
-    setRoutes(){
+    private setRoutes(): void {
         this.app.get("/", (req:Request, res:Response) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });

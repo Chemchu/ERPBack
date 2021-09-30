@@ -5,6 +5,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 let apiRouter = new Router();
 const PORT = process.env.PORT || 5151;
-apiRouter.app.listen(PORT, () => {
+apiRouter.App.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
