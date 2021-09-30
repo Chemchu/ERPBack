@@ -1,15 +1,18 @@
-const db = require("../database");
+const db = require("../database.js");
 import { Request, Response } from 'express';
-const Productos = db.productos;
+import mongoose from 'mongoose';
+
+const conexion = mongoose.createConnection('mongodb://localhost:27017/erp_db');
 
 // Create and Save a new Producto
 exports.create = (req : Request, res : Response) => {
     res.send({message: "opsie"});
+
 };
 
 // Retrieve all Producto from the database.
 exports.findAll = (req : Request, res : Response) => {
-    res.send({message: "opsie"});
+    res.send({message: "opsie doopsie"});
 };
 
 // Find a single Producto with an id

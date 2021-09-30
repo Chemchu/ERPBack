@@ -6,20 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Router = void 0;
 const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
 const express_1 = __importDefault(require("express"));
+const database_js_1 = require("./database.js");
 const cors = require('cors');
-const db = require('./database.js');
 class Router {
     constructor() {
         this.app = (0, express_1.default)();
-        db.mongoose.connect(db.url + db.dbName, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        }).then(() => {
-            console.log("Connected to the database!");
-        }).catch((err) => {
-            console.log("Cannot connect to the database!", err);
-            process.exit();
-        });
+        this.database = database_js_1.Database.Instance();
         var corsOptions = {
             origin: "http://localhost:8081"
         };
