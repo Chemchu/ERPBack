@@ -25,6 +25,7 @@ const db : any = {
 export class Database {
     private static instance: Database;
 	private dbInformation: any;
+	public dbMongoose : mongoose.Mongoose;
 
     private constructor () {
 		this.dbInformation = db;
@@ -38,6 +39,8 @@ export class Database {
             console.log("Cannot connect to the database!", err);
             process.exit();
         });
+		
+		this.dbMongoose = db.mongo;
     }
 
     public static Instance(): Database  {

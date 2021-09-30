@@ -1,13 +1,26 @@
-const db = require("../database.js");
+import { Database } from '../database.js';
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
+import { IProduct } from '../models/productoModel.js';
 
-const conexion = mongoose.createConnection('mongodb://localhost:27017/erp_db');
+const db = Database.Instance().dbMongoose;
 
 // Create and Save a new Producto
 exports.create = (req : Request, res : Response) => {
     res.send({message: "opsie"});
 
+    const prod: IProduct = {
+        nombre: 'Coca-cola',
+        descripcion: 'bebida',
+        familia: 'bebida',
+        precioVenta: 0.55,
+        precioCompra: 0.40,
+        IVA: 0,
+        EAN: ['jeje'],
+        alta: false,
+        tag: 'res',
+    };
+
+    db.connection.collection('productos').insertOne(prod);
 };
 
 // Retrieve all Producto from the database.

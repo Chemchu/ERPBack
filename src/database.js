@@ -31,6 +31,7 @@ class Database {
             console.log("Cannot connect to the database!", err);
             process.exit();
         });
+        this.dbMongoose = db.mongo;
     }
     static Instance() {
         if (!this.instance) {

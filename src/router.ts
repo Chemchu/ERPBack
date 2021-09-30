@@ -1,5 +1,5 @@
 import productRoutes from './routes/productRoutes'
-import express, { Request, Response, ErrorRequestHandler } from 'express';
+import express, { Request, Response } from 'express';
 import { Database } from './database.js';
 const cors = require('cors');
 

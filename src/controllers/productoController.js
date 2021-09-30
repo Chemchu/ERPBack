@@ -1,13 +1,21 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const db = require("../database.js");
-const mongoose_1 = __importDefault(require("mongoose"));
-const conexion = mongoose_1.default.createConnection('mongodb://localhost:27017/erp_db');
+const database_js_1 = require("../database.js");
+const db = database_js_1.Database.Instance().dbMongoose;
 exports.create = (req, res) => {
     res.send({ message: "opsie" });
+    const prod = {
+        nombre: 'Coca-cola',
+        descripcion: 'bebida',
+        familia: 'bebida',
+        precioVenta: 0.55,
+        precioCompra: 0.40,
+        IVA: 0,
+        EAN: ['jeje'],
+        alta: false,
+        tag: 'res',
+    };
+    db.connection.collection('productos').insertOne(prod);
 };
 exports.findAll = (req, res) => {
     res.send({ message: "opsie doopsie" });
