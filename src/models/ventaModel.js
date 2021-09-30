@@ -1,27 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Venta = void 0;
-var mongoose_1 = require("mongoose");
-var clienteModel_1 = require("./clienteModel");
-var productoModel_1 = require("./productoModel");
-var Venta = (function () {
-    function Venta() {
-        var VentaSchema = new mongoose_1.Schema({
-            Productos: { type: [productoModel_1.Producto], required: true },
+const mongoose_1 = require("mongoose");
+class Venta {
+    constructor() {
+        const VentaSchema = new mongoose_1.Schema({
+            Productos: [{ type: mongoose_1.Types.ObjectId, ref: 'Producto' }],
             PrecioVentaTotal: { type: Number, required: true },
             Fecha: { type: Date, required: true },
-            Cliente: { type: clienteModel_1.Cliente },
+            Cliente: { type: mongoose_1.Types.ObjectId, ref: 'Cliente' },
         });
         this.modelo = (0, mongoose_1.model)('Venta', VentaSchema);
     }
-    Object.defineProperty(Venta.prototype, "Model", {
-        get: function () {
-            return this.modelo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Venta;
-}());
+    get Model() {
+        return this.modelo;
+    }
+}
 exports.Venta = Venta;
 exports.default = Venta;

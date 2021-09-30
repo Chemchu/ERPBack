@@ -1,17 +1,17 @@
 "use strict";
-var db = require("../routes");
-var Productos = db.productos;
-exports.create = function (req, res) {
+const db = require("../database");
+const Productos = db.productos;
+exports.create = (req, res) => {
 };
-exports.findAll = function (req, res) {
+exports.findAll = (req, res) => {
 };
-exports.findOne = function (req, res) {
+exports.findOne = (req, res) => {
 };
-exports.update = function (req, res) {
+exports.update = (req, res) => {
 };
-exports.delete = function (req, res) {
+exports.delete = (req, res) => {
 };
-exports.deleteAll = function (req, res) {
+exports.deleteAll = (req, res) => {
 };
-exports.findAllPublished = function (req, res) {
+exports.findAllPublished = (req, res) => {
 };

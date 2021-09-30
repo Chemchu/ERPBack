@@ -1,9 +1,9 @@
-import {Schema, model, Document, Model} from 'mongoose';
-import { IClient, Cliente } from './clienteModel';
-import { IProduct, Producto } from './productoModel';
+import {Schema, model, Document, Model, Types} from 'mongoose';
+import { IClient } from './clienteModel';
+import { IProduct } from './productoModel';
 
 export interface ISale extends Document {
-    Productos: IProduct[],
+    Productos: [IProduct],
     PrecioVentaTotal: number,
     Fecha: Date,
     Cliente?: IClient
@@ -14,10 +14,10 @@ export class Venta {
 
     constructor(){
         const VentaSchema = new Schema({
-            Productos: {type: [Producto], required: true},
+            Productos: [{type: Types.ObjectId, ref: 'Producto'}],
             PrecioVentaTotal: {type: Number, required: true},
             Fecha: {type: Date, required: true},
-            Cliente: {type: Cliente},
+            Cliente: {type: Types.ObjectId, ref: 'Cliente'},
         });
 
         this.modelo = model<ISale>('Venta', VentaSchema);

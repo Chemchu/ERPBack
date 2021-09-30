@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Producto = void 0;
-var mongoose_1 = require("mongoose");
-var Producto = (function () {
-    function Producto() {
-        var ProductSchema = new mongoose_1.Schema({
+const mongoose_1 = require("mongoose");
+class Producto {
+    constructor() {
+        const ProductSchema = new mongoose_1.Schema({
             nombre: { type: String, required: true },
             descripcion: { type: String, required: false },
             familia: { type: String, required: false },
@@ -17,13 +17,8 @@ var Producto = (function () {
         });
         this.modelo = (0, mongoose_1.model)('Producto', ProductSchema);
     }
-    Object.defineProperty(Producto.prototype, "Model", {
-        get: function () {
-            return this.modelo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Producto;
-}());
+    get Model() {
+        return this.modelo;
+    }
+}
 exports.Producto = Producto;
