@@ -13,26 +13,27 @@ exports.Database = void 0;
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const productoModel_1 = require("./models/productoModel");
-const clienteModel_1 = require("./models/clienteModel");
 const ventaModel_1 = require("./models/ventaModel");
+const clienteModel_1 = require("./models/clienteModel");
 mongoose.Promise = global.Promise;
 dotenv.config();
-let cliente = new clienteModel_1.Cliente();
+let producto = new productoModel_1.Producto();
 let venta = new ventaModel_1.Venta();
+let cliente = new clienteModel_1.Cliente();
 const dbInformation = {
     mongo: mongoose,
     url: process.env.MONGO_URI == "" ? "mongodb://localhost:27017/" : process.env.MONGO_URI,
     dbName: process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
-    productosCollection: productoModel_1.Producto,
+    productosCollection: producto.Model,
+    ventasCollection: venta.Model,
     clientesCollection: cliente.Model,
-    ventasCollection: venta.Model
 };
 class Database {
     constructor() {
         this.db = dbInformation.mongo;
-        this.ProductModel = new productoModel_1.Producto().Model;
-        this.ClientModel = new clienteModel_1.Cliente().Model;
-        this.VentasModel = new ventaModel_1.Venta().Model;
+        this.ProductModel = dbInformation.productosCollection;
+        this.VentasModel = dbInformation.ventasCollection;
+        this.ClientModel = dbInformation.clientesCollection;
         this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("Connected to the database!");
         }).catch((err) => {

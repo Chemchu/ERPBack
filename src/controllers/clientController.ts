@@ -7,16 +7,16 @@ const db = Database.Instance();
 const ClientController = {
     create: async (req : Request, res : Response) => {   
         // Añade el producto en la db
-        let prodAddedCorrectly = await db.AddProduct(req);
+        //let prodAddedCorrectly = await db.AddProduct(req);
 
-        if(prodAddedCorrectly){
-            res.status(200);
-            res.send({message: 'Producto añadido'});
-        }
-        else {
-            res.status(200);
-            res.send({message: 'Nombre o código de barras repetido'});
-        }
+        // if(prodAddedCorrectly){
+        //     res.status(200);
+        //     res.send({message: 'Producto añadido'});
+        // }
+        // else {
+        //     res.status(200);
+        //     res.send({message: 'Nombre o código de barras repetido'});
+        // }
     },
 
     findAll: async (req : Request, res : Response) => {

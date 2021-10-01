@@ -1,42 +1,44 @@
 import mongoose = require('mongoose');
 import dotenv = require('dotenv');
 import { Producto } from './models/productoModel';
-import { Cliente } from './models/clienteModel';
 import { Venta } from './models/ventaModel';
 import { ErrorRequestHandler } from 'express';
 import { IProduct } from './types/Producto';
 import { Request } from 'express';
 import { IClient } from './types/Cliente';
 import { ISale } from './types/Venta';
+import { Cliente } from './models/clienteModel';
 
 mongoose.Promise = global.Promise;
 		
 dotenv.config();
 
-let cliente = new Cliente();
+let producto = new Producto();
 let venta = new Venta();
+let cliente = new Cliente();
 
 const dbInformation : any = {
 	mongo : mongoose,
 	url: process.env.MONGO_URI == "" ? "mongodb://localhost:27017/" : process.env.MONGO_URI,
 	dbName : process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
-	productosCollection : Producto,
+	productosCollection : producto.Model,
+	ventasCollection : venta.Model,
 	clientesCollection : cliente.Model,
-	ventasCollection : venta.Model
 };
 
 export class Database {
     private static instance: Database;
 	private db: mongoose.Mongoose;
 	private ProductModel: mongoose.Model<IProduct>;
-	private ClientModel: mongoose.Model<IClient>;
 	private VentasModel: mongoose.Model<ISale>;
+	private ClientModel: mongoose.Model<IClient>;
 
     private constructor () {
 		this.db = dbInformation.mongo;
-		this.ProductModel = new Producto().Model;
-		this.ClientModel = new Cliente().Model;
-		this.VentasModel = new Venta().Model;
+
+		this.ProductModel = dbInformation.productosCollection;
+		this.VentasModel = dbInformation.ventasCollection;
+		this.ClientModel = dbInformation.clientesCollection;
 
 		this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("Connected to the database!");

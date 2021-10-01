@@ -13,15 +13,6 @@ const database_1 = require("../database");
 const db = database_1.Database.Instance();
 const ClientController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        let prodAddedCorrectly = yield db.AddProduct(req);
-        if (prodAddedCorrectly) {
-            res.status(200);
-            res.send({ message: 'Producto añadido' });
-        }
-        else {
-            res.status(200);
-            res.send({ message: 'Nombre o código de barras repetido' });
-        }
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send({ message: "opsie findAll" });
