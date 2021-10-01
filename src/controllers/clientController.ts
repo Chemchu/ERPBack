@@ -4,7 +4,7 @@ import { Database } from '../database';
 const db = Database.Instance();
 //const ProdModel: Model<IProduct> = db.MongooseInstance.connection.model('productos', ProductSchema);
 
-const ProductController = {
+const ClientController = {
     create: async (req : Request, res : Response) => {   
         // Añade el producto en la db
         let prodAddedCorrectly = await db.AddProduct(req);
@@ -44,4 +44,4 @@ const ProductController = {
     }
 }
 
-module.exports = ProductController;
+module.exports = ClientController;

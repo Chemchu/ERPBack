@@ -1,11 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const prodRouter = express.Router();
 const ProductController = require('../controllers/productoController');
 
-router.get('/', ProductController.findAll);
-router.get('/producto/:id', ProductController.findOne);
-router.put('/producto/add/:id', ProductController.create);
-router.put('/producto/update/:id', ProductController.update);
-router.delete('/producto/remove/:id', ProductController.delete);
+prodRouter.get('/', ProductController.findAll);
+prodRouter.get('/producto/:id', ProductController.findOne);
+prodRouter.put('/producto/add/:id', ProductController.create);
+prodRouter.put('/producto/update/:id', ProductController.update);
+prodRouter.delete('/producto/remove/:id', ProductController.delete);
 
-export default router;
+export default prodRouter;

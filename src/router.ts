@@ -1,4 +1,6 @@
-import router from './routes/productRoutes.js';
+import prodRouter from './routes/productRoutes.js';
+import clientRouter from './routes/clientRoutes.js';
+import saleRouter from './routes/saleRoutes.js';
 import express, { Request, Response } from 'express';
 import { Database } from './database.js';
 const cors = require('cors');
@@ -32,7 +34,9 @@ export class Router {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
 
-        this.app.use('/api/productos/', router);
+        this.app.use('/api/productos/', prodRouter);
+        this.app.use('/api/clientes/', clientRouter);
+        this.app.use('/api/ventas/', saleRouter);
     }
 
     public get App(): Express.Application  {
