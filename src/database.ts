@@ -60,7 +60,7 @@ export class Database {
 		var yaExisteEAN = await prodModel.exists({EAN: prodEAN});
 
 		if(yaExisteProducto || yaExisteEAN) return false;
-		else producto.save();
+		else { producto.save(); }  
 
 		return true;
 	}

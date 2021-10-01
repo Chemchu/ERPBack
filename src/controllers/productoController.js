@@ -16,13 +16,13 @@ const ProdModel = db.DB.connection.model('productos', productoModel_js_1.Product
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const producto = new ProdModel({
-            nombre: 'Lol',
+            nombre: 'Mango',
             descripcion: 'bebida',
             familia: 'bebida',
             precioVenta: 0.55,
             precioCompra: 0.40,
             IVA: 0,
-            EAN: 'Lol',
+            EAN: 'Mango',
             alta: false,
             tag: 'res',
             cantidad: 0

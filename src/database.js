@@ -59,8 +59,9 @@ class Database {
             var yaExisteEAN = yield prodModel.exists({ EAN: prodEAN });
             if (yaExisteProducto || yaExisteEAN)
                 return false;
-            else
+            else {
                 producto.save();
+            }
             return true;
         });
     }

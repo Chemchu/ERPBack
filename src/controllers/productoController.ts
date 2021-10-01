@@ -11,13 +11,13 @@ const ProductController = {
     create: async (req : Request, res : Response) => {        
         // Crea el producto
 		const producto: Document<IProduct> = new ProdModel({
-			nombre: 'Pitingo',
+			nombre: 'Mango',
 			descripcion: 'bebida',
 			familia: 'bebida',
 			precioVenta: 0.55,
 			precioCompra: 0.40,
 			IVA: 0,
-			EAN: 'Pete',
+			EAN: 'Mango',
 			alta: false,
 			tag: 'res',
             cantidad: 0
