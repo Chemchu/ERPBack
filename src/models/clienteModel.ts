@@ -1,11 +1,5 @@
-import {Schema, model, Document, Model} from 'mongoose';
-
-export interface IClient extends Document {
-    NIF: string,
-    Nombre: string,
-    Calle: string,
-    CP: string
-}
+import {Schema, model, Model} from 'mongoose';
+import { IClient } from '../types/Cliente';
 
 export class Cliente {
     private modelo: Model<IClient>;

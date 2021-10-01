@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = void 0;
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const productoModel_1 = __importDefault(require("./models/productoModel"));
+const productoModel_1 = require("./models/productoModel");
 const clienteModel_1 = require("./models/clienteModel");
 const ventaModel_1 = require("./models/ventaModel");
 mongoose.Promise = global.Promise;
@@ -26,13 +23,16 @@ const dbInformation = {
     mongo: mongoose,
     url: process.env.MONGO_URI == "" ? "mongodb://localhost:27017/" : process.env.MONGO_URI,
     dbName: process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
-    productosCollection: productoModel_1.default,
+    productosCollection: productoModel_1.Producto,
     clientesCollection: cliente.Model,
     ventasCollection: venta.Model
 };
 class Database {
     constructor() {
         this.db = dbInformation.mongo;
+        this.ProductModel = new productoModel_1.Producto().Model;
+        this.ClientModel = new clienteModel_1.Cliente().Model;
+        this.VentasModel = new ventaModel_1.Venta().Model;
         this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("Connected to the database!");
         }).catch((err) => {
@@ -46,13 +46,45 @@ class Database {
         }
         return this.instance;
     }
-    get DB() {
+    get MongooseInstance() {
         return this.db;
     }
-    AddProduct(producto, prodModel) {
+    AddProduct(prodReq) {
         return __awaiter(this, void 0, void 0, function* () {
-            const prodName = producto.get('nombre');
-            const prodEAN = producto.get('EAN');
+            const prodJSON = prodReq.body;
+            const productoToAdd = new this.ProductModel({
+                nombre: prodJSON.nombre,
+                descripcion: prodJSON.descripcion,
+                familia: prodJSON.familia,
+                precioVenta: prodJSON.precioVenta,
+                precioCompra: prodJSON.precioCompra,
+                IVA: prodJSON.IVA,
+                EAN: prodJSON.EAN,
+                alta: prodJSON.alta,
+                tags: prodJSON.tags,
+                cantidad: prodJSON.cantidad
+            });
+            const prodName = productoToAdd.get('nombre');
+            const prodEAN = productoToAdd.get('EAN');
+            console.log(`Nombre: ${prodName}`);
+            console.log(`EAN: ${prodEAN}`);
+            var yaExisteProducto = yield this.ProductModel.exists({ nombre: prodName });
+            var yaExisteEAN = yield this.ProductModel.exists({ EAN: prodEAN });
+            if (yaExisteProducto || yaExisteEAN) {
+                console.log(`Nombre o código de barras repetido`);
+                return false;
+            }
+            else {
+                productoToAdd.save();
+                console.log(`El producto ${prodName} ha sido añadido en la base de datos`);
+            }
+            return true;
+        });
+    }
+    RemoveProduct(productoToRemove, prodModel) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const prodName = productoToRemove.get('nombre');
+            const prodEAN = productoToRemove.get('EAN');
             console.log(`Nombre: ${prodName}`);
             console.log(`EAN: ${prodEAN}`);
             var yaExisteProducto = yield prodModel.exists({ nombre: prodName });
@@ -60,7 +92,23 @@ class Database {
             if (yaExisteProducto || yaExisteEAN)
                 return false;
             else {
-                producto.save();
+                productoToRemove.save();
+            }
+            return true;
+        });
+    }
+    UpdateProduct(productoToUpdate, prodModel) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const prodName = productoToUpdate.get('nombre');
+            const prodEAN = productoToUpdate.get('EAN');
+            console.log(`Nombre: ${prodName}`);
+            console.log(`EAN: ${prodEAN}`);
+            var yaExisteProducto = yield prodModel.exists({ nombre: prodName });
+            var yaExisteEAN = yield prodModel.exists({ EAN: prodEAN });
+            if (yaExisteProducto || yaExisteEAN)
+                return false;
+            else {
+                productoToUpdate.save();
             }
             return true;
         });

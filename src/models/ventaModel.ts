@@ -1,13 +1,5 @@
-import {Schema, model, Document, Model, Types} from 'mongoose';
-import { IClient } from './clienteModel';
-import { IProduct } from '../types/Producto';
-
-export interface ISale extends Document {
-    Productos: [IProduct],
-    PrecioVentaTotal: number,
-    Fecha: Date,
-    Cliente?: IClient
-}
+import {Schema, model, Model, Types} from 'mongoose';
+import { ISale } from '../types/Venta';
 
 export class Venta {
     private modelo: Model<ISale>;

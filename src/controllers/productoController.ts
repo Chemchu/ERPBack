@@ -1,38 +1,23 @@
 import { Request, Response } from 'express';
-import { ProductSchema } from '../models/productoModel.js';
 import { Database } from '../database';
 import { Document, Model } from 'mongoose';
 import { IProduct } from '../types/Producto.js';
 
 const db = Database.Instance();
-const ProdModel: Model<IProduct> = db.DB.connection.model('productos', ProductSchema);
+//const ProdModel: Model<IProduct> = db.MongooseInstance.connection.model('productos', ProductSchema);
 
 const ProductController = {
-    create: async (req : Request, res : Response) => {        
-        // Crea el producto
-		const producto: Document<IProduct> = new ProdModel({
-			nombre: 'Mango',
-			descripcion: 'bebida',
-			familia: 'bebida',
-			precioVenta: 0.55,
-			precioCompra: 0.40,
-			IVA: 0,
-			EAN: 'Mango',
-			alta: false,
-			tag: 'res',
-            cantidad: 0
-		});
-
+    create: async (req : Request, res : Response) => {   
         // Añade el producto en la db
-        let prodAddedCorrectly = await db.AddProduct(producto, ProdModel);
+        let prodAddedCorrectly = await db.AddProduct(req);
 
         if(prodAddedCorrectly){
             res.status(200);
-            res.send({message: `El producto ${producto.get('nombre')} ha sido añadido en la base de datos`, });
+            res.send({message: 'Producto añadido'});
         }
         else {
             res.status(200);
-            res.send({message: `Nombre o código de barras repetido`, });
+            res.send({message: 'Nombre o código de barras repetido'});
         }
     },
 

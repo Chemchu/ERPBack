@@ -9,5 +9,5 @@ export interface IProduct extends Document {
     IVA: number
     EAN: string[]
     alta: boolean
-    tag: string
+    tags: string[]
 }

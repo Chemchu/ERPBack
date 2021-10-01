@@ -9,32 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const productoModel_js_1 = require("../models/productoModel.js");
 const database_1 = require("../database");
 const db = database_1.Database.Instance();
-const ProdModel = db.DB.connection.model('productos', productoModel_js_1.ProductSchema);
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const producto = new ProdModel({
-            nombre: 'Mango',
-            descripcion: 'bebida',
-            familia: 'bebida',
-            precioVenta: 0.55,
-            precioCompra: 0.40,
-            IVA: 0,
-            EAN: 'Mango',
-            alta: false,
-            tag: 'res',
-            cantidad: 0
-        });
-        let prodAddedCorrectly = yield db.AddProduct(producto, ProdModel);
+        let prodAddedCorrectly = yield db.AddProduct(req);
         if (prodAddedCorrectly) {
             res.status(200);
-            res.send({ message: `El producto ${producto.get('nombre')} ha sido añadido en la base de datos`, });
+            res.send({ message: 'Producto añadido' });
         }
         else {
             res.status(200);
-            res.send({ message: `Nombre o código de barras repetido`, });
+            res.send({ message: 'Nombre o código de barras repetido' });
         }
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
