@@ -13,14 +13,14 @@ const database_1 = require("../database");
 const db = database_1.Database.Instance();
 const SaleController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        let prodAddedCorrectly = yield db.AddProduct(req);
-        if (prodAddedCorrectly) {
+        let saleAddedCorrectly = yield db.AddSale(req);
+        if (saleAddedCorrectly) {
             res.status(200);
-            res.send({ message: 'Producto añadido' });
+            res.send({ message: 'Venta añadido' });
         }
         else {
             res.status(200);
-            res.send({ message: 'Nombre o código de barras repetido' });
+            res.send({ message: 'La venta no se ha podido añadir a la base de datos' });
         }
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {

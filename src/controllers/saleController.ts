@@ -7,15 +7,15 @@ const db = Database.Instance();
 const SaleController = {
     create: async (req : Request, res : Response) => {   
         // Añade el producto en la db
-        let prodAddedCorrectly = await db.AddProduct(req);
+        let saleAddedCorrectly = await db.AddSale(req);
 
-        if(prodAddedCorrectly){
+        if(saleAddedCorrectly){
             res.status(200);
-            res.send({message: 'Producto añadido'});
+            res.send({message: 'Venta añadido'});
         }
         else {
             res.status(200);
-            res.send({message: 'Nombre o código de barras repetido'});
+            res.send({message: 'La venta no se ha podido añadir a la base de datos'});
         }
     },
 

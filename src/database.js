@@ -81,6 +81,28 @@ class Database {
             return true;
         });
     }
+    AddSale(saleReq) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const saleJSON = saleReq.body;
+            const saleToAdd = new this.VentasModel({
+                Productos: saleJSON.productos,
+                PrecioVentaTotal: saleJSON.precioVentaTotal,
+                Cliente: saleJSON.cliente,
+            });
+            const ventaID = saleToAdd.get('_id');
+            console.log(`ID: ${ventaID}`);
+            saleToAdd.save(function (err) {
+                if (err) {
+                    console.log(`La venta no se ha podido añadir`);
+                    return false;
+                }
+                else {
+                    console.log(`La venta ha sido añadido en la base de datos`);
+                }
+            });
+            return true;
+        });
+    }
     RemoveProduct(productoToRemove, prodModel) {
         return __awaiter(this, void 0, void 0, function* () {
             const prodName = productoToRemove.get('nombre');

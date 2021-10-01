@@ -99,6 +99,34 @@ export class Database {
 		return true;
 	}
 
+	public async AddSale(saleReq: Request): Promise<boolean> {
+		// El producto en JSON de la petición
+		const saleJSON = saleReq.body;
+
+		// Crea el producto
+		const saleToAdd: mongoose.Document<IProduct> = new this.VentasModel({
+			Productos: saleJSON.productos,
+            PrecioVentaTotal: saleJSON.precioVentaTotal,
+            Cliente: saleJSON.cliente,
+		});
+
+		const ventaID = saleToAdd.get('_id');
+
+		console.log(`ID: ${ventaID}`);
+
+		saleToAdd.save(function(err) {
+			if(err) {
+				console.log(`La venta no se ha podido añadir`); 
+				return false;
+			}
+			else {
+				console.log(`La venta ha sido añadido en la base de datos`); 
+			}
+		});
+		
+		return true;
+	}
+
 	// TODO
 	public async RemoveProduct(productoToRemove: mongoose.Document<IProduct>, prodModel : mongoose.Model<IProduct>): Promise<boolean> {
 		const prodName = productoToRemove.get('nombre');
