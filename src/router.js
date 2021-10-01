@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Router = void 0;
-const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
+const productRoutes_js_1 = __importDefault(require("./routes/productRoutes.js"));
 const express_1 = __importDefault(require("express"));
 const database_js_1 = require("./database.js");
 const cors = require('cors');
@@ -24,7 +24,7 @@ class Router {
         this.app.get("/", (req, res) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
-        this.app.use('/api/productos/', productRoutes_1.default);
+        this.app.use('/api/productos/', productRoutes_js_1.default);
     }
     get App() {
         return this.app;

@@ -1,4 +1,4 @@
-import productRoutes from './routes/productRoutes'
+import router from './routes/productRoutes.js';
 import express, { Request, Response } from 'express';
 import { Database } from './database.js';
 const cors = require('cors');
@@ -32,7 +32,7 @@ export class Router {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
 
-        this.app.use('/api/productos/', productRoutes);
+        this.app.use('/api/productos/', router);
     }
 
     public get App(): Express.Application  {

@@ -1,6 +1,6 @@
 import {Schema, model, Document, Model, Types} from 'mongoose';
 import { IClient } from './clienteModel';
-import { IProduct } from './productoModel';
+import { IProduct } from '../types/Producto';
 
 export interface ISale extends Document {
     Productos: [IProduct],

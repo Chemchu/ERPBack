@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require('express');
 const router = express.Router();
-const ProductosController = require('../controllers/productoController');
-router.get('/', ProductosController.findAll);
-router.get('/:id', ProductosController.findOne);
-router.put('/add/:id', ProductosController.create);
-router.put('/update/:id', ProductosController.update);
-router.delete('/remove/:id', ProductosController.delete);
+const ProductController = require('../controllers/productoController');
+router.get('/', ProductController.findAll);
+router.get('/producto/:id', ProductController.findOne);
+router.put('/producto/add/:id', ProductController.create);
+router.put('/producto/update/:id', ProductController.update);
+router.delete('/producto/remove/:id', ProductController.delete);
 exports.default = router;

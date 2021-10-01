@@ -1,37 +1,40 @@
-import {Schema, model, Model} from 'mongoose';
+import {Schema, model} from 'mongoose';
+import { IProduct } from '../types/Producto';
 
-export interface IProduct {
-  nombre: string
-  descripcion: string
-  familia: string
-  precioVenta: number
-  precioCompra: number
-  IVA: number
-  EAN: string[]
-  alta: boolean
-  tag: string
-}
+export const ProductSchema: Schema = new Schema({
+  nombre: { type: String, required: true },
+  descripcion: { type: String, required: false },
+  familia: { type: String, required: false },
+  precioVenta: { type: Number, required: true },
+  precioCompra: { type: Number, required: false },
+  IVA: { type: Number, required: false },
+  EAN: { type: String, required: false },
+  alta: { type: Boolean, required: true },
+  tag: { type: String, required: false },
+});
 
-export class Producto {
-  private modelo: Model<IProduct>;
+export default model<IProduct>('productos', ProductSchema);
 
-  constructor(){
-      const ProductSchema = new Schema({
-        nombre: {type: String, required: true},
-        descripcion: {type: String, required: false},
-        familia: {type: String, required: false},
-        precioVenta: {type: Number, required: true},
-        precioCompra: {type: Number, required: false},
-        IVA: {type: Number, required: false},
-        EAN: {type: [String], required: false},
-        alta: {type: Boolean, required: true},
-        tag: {type: String, required: false},
-      });
+// export class Producto {
+//   private modelo: Model<IProduct>;
 
-      this.modelo = model<IProduct>('Producto', ProductSchema);
-  }
+//   constructor(){
+//       const ProductSchema = new Schema({
+//         nombre: {type: String, required: true},
+//         descripcion: {type: String, required: false},
+//         familia: {type: String, required: false},
+//         precioVenta: {type: Number, required: true},
+//         precioCompra: {type: Number, required: false},
+//         IVA: {type: Number, required: false},
+//         EAN: {type: [String], required: false},
+//         alta: {type: Boolean, required: true},
+//         tag: {type: String, required: false},
+//       });
 
-  public get Model(): Model<IProduct> {
-      return this.modelo;
-  }
-}
+//       this.modelo = model<IProduct>('Producto', ProductSchema);
+//   }
+
+//   public get Model(): Model<IProduct> {
+//       return this.modelo;
+//   }
+// }

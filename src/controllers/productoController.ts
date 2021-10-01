@@ -1,54 +1,64 @@
-import { Database } from '../database.js';
 import { Request, Response } from 'express';
-import { IProduct } from '../models/productoModel.js';
+import { ProductSchema } from '../models/productoModel.js';
+import { Database } from '../database';
+import { Document, Model } from 'mongoose';
+import { IProduct } from '../types/Producto.js';
 
-const db = Database.Instance().dbMongoose;
+const db = Database.Instance();
+const ProdModel: Model<IProduct> = db.DB.connection.model('productos', ProductSchema);
 
-// Create and Save a new Producto
-exports.create = (req : Request, res : Response) => {
-    res.send({message: "opsie"});
+const ProductController = {
+    create: async (req : Request, res : Response) => {        
+        // Crea el producto
+		const producto: Document<IProduct> = new ProdModel({
+			nombre: 'Lol',
+			descripcion: 'bebida',
+			familia: 'bebida',
+			precioVenta: 0.55,
+			precioCompra: 0.40,
+			IVA: 0,
+			EAN: 'Lol',
+			alta: false,
+			tag: 'res',
+            cantidad: 0
+		});
 
-    const prod: IProduct = {
-        nombre: 'Coca-cola',
-        descripcion: 'bebida',
-        familia: 'bebida',
-        precioVenta: 0.55,
-        precioCompra: 0.40,
-        IVA: 0,
-        EAN: ['jeje'],
-        alta: false,
-        tag: 'res',
-    };
+        // Añade el producto en la db
+        let prodAddedCorrectly = await db.AddProduct(producto, ProdModel);
 
-    db.connection.collection('productos').insertOne(prod);
-};
+        if(prodAddedCorrectly){
+            res.status(200);
+            res.send({message: `El producto ${producto.get('nombre')} ha sido añadido en la base de datos`, });
+        }
+        else {
+            res.status(200);
+            res.send({message: `Nombre o código de barras repetido`, });
+        }
+    },
 
-// Retrieve all Producto from the database.
-exports.findAll = (req : Request, res : Response) => {
-    res.send({message: "opsie doopsie"});
-};
+    findAll: async (req : Request, res : Response) => {
+        res.send({message: "opsie findAll"});
+    },
 
-// Find a single Producto with an id
-exports.findOne = (req : Request, res : Response) => {
-    res.send({message: "opsie"});
-};
+    findOne: async (req : Request, res : Response) => {
+        res.send({message: "opsie findOne"});
+    },
 
-// Update a Producto by the id in the request
-exports.update = (req : Request, res : Response) => {
-    res.send({message: "opsie"});
-};
+    update: async (req : Request, res : Response) => {
+        res.send({message: "opsie update"});
+    },
 
-// Delete a Producto with the specified id in the request
-exports.delete = (req : Request, res : Response) => {
-    res.send({message: "opsie"});
-};
+    delete: async(req : Request, res : Response) => {
+        res.send({message: "opsie delete"});
+    },
 
-// Delete all Producto from the database.
-exports.deleteAll = (req : Request, res : Response) => {
-    res.send({message: "opsie"});
-};
+    deleteAll: async (req : Request, res : Response) => {
+        res.send({message: "opsie deleteAll"});
+    },
 
-// Find all published Producto
-exports.findAllPublished = (req : Request, res : Response) => {
-    res.send({message: "opsie"});
-};
+    findAllPublished: async (req : Request, res : Response) => {
+        res.send({message: "opsie"});
+    }
+}
+
+module.exports = ProductController;
