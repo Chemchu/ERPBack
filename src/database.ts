@@ -135,9 +135,11 @@ export class Database {
 	}
 
 	public async GetProduct(prodAttr : string): Promise<Array<IProduct> | null> {		
+		const regexedQuery = {$regex :  "/^" + prodAttr + "/i"};
+
 		return await this.ProductModel.find(
 			{ 
-				$or:[ {'EAN': prodAttr }, {'nombre': prodAttr }, {'familia': prodAttr} ]
+				$or:[{'nombre': regexedQuery }, {'EAN': regexedQuery }, {'familia': regexedQuery}]
 			}
 		).exec();
 	}

@@ -112,8 +112,9 @@ class Database {
     }
     GetProduct(prodAttr) {
         return __awaiter(this, void 0, void 0, function* () {
+            const regexedQuery = { $regex: "/^" + prodAttr + "/i" };
             return yield this.ProductModel.find({
-                $or: [{ 'EAN': prodAttr }, { 'nombre': prodAttr }, { 'familia': prodAttr }]
+                $or: [{ 'nombre': regexedQuery }, { 'EAN': regexedQuery }, { 'familia': regexedQuery }]
             }).exec();
         });
     }
