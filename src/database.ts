@@ -2,9 +2,8 @@ import mongoose = require('mongoose');
 import dotenv = require('dotenv');
 import { Producto } from './models/productoModel';
 import { Venta } from './models/ventaModel';
-import { ErrorRequestHandler } from 'express';
 import { IProduct } from './types/Producto';
-import { Request } from 'express';
+import { Request, Response, ErrorRequestHandler } from 'express';
 import { IClient } from './types/Cliente';
 import { ISale } from './types/Venta';
 import { Cliente } from './models/clienteModel';
@@ -127,6 +126,20 @@ export class Database {
 		});
 		
 		return true;
+	}
+
+	public async GetAllProducts(): Promise<Array<IProduct> | null> {
+		const filter = {};
+		
+		return await this.ProductModel.find(filter);
+	}
+
+	public async GetProduct(prodAttr : string): Promise<Array<IProduct> | null> {		
+		return await this.ProductModel.find(
+			{ 
+				$or:[ {'EAN': prodAttr }, {'nombre': prodAttr }, {'familia': prodAttr} ]
+			}
+		).exec();
 	}
 
 	// TODO

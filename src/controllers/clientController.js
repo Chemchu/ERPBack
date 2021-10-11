@@ -15,7 +15,7 @@ const ClientController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie findAll" });
+        res.send({ message: "opsie findAll cliente" });
     }),
     findOne: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send({ message: "opsie findOne" });

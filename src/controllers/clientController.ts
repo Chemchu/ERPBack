@@ -20,7 +20,7 @@ const ClientController = {
     },
 
     findAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie findAll"});
+        res.send({message: "opsie findAll cliente"});
     },
 
     findOne: async (req : Request, res : Response) => {

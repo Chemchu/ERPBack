@@ -104,6 +104,19 @@ class Database {
             return true;
         });
     }
+    GetAllProducts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const filter = {};
+            return yield this.ProductModel.find(filter);
+        });
+    }
+    GetProduct(prodAttr) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.ProductModel.find({
+                $or: [{ 'EAN': prodAttr }, { 'nombre': prodAttr }, { 'familia': prodAttr }]
+            }).exec();
+        });
+    }
     RemoveProduct(productoToRemove, prodModel) {
         return __awaiter(this, void 0, void 0, function* () {
             const prodName = productoToRemove.get('nombre');

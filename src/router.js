@@ -15,7 +15,7 @@ class Router {
         this.app = (0, express_1.default)();
         this.database = database_js_1.Database.Instance();
         var corsOptions = {
-            origin: "http://localhost:8081"
+            origin: "*"
         };
         this.app.use(cors(corsOptions));
         this.app.use(express_1.default.json());

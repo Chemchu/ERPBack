@@ -20,11 +20,15 @@ const ProductController = {
     },
 
     findAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie findAll"});
+        let allProducts = await db.GetAllProducts();
+
+        res.send({message: allProducts});
     },
 
-    findOne: async (req : Request, res : Response) => {
-        res.send({message: "opsie findOne"});
+    find: async (req : Request, res : Response) => {
+        let product = await db.GetProduct(req.params.id);
+
+        res.send({message: product});
     },
 
     update: async (req : Request, res : Response) => {

@@ -14,7 +14,7 @@ export class Router {
         this.database = Database.Instance();
 
         var corsOptions = {
-            origin: "http://localhost:8081"
+            origin: "*"
         };
 
         this.app.use(cors(corsOptions));

@@ -24,10 +24,12 @@ const ProductController = {
         }
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie findAll" });
+        let allProducts = yield db.GetAllProducts();
+        res.send({ message: allProducts });
     }),
-    findOne: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie findOne" });
+    find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        let product = yield db.GetProduct(req.params.id);
+        res.send({ message: product });
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send({ message: "opsie update" });
