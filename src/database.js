@@ -50,7 +50,7 @@ class Database {
     get MongooseInstance() {
         return this.db;
     }
-    AddProduct(prodReq) {
+    AddProduct(prodReq, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const prodJSON = prodReq.body;
             const productoToAdd = new this.ProductModel({
@@ -67,19 +67,61 @@ class Database {
             });
             const prodName = productoToAdd.get('nombre');
             const prodEAN = productoToAdd.get('EAN');
-            console.log(`Nombre: ${prodName}`);
-            console.log(`EAN: ${prodEAN}`);
-            var yaExisteProducto = yield this.ProductModel.exists({ nombre: prodName });
-            var yaExisteEAN = yield this.ProductModel.exists({ EAN: prodEAN });
-            if (yaExisteProducto || yaExisteEAN) {
-                console.log(`Nombre o código de barras repetido`);
-                return false;
+            try {
+                const yaExisteProducto = yield this.ProductModel.exists({ nombre: prodName });
+                if (yaExisteProducto)
+                    return res.status(200).json({ message: `Error al añadir ${prodJSON.nombre} en la BBDD: nombre en uso`, success: false });
+                const yaExisteEAN = yield this.ProductModel.exists({ EAN: prodEAN });
+                if (yaExisteEAN)
+                    return res.status(200).json({ message: `Error al añadir ${prodJSON.nombre} en la BBDD: EAN en uso`, success: false });
+                yield productoToAdd.save();
+                return res.status(200).json({ message: `El producto ${prodName} ha sido añadido en la base de datos`, success: true });
             }
-            else {
-                productoToAdd.save();
-                console.log(`El producto ${prodName} ha sido añadido en la base de datos`);
+            catch (err) {
+                return res.status(400).json({ message: `Error al añadir ${prodJSON.nombre} a la BBDD: ${err}`, success: false });
             }
-            return true;
+        });
+    }
+    GetAllProducts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const filter = {};
+            return yield this.ProductModel.find(filter);
+        });
+    }
+    GetProduct(prodAttr) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const regexedQuery = { $regex: "/^" + prodAttr + "/i" };
+            return yield this.ProductModel.find({
+                $or: [{ 'nombre': regexedQuery }, { 'EAN': regexedQuery }, { 'familia': regexedQuery }]
+            }).exec();
+        });
+    }
+    RemoveProduct(productName, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const productDeleted = yield this.ProductModel.deleteOne({ nombre: productName });
+                if (productDeleted.deletedCount > 0) {
+                    return res.status(200).json({ message: `El producto ${productName} ha sido borrado correctamente de la base de datos`, success: true });
+                }
+                return res.status(200).json({ message: `Error al borrar ${productName} de la BBDD: el producto no existe`, success: false });
+            }
+            catch (err) {
+                return res.status(400).json({ message: `Error al borrar ${productName} de la BBDD: ${err}`, success: false });
+            }
+        });
+    }
+    UpdateProduct(productoToUpdate, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const productUpdated = yield this.ProductModel.updateOne({ nombre: productoToUpdate });
+                if (productUpdated.modifiedCount > 0) {
+                    return res.status(200).json({ message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true });
+                }
+                return res.status(200).json({ message: `Error al actualizar ${productoToUpdate} en la BBDD: el producto no existe`, success: false });
+            }
+            catch (err) {
+                return res.status(400).json({ message: `Error al actualizar ${productoToUpdate} en la BBDD: ${err}`, success: false });
+            }
         });
     }
     AddSale(saleReq) {
@@ -101,52 +143,6 @@ class Database {
                     console.log(`La venta ha sido añadido en la base de datos`);
                 }
             });
-            return true;
-        });
-    }
-    GetAllProducts() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const filter = {};
-            return yield this.ProductModel.find(filter);
-        });
-    }
-    GetProduct(prodAttr) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const regexedQuery = { $regex: "/^" + prodAttr + "/i" };
-            return yield this.ProductModel.find({
-                $or: [{ 'nombre': regexedQuery }, { 'EAN': regexedQuery }, { 'familia': regexedQuery }]
-            }).exec();
-        });
-    }
-    RemoveProduct(productoToRemove, prodModel) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const prodName = productoToRemove.get('nombre');
-            const prodEAN = productoToRemove.get('EAN');
-            console.log(`Nombre: ${prodName}`);
-            console.log(`EAN: ${prodEAN}`);
-            var yaExisteProducto = yield prodModel.exists({ nombre: prodName });
-            var yaExisteEAN = yield prodModel.exists({ EAN: prodEAN });
-            if (yaExisteProducto || yaExisteEAN)
-                return false;
-            else {
-                productoToRemove.save();
-            }
-            return true;
-        });
-    }
-    UpdateProduct(productoToUpdate, prodModel) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const prodName = productoToUpdate.get('nombre');
-            const prodEAN = productoToUpdate.get('EAN');
-            console.log(`Nombre: ${prodName}`);
-            console.log(`EAN: ${prodEAN}`);
-            var yaExisteProducto = yield prodModel.exists({ nombre: prodName });
-            var yaExisteEAN = yield prodModel.exists({ EAN: prodEAN });
-            if (yaExisteProducto || yaExisteEAN)
-                return false;
-            else {
-                productoToUpdate.save();
-            }
             return true;
         });
     }

@@ -59,7 +59,8 @@ export class Database {
 		return this.db;
 	}
 
-	public async AddProduct(prodReq: Request): Promise<boolean> {
+	public async AddProduct(prodReq: Request, res: Response): Promise<Response> {
+		
 		// El producto en JSON de la petición
 		const prodJSON = prodReq.body;
 
@@ -74,32 +75,71 @@ export class Database {
 			EAN: prodJSON.EAN,
 			alta: prodJSON.alta,
 			tags: prodJSON.tags,
-            cantidad: prodJSON.cantidad
+			cantidad: prodJSON.cantidad
 		});
 
 		const prodName = productoToAdd.get('nombre');
 		const prodEAN = productoToAdd.get('EAN');
 
-		console.log(`Nombre: ${prodName}`);
-		console.log(`EAN: ${prodEAN}`);
-
-		var yaExisteProducto = await this.ProductModel.exists({nombre: prodName});
-		var yaExisteEAN = await this.ProductModel.exists({EAN: prodEAN});
-
-		if(yaExisteProducto || yaExisteEAN) 
-		{
-			console.log(`Nombre o código de barras repetido`);
-			return false;
+		try{			
+			const yaExisteProducto = await this.ProductModel.exists({nombre: prodName});
+			if(yaExisteProducto) return res.status(200).json({message: `Error al añadir ${prodJSON.nombre} en la BBDD: nombre en uso`, success: false});
+			
+			const yaExisteEAN = await this.ProductModel.exists({EAN: prodEAN});
+			if(yaExisteEAN) return res.status(200).json({message: `Error al añadir ${prodJSON.nombre} en la BBDD: EAN en uso`, success: false});
+		
+			await productoToAdd.save();
+			return res.status(200).json({message: `El producto ${prodName} ha sido añadido en la base de datos`, success: true});
 		}
-		else 
-		{ 
-			productoToAdd.save();
-			console.log(`El producto ${prodName} ha sido añadido en la base de datos`);
-		}  
-
-		return true;
+		catch(err) {
+			return res.status(400).json({message: `Error al añadir ${prodJSON.nombre} a la BBDD: ${err}`, success: false});
+		}
 	}
 
+	public async GetAllProducts(): Promise<Array<IProduct> | null> {
+		const filter = {};
+		
+		return await this.ProductModel.find(filter);
+	}
+
+	public async GetProduct(prodAttr : string): Promise<Array<IProduct> | null> {		
+		const regexedQuery = {$regex :  "/^" + prodAttr + "/i"};
+
+		return await this.ProductModel.find(
+			{ 
+				$or:[{'nombre': regexedQuery }, {'EAN': regexedQuery }, {'familia': regexedQuery}]
+			}
+		).exec();
+	}
+
+	// TODO
+	public async RemoveProduct(productName: string, res: Response): Promise<Response> {
+		try {
+			const productDeleted = await this.ProductModel.deleteOne({nombre: productName});
+			if(productDeleted.deletedCount > 0) {
+				return res.status(200).json({message: `El producto ${productName} ha sido borrado correctamente de la base de datos`, success: true});
+			}
+			return res.status(200).json({message: `Error al borrar ${productName} de la BBDD: el producto no existe`, success: false});
+		}
+		catch(err) {
+			return res.status(400).json({message: `Error al borrar ${productName} de la BBDD: ${err}`, success: false});
+		}
+	}
+
+	// TODO
+	public async UpdateProduct(productoToUpdate: string, res: Response): Promise<Response> {
+		try {
+			const productUpdated = await this.ProductModel.updateOne({nombre: productoToUpdate});
+			if(productUpdated.modifiedCount > 0) {
+				return res.status(200).json({message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true});
+			}
+			return res.status(200).json({message: `Error al actualizar ${productoToUpdate} en la BBDD: el producto no existe`, success: false});
+		}
+		catch(err) {
+			return res.status(400).json({message: `Error al actualizar ${productoToUpdate} en la BBDD: ${err}`, success: false});
+		}
+	}
+	
 	public async AddSale(saleReq: Request): Promise<boolean> {
 		// El producto en JSON de la petición
 		const saleJSON = saleReq.body;
@@ -125,56 +165,6 @@ export class Database {
 			}
 		});
 		
-		return true;
-	}
-
-	public async GetAllProducts(): Promise<Array<IProduct> | null> {
-		const filter = {};
-		
-		return await this.ProductModel.find(filter);
-	}
-
-	public async GetProduct(prodAttr : string): Promise<Array<IProduct> | null> {		
-		const regexedQuery = {$regex :  "/^" + prodAttr + "/i"};
-
-		return await this.ProductModel.find(
-			{ 
-				$or:[{'nombre': regexedQuery }, {'EAN': regexedQuery }, {'familia': regexedQuery}]
-			}
-		).exec();
-	}
-
-	// TODO
-	public async RemoveProduct(productoToRemove: mongoose.Document<IProduct>, prodModel : mongoose.Model<IProduct>): Promise<boolean> {
-		const prodName = productoToRemove.get('nombre');
-		const prodEAN = productoToRemove.get('EAN');
-
-		console.log(`Nombre: ${prodName}`);
-		console.log(`EAN: ${prodEAN}`);
-
-		var yaExisteProducto = await prodModel.exists({nombre: prodName});
-		var yaExisteEAN = await prodModel.exists({EAN: prodEAN});
-
-		if(yaExisteProducto || yaExisteEAN) return false;
-		else { productoToRemove.save(); }  
-
-		return true;
-	}
-
-	// TODO
-	public async UpdateProduct(productoToUpdate: mongoose.Document<IProduct>, prodModel : mongoose.Model<IProduct>): Promise<boolean> {
-		const prodName = productoToUpdate.get('nombre');
-		const prodEAN = productoToUpdate.get('EAN');
-
-		console.log(`Nombre: ${prodName}`);
-		console.log(`EAN: ${prodEAN}`);
-
-		var yaExisteProducto = await prodModel.exists({nombre: prodName});
-		var yaExisteEAN = await prodModel.exists({EAN: prodEAN});
-
-		if(yaExisteProducto || yaExisteEAN) return false;
-		else { productoToUpdate.save(); }  
-
 		return true;
 	}
 }

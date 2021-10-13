@@ -13,15 +13,8 @@ const database_1 = require("../database");
 const db = database_1.Database.Instance();
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        let prodAddedCorrectly = yield db.AddProduct(req);
-        if (prodAddedCorrectly) {
-            res.status(200);
-            res.send({ message: 'Producto añadido' });
-        }
-        else {
-            res.status(200);
-            res.send({ message: 'Nombre o código de barras repetido' });
-        }
+        res = yield db.AddProduct(req, res);
+        res.send();
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let allProducts = yield db.GetAllProducts();
@@ -35,7 +28,8 @@ const ProductController = {
         res.send({ message: "opsie update" });
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie delete" });
+        res = yield db.RemoveProduct(req.params.id, res);
+        res.send();
     }),
     deleteAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send({ message: "opsie deleteAll" });

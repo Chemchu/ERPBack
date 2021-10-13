@@ -7,21 +7,12 @@ const db = Database.Instance();
 const ProductController = {
     create: async (req : Request, res : Response) => {   
         // Añade el producto en la db
-        let prodAddedCorrectly = await db.AddProduct(req);
-
-        if(prodAddedCorrectly){
-            res.status(200);
-            res.send({message: 'Producto añadido'});
-        }
-        else {
-            res.status(200);
-            res.send({message: 'Nombre o código de barras repetido'});
-        }
+        res = await db.AddProduct(req, res);
+        res.send();
     },
 
     findAll: async (req : Request, res : Response) => {
         let allProducts = await db.GetAllProducts();
-
         res.send({message: allProducts});
     },
 
@@ -36,7 +27,8 @@ const ProductController = {
     },
 
     delete: async(req : Request, res : Response) => {
-        res.send({message: "opsie delete"});
+        res = await db.RemoveProduct(req.params.id, res);
+        res.send();
     },
 
     deleteAll: async (req : Request, res : Response) => {
