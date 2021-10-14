@@ -1,17 +1,17 @@
 import mongoose from 'mongoose';
-import { IClient } from '../types/Cliente';
+import { IEmployee } from '../types/Empleado';
 import IDBController from './IDBController';
 import { Request, Response } from 'express';
 
-export class ClientDBController implements IDBController {
+export class EmployeeDBController implements IDBController {
 
-    public CollectionModel: mongoose.Model<IClient>;
+    public CollectionModel: mongoose.Model<IEmployee>;
 
-    constructor(modelo: mongoose.Model<IClient>) {
+    constructor(modelo: mongoose.Model<IEmployee>) {
         this.CollectionModel = modelo
     }
 
-	// TODO
+    // TODO
     public async Add(req: Request, res: Response): Promise<Response> {
 		return res;
 	}

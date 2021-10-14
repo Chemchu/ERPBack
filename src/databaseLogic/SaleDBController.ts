@@ -11,14 +11,17 @@ export class SaleDBController implements IDBController {
         this.CollectionModel = modelo
     }
 
+	// TODO
     public async Add(req: Request, res: Response): Promise<Response> {
 		return res;
 	}
 
+	// TODO
 	public async GetAll(res: Response): Promise<Response> {
 		return res;
 	}
 
+	// TODO
 	public async Get(req: Request, res: Response): Promise<Response> {		
 		return res;
 	}

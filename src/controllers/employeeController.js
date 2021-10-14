@@ -11,26 +11,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../databaseLogic/database");
 const db = database_1.Database.Instance();
-const ClientController = {
+const EmployeeController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Add(req, res);
+        res = yield db.EmployeeDBController.Add(req, res);
         return res;
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.GetAll(res);
+        res = yield db.EmployeeDBController.GetAll(res);
         return res;
     }),
     findOne: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Get(req, res);
+        res = yield db.EmployeeDBController.Get(req, res);
         return res;
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Update(req, res);
+        res = yield db.EmployeeDBController.Update(req, res);
         return res;
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Remove(req, res);
+        res = yield db.EmployeeDBController.Remove(req, res);
         return res;
-    }),
+    })
 };
-module.exports = ClientController;
+module.exports = EmployeeController;

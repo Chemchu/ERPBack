@@ -9,6 +9,7 @@ const clientRoutes_js_1 = __importDefault(require("./routes/clientRoutes.js"));
 const saleRoutes_js_1 = __importDefault(require("./routes/saleRoutes.js"));
 const express_1 = __importDefault(require("express"));
 const database_js_1 = require("./databaseLogic/database.js");
+const employeeRoutes_js_1 = __importDefault(require("./routes/employeeRoutes.js"));
 const cors = require('cors');
 class Router {
     constructor() {
@@ -29,6 +30,7 @@ class Router {
         this.app.use('/api/productos/', productRoutes_js_1.default);
         this.app.use('/api/clientes/', clientRoutes_js_1.default);
         this.app.use('/api/ventas/', saleRoutes_js_1.default);
+        this.app.use('/api/empleados/', employeeRoutes_js_1.default);
     }
     get App() {
         return this.app;

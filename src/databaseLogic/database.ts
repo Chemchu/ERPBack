@@ -7,24 +7,18 @@ import { Cliente } from '../models/clienteModel';
 import { ProductoDBController } from './ProductDBController';
 import { ClientDBController } from './ClientDBController';
 import { SaleDBController } from './SaleDBController';
+import { EmployeeDBController } from './EmployeeDBController';
+import { Empleado } from '../models/employeeModel';
 
 mongoose.Promise = global.Promise;
 		
 dotenv.config();
 
-let producto = new Producto();
-let venta = new Venta();
-let cliente = new Cliente();
-
 const dbInformation : any = {
 	mongo : mongoose,
 	url: process.env.MONGO_URI == "" ? "mongodb://localhost:27017/" : process.env.MONGO_URI,
 	dbName : process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
-	productosCollection : producto.Model,
-	ventasCollection : venta.Model,
-	clientesCollection : cliente.Model,
 };
-
 export class Database {
     private static instance: Database;
 	private db: mongoose.Mongoose;
@@ -32,13 +26,15 @@ export class Database {
 	public ProductDBController : ProductoDBController;
 	public VentasDBController : SaleDBController; 
 	public ClientDBController : ClientDBController;
+	public EmployeeDBController : EmployeeDBController;
 
     private constructor () {
 		this.db = dbInformation.mongo;
 
-		this.ProductDBController = new ProductoDBController(dbInformation.productosCollection);
-		this.VentasDBController = new SaleDBController(dbInformation.ventasCollection);
-		this.ClientDBController = new ClientDBController(dbInformation.clientesCollection);
+		this.ProductDBController = new ProductoDBController(new Producto().Model);
+		this.VentasDBController = new SaleDBController(new Venta().Model);
+		this.ClientDBController = new ClientDBController(new Cliente().Model);
+		this.EmployeeDBController = new EmployeeDBController(new Empleado().Model);
 
 		this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("¡Conexión realizada con la base de datos!");

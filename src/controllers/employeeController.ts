@@ -3,31 +3,31 @@ import { Database } from '../databaseLogic/database';
 
 const db = Database.Instance();
 
-const ClientController = {
+const EmployeeController = {
     create: async (req : Request, res : Response) => {   
-        res = await db.ClientDBController.Add(req, res);
+        res = await db.EmployeeDBController.Add(req, res);
         return res;
     },
 
     findAll: async (req : Request, res : Response) => {
-        res = await db.ClientDBController.GetAll(res);
+        res = await db.EmployeeDBController.GetAll(res);
         return res;
     },
 
     findOne: async (req : Request, res : Response) => {
-        res = await db.ClientDBController.Get(req, res);
+        res = await db.EmployeeDBController.Get(req, res);
         return res;
     },
 
     update: async (req : Request, res : Response) => {
-        res = await db.ClientDBController.Update(req, res);
+        res = await db.EmployeeDBController.Update(req, res);
         return res;
     },
 
     delete: async(req : Request, res : Response) => {
-        res = await db.ClientDBController.Remove(req, res);
+        res = await db.EmployeeDBController.Remove(req, res);
         return res;
-    },
+    }
 }
 
-module.exports = ClientController;
+module.exports = EmployeeController;

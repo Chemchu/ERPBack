@@ -2,45 +2,31 @@ import { Request, Response } from 'express';
 import { Database } from '../databaseLogic/database';
 
 const db = Database.Instance();
-//const ProdModel: Model<IProduct> = db.MongooseInstance.connection.model('productos', ProductSchema);
 
 const SaleController = {
     create: async (req : Request, res : Response) => {   
-        // Añade el producto en la db
-        let saleAddedCorrectly = await db.AddSale(req);
-
-        if(saleAddedCorrectly){
-            res.status(200);
-            res.send({message: 'Venta añadido'});
-        }
-        else {
-            res.status(200);
-            res.send({message: 'La venta no se ha podido añadir a la base de datos'});
-        }
+        res = await db.VentasDBController.Add(req, res);
+        return res;
     },
 
     findAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie findAll"});
+        res = await db.VentasDBController.GetAll(res);
+        return res;
     },
 
     findOne: async (req : Request, res : Response) => {
-        res.send({message: "opsie findOne"});
+        res = await db.VentasDBController.Get(req, res);
+        return res;
     },
 
     update: async (req : Request, res : Response) => {
-        res.send({message: "opsie update"});
+        res = await db.VentasDBController.Update(req, res);
+        return res;
     },
 
     delete: async(req : Request, res : Response) => {
-        res.send({message: "opsie delete"});
-    },
-
-    deleteAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie deleteAll"});
-    },
-
-    findAllPublished: async (req : Request, res : Response) => {
-        res.send({message: "opsie"});
+        res = await db.VentasDBController.Remove(req, res);
+        return res;
     }
 }
 

@@ -13,33 +13,24 @@ const database_1 = require("../databaseLogic/database");
 const db = database_1.Database.Instance();
 const SaleController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        let saleAddedCorrectly = yield db.AddSale(req);
-        if (saleAddedCorrectly) {
-            res.status(200);
-            res.send({ message: 'Venta añadido' });
-        }
-        else {
-            res.status(200);
-            res.send({ message: 'La venta no se ha podido añadir a la base de datos' });
-        }
+        res = yield db.VentasDBController.Add(req, res);
+        return res;
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie findAll" });
+        res = yield db.VentasDBController.GetAll(res);
+        return res;
     }),
     findOne: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie findOne" });
+        res = yield db.VentasDBController.Get(req, res);
+        return res;
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie update" });
+        res = yield db.VentasDBController.Update(req, res);
+        return res;
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie delete" });
-    }),
-    deleteAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie deleteAll" });
-    }),
-    findAllPublished: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie" });
+        res = yield db.VentasDBController.Remove(req, res);
+        return res;
     })
 };
 module.exports = SaleController;
