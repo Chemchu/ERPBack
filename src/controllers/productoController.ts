@@ -22,7 +22,8 @@ const ProductController = {
     },
 
     update: async (req : Request, res : Response) => {
-        res.send({message: "opsie update"});
+        res = await db.UpdateProduct(req.params.id, req, res);
+        res.send();
     },
 
     delete: async(req : Request, res : Response) => {

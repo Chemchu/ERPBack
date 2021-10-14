@@ -25,7 +25,8 @@ const ProductController = {
         res.send();
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie update" });
+        res = yield db.UpdateProduct(req.params.id, req, res);
+        res.send();
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res = yield db.RemoveProduct(req.params.id, res);
