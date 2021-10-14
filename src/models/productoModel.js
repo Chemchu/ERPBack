@@ -13,7 +13,7 @@ class Producto {
             IVA: { type: Number, required: false },
             EAN: { type: [String], required: false },
             alta: { type: Boolean, required: true },
-            tag: { type: String, required: false },
+            tag: { type: [String], required: false },
         });
         this.modelo = (0, mongoose_1.model)('Producto', ProductSchema);
     }
