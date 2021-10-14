@@ -8,7 +8,7 @@ const productRoutes_js_1 = __importDefault(require("./routes/productRoutes.js"))
 const clientRoutes_js_1 = __importDefault(require("./routes/clientRoutes.js"));
 const saleRoutes_js_1 = __importDefault(require("./routes/saleRoutes.js"));
 const express_1 = __importDefault(require("express"));
-const database_js_1 = require("./database.js");
+const database_js_1 = require("./databaseLogic/database.js");
 const cors = require('cors');
 class Router {
     constructor() {

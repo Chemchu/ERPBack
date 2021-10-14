@@ -9,33 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("../database");
+const database_1 = require("../databaseLogic/database");
 const db = database_1.Database.Instance();
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.AddProduct(req, res);
+        res = yield db.ProductDBController.Add(req, res);
         res.send();
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.GetAllProducts(res);
+        res = yield db.ProductDBController.GetAll(res);
         res.send();
     }),
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.GetProducts(req.params.id, res);
+        res = yield db.ProductDBController.Get(req, res);
         res.send();
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie update" });
-    }),
-    delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.RemoveProduct(req.params.id, res);
+        res = yield db.ProductDBController.Update(req, res);
         res.send();
     }),
-    deleteAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie deleteAll" });
+    delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        res = yield db.ProductDBController.Remove(req, res);
+        res.send();
     }),
-    findAllPublished: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.send({ message: "opsie" });
-    })
 };
 module.exports = ProductController;
