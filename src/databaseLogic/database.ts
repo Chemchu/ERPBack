@@ -1,12 +1,12 @@
 import mongoose = require('mongoose');
 import dotenv = require('dotenv');
-import { Producto } from './models/productoModel';
-import { Venta } from './models/ventaModel';
-import { IProduct } from './types/Producto';
+import { Producto } from '../models/productoModel';
+import { Venta } from '../models/ventaModel';
+import { IProduct } from '../types/Producto';
 import { Request, Response, ErrorRequestHandler } from 'express';
-import { IClient } from './types/Cliente';
-import { ISale } from './types/Venta';
-import { Cliente } from './models/clienteModel';
+import { IClient } from '../types/Cliente';
+import { ISale } from '../types/Venta';
+import { Cliente } from '../models/clienteModel';
 
 mongoose.Promise = global.Promise;
 		
@@ -40,9 +40,9 @@ export class Database {
 		this.ClientModel = dbInformation.clientesCollection;
 
 		this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
-            console.log("Connected to the database!");
+            console.log("¡Conexión realizada con la base de datos!");
         }).catch((err: ErrorRequestHandler) => {
-            console.log("Cannot connect to the database!", err);
+            console.log("¡No se pudo realizar la conexión con la base de datos!", err);
             process.exit();
         });
 
@@ -159,15 +159,15 @@ export class Database {
 			// Ejemplo del JSON del request.body 
 			// {
 			// 	"nombre": "Aquarel",
-			// 	 "descripcion": "Agua barata",
-			// 	 "familia": "Bebida",
+			// 	"descripcion": "Agua barata",
+			// 	"familia": "Bebida",
 			// 	"precioVenta": 0.26,
-			// 	 "precioCompra": 0.15,
-			// 	 "IVA": 0,
-			// 	 "EAN": ["Aquarel"],
-			// 	 "alta": true,
-			// 	 "tags": [""],
-			// 	 "cantidad": 1000
+			// 	"precioCompra": 0.15,
+			// 	"IVA": 0,
+			// 	"EAN": ["Aquarel"],
+			// 	"alta": true,
+			// 	"tags": [""],
+			// 	"cantidad": 1000
 			// }
 
 			if(productUpdated.modifiedCount > 0) {

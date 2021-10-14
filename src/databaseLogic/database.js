@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = void 0;
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const productoModel_1 = require("./models/productoModel");
-const ventaModel_1 = require("./models/ventaModel");
-const clienteModel_1 = require("./models/clienteModel");
+const productoModel_1 = require("../models/productoModel");
+const ventaModel_1 = require("../models/ventaModel");
+const clienteModel_1 = require("../models/clienteModel");
 mongoose.Promise = global.Promise;
 dotenv.config();
 let producto = new productoModel_1.Producto();
@@ -35,9 +35,9 @@ class Database {
         this.VentasModel = dbInformation.ventasCollection;
         this.ClientModel = dbInformation.clientesCollection;
         this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
-            console.log("Connected to the database!");
+            console.log("¡Conexión realizada con la base de datos!");
         }).catch((err) => {
-            console.log("Cannot connect to the database!", err);
+            console.log("¡No se pudo realizar la conexión con la base de datos!", err);
             process.exit();
         });
     }

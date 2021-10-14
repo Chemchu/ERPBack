@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Database } from '../database';
+import { Database } from '../databaseLogic/database';
 
 const db = Database.Instance();
 //const ProdModel: Model<IProduct> = db.MongooseInstance.connection.model('productos', ProductSchema);
