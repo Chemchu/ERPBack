@@ -60,7 +60,7 @@ class Database {
                 precioVenta: prodJSON.precioVenta,
                 precioCompra: prodJSON.precioCompra,
                 IVA: prodJSON.IVA,
-                EAN: prodJSON.EAN,
+                EAN: [prodJSON.EAN],
                 alta: prodJSON.alta,
                 tags: prodJSON.tags,
                 cantidad: prodJSON.cantidad
@@ -82,18 +82,29 @@ class Database {
             }
         });
     }
-    GetAllProducts() {
+    GetAllProducts(res) {
         return __awaiter(this, void 0, void 0, function* () {
             const filter = {};
-            return yield this.ProductModel.find(filter);
+            try {
+                const prodArray = yield this.ProductModel.find(filter);
+                return res.status(200).json({ message: prodArray, success: true });
+            }
+            catch (err) {
+                return res.status(400).json({ message: `Error al buscar los productos: ${err}`, success: false });
+            }
         });
     }
-    GetProduct(prodAttr) {
+    GetProducts(prodAttr, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const regexedQuery = { $regex: "/^" + prodAttr + "/i" };
-            return yield this.ProductModel.find({
-                $or: [{ 'nombre': regexedQuery }, { 'EAN': regexedQuery }, { 'familia': regexedQuery }]
-            }).exec();
+            try {
+                const products = yield this.ProductModel.find({
+                    $or: [{ 'nombre': { $regex: prodAttr, $options: "i" } }, { 'familia': { $regex: prodAttr, $options: "i" } }, { 'EAN': { $regex: prodAttr, $options: "i" } }]
+                }).exec();
+                return res.status(200).json({ message: products, success: true });
+            }
+            catch (err) {
+                return res.status(400).json({ message: `Error al buscar los productos: ${err}`, success: false });
+            }
         });
     }
     RemoveProduct(productName, res) {

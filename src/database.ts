@@ -72,7 +72,7 @@ export class Database {
 			precioVenta: prodJSON.precioVenta,
 			precioCompra: prodJSON.precioCompra,
 			IVA: prodJSON.IVA,
-			EAN: prodJSON.EAN,
+			EAN: [prodJSON.EAN],
 			alta: prodJSON.alta,
 			tags: prodJSON.tags,
 			cantidad: prodJSON.cantidad
@@ -96,20 +96,33 @@ export class Database {
 		}
 	}
 
-	public async GetAllProducts(): Promise<Array<IProduct> | null> {
+	public async GetAllProducts(res: Response): Promise<Response> {
 		const filter = {};
 		
-		return await this.ProductModel.find(filter);
+		try {
+			const prodArray = await this.ProductModel.find(filter);
+			return res.status(200).json({message: prodArray, success: true});
+		}
+		catch(err) {
+			return res.status(400).json({message: `Error al buscar los productos: ${err}`, success: false});
+		}
 	}
 
-	public async GetProduct(prodAttr : string): Promise<Array<IProduct> | null> {		
-		const regexedQuery = {$regex :  "/^" + prodAttr + "/i"};
-
-		return await this.ProductModel.find(
+	public async GetProducts(prodAttr : string, res: Response): Promise<Response> {		
+		try {
+			const products = await this.ProductModel.find(
 			{ 
-				$or:[{'nombre': regexedQuery }, {'EAN': regexedQuery }, {'familia': regexedQuery}]
+				$or:[{'nombre': {$regex : prodAttr, $options: "i"} }, {'familia': {$regex : prodAttr, $options: "i"} }, {'EAN': {$regex : prodAttr, $options: "i"} }]
 			}
-		).exec();
+			).exec();	
+
+			//console.log(products.length); // ---> Para contar cuantos productos devuelve la db
+				
+			return res.status(200).json({message: products, success: true});
+		}
+		catch(err) {
+			return res.status(400).json({message: `Error al buscar los productos: ${err}`, success: false});
+		}		
 	}
 
 	// TODO

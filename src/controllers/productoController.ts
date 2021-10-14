@@ -12,14 +12,13 @@ const ProductController = {
     },
 
     findAll: async (req : Request, res : Response) => {
-        let allProducts = await db.GetAllProducts();
-        res.send({message: allProducts});
+        res = await db.GetAllProducts(res);
+        res.send();
     },
 
     find: async (req : Request, res : Response) => {
-        let product = await db.GetProduct(req.params.id);
-
-        res.send({message: product});
+        res = await db.GetProducts(req.params.id, res);
+        res.send();
     },
 
     update: async (req : Request, res : Response) => {
