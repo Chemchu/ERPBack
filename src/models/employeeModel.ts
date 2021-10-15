@@ -9,14 +9,12 @@ export class Empleado {
         nombre: {type: String, required: true},
         apellidos: {type: String, required: true},
         dni: {type: String, required: true, unique: true},
-        genero: {type: String, required: true},
+        genero: {type: String, required: false},
         email: {type: String, required: true},
         hashPassword: {type: String, required: true},
         horasPorSemana: {type: Number, required: true},
         fechaAlta: {type: Date, required: true},
-        fechaBaja: {type: Date, required: true},
         diasLibresDisponibles: {type: Number, required: true},
-        alta: {type: Boolean, required: true},
       }, {strict: true});
 
       this.modelo = model<IEmployee>('Empleados', EmpleadoSchema);

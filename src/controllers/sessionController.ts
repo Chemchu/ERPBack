@@ -5,7 +5,7 @@ const db = Database.Instance();
 
 const SessionController = {
     authenticate: async (req : Request, res : Response) => {   
-        res = await db.EmployeeDBController.Add(req, res);
+        res = await db.EmployeeDBController.Authenticate(req, res);
         return res;
     },
 

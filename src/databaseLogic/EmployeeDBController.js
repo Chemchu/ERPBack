@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmployeeDBController = void 0;
+var bcrypt = require('bcryptjs');
+var salt = bcrypt.genSaltSync(10);
 class EmployeeDBController {
     constructor(modelo) {
         this.CollectionModel = modelo;
@@ -17,28 +19,27 @@ class EmployeeDBController {
     Add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const employeeJSON = req.body;
-            if (!employeeJSON.DNI)
-                return res.status(200).json({ message: `El empleado debe tener un DNI/NIE`, success: false });
+            let hashedPassword = yield bcrypt.hash(employeeJSON.password, salt);
             const employeeToAdd = new this.CollectionModel({
                 nombre: employeeJSON.nombre,
                 apellidos: employeeJSON.apellidos,
-                DNI: employeeJSON.DNI,
+                dni: employeeJSON.dni,
                 genero: employeeJSON.genero,
                 email: employeeJSON.email,
-                hashPassword: employeeJSON.password,
+                hashPassword: hashedPassword,
                 horasPorSemana: employeeJSON.horasPorSemana,
                 fechaAlta: employeeJSON.fechaAlta,
-                diasLibresDisponibles: employeeJSON.diasLibres
+                diasLibresDisponibles: employeeJSON.diasLibresDisponibles
             });
             try {
-                const empleadoExistente = yield this.CollectionModel.exists({ DNI: employeeJSON.DNI });
+                const empleadoExistente = yield this.CollectionModel.exists({ dni: employeeJSON.dni });
                 if (empleadoExistente)
                     return res.status(200).json({ message: `Error al añadir el empleado en la base de datos: el empleado ya existe`, success: false });
                 yield employeeToAdd.save();
                 return res.status(200).json({ message: `El empleado ha sido añadido en la base de datos`, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al añadir el empleado en la BBDD: ${err}`, success: false });
+                return res.status(500).json({ message: `Error al añadir el empleado en la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -58,12 +59,32 @@ class EmployeeDBController {
             try {
                 const employeeAttr = req.params.id;
                 const employees = yield this.CollectionModel.find({
-                    $or: [{ 'nombre': { $regex: employeeAttr, $options: "i" } }, { 'apellidos': { $regex: employeeAttr, $options: "i" } }, { 'DNI': { $regex: employeeAttr, $options: "i" } }]
+                    $or: [{ 'nombre': { $regex: employeeAttr, $options: "i" } }, { 'apellidos': { $regex: employeeAttr, $options: "i" } }, { 'dni': { $regex: employeeAttr, $options: "i" } }]
                 }).exec();
                 return res.status(200).json({ message: employees, success: true });
             }
             catch (err) {
                 return res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
+            }
+        });
+    }
+    Authenticate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const employeeJSON = req.body;
+                const employeeToAuthenticate = yield this.CollectionModel.findOne({
+                    email: employeeJSON.email
+                }).exec();
+                if (!employeeToAuthenticate)
+                    return res.status(200).json({ message: "Nombre de usuario o contraseña incorrecto", success: false });
+                let doesPasswordsMatch = yield bcrypt.compare(employeeJSON.password, employeeToAuthenticate === null || employeeToAuthenticate === void 0 ? void 0 : employeeToAuthenticate.hashPassword);
+                if (doesPasswordsMatch)
+                    return res.status(200).json({ message: "Autenticado con éxito", success: true });
+                else
+                    return res.status(200).json({ message: "Fallo en la autenticación", success: false });
+            }
+            catch (err) {
+                return res.status(500).json({ message: `Error al autenticar: ${err}`, success: false });
             }
         });
     }
@@ -87,16 +108,17 @@ class EmployeeDBController {
             const employeeToUpdate = req.params.id;
             try {
                 const employeeJSON = req.body;
+                let hashedPassword = yield bcrypt.hash(employeeJSON.password, salt);
                 const employeeUpdated = yield this.CollectionModel.updateOne({ nombre: employeeToUpdate }, {
                     nombre: employeeJSON.nombre,
                     apellidos: employeeJSON.apellidos,
-                    DNI: employeeJSON.DNI,
+                    dni: employeeJSON.dni,
                     genero: employeeJSON.genero,
                     email: employeeJSON.email,
-                    hashPassword: employeeJSON.password,
+                    hashPassword: hashedPassword,
                     horasPorSemana: employeeJSON.horasPorSemana,
                     fechaAlta: employeeJSON.fechaAlta,
-                    diasLibresDisponibles: employeeJSON.diasLibres
+                    diasLibresDisponibles: employeeJSON.diasLibresDisponibles
                 });
                 if (employeeUpdated.modifiedCount > 0) {
                     return res.status(200).json({ message: `El empleado ${employeeToUpdate} ha sido actualizado correctamente`, success: true });
