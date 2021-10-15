@@ -14,7 +14,7 @@ const EmployeeController = {
         return res;
     },
 
-    findOne: async (req : Request, res : Response) => {
+    find: async (req : Request, res : Response) => {
         res = await db.EmployeeDBController.Get(req, res);
         return res;
     },

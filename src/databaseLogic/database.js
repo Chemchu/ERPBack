@@ -11,6 +11,8 @@ const ClientDBController_1 = require("./ClientDBController");
 const SaleDBController_1 = require("./SaleDBController");
 const EmployeeDBController_1 = require("./EmployeeDBController");
 const employeeModel_1 = require("../models/employeeModel");
+const OldEmployeeDBController_1 = require("./OldEmployeeDBController");
+const oldEmployeeModel_1 = require("../models/oldEmployeeModel");
 mongoose.Promise = global.Promise;
 dotenv.config();
 const dbInformation = {
@@ -25,6 +27,7 @@ class Database {
         this.VentasDBController = new SaleDBController_1.SaleDBController(new ventaModel_1.Venta().Model);
         this.ClientDBController = new ClientDBController_1.ClientDBController(new clienteModel_1.Cliente().Model);
         this.EmployeeDBController = new EmployeeDBController_1.EmployeeDBController(new employeeModel_1.Empleado().Model);
+        this.OldEmployeeDBController = new OldEmployeeDBController_1.OldEmployeeDBController(new oldEmployeeModel_1.OldEmpleado().Model);
         this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("¡Conexión realizada con la base de datos!");
         }).catch((err) => {

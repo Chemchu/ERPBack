@@ -3,12 +3,20 @@ import { Document } from 'mongoose';
 export interface IEmployee extends Document {
     nombre: string
     apellidos: string
+    DNI: string
     genero: string
-    correoElectrónico: string
+    email: string
     hashPassword: string 
     horasPorSemana: number
     fechaAlta: Date
-    fechaBaja: Date
     diasLibresDisponibles: number
-    alta: boolean
+}
+
+export interface IOldEmployee extends Document {
+    nombre: string
+    apellidos: string
+    DNI: string
+    genero: string
+    email: string
+    fechaBaja: Date
 }

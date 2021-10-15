@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EmployeeDBController = void 0;
-class EmployeeDBController {
+exports.OldEmployeeDBController = void 0;
+class OldEmployeeDBController {
     constructor(modelo) {
         this.CollectionModel = modelo;
     }
@@ -25,10 +25,7 @@ class EmployeeDBController {
                 DNI: employeeJSON.DNI,
                 genero: employeeJSON.genero,
                 email: employeeJSON.email,
-                hashPassword: employeeJSON.password,
-                horasPorSemana: employeeJSON.horasPorSemana,
-                fechaAlta: employeeJSON.fechaAlta,
-                diasLibresDisponibles: employeeJSON.diasLibres
+                fechaBaja: employeeJSON.fechaBaja
             });
             try {
                 const empleadoExistente = yield this.CollectionModel.exists({ DNI: employeeJSON.DNI });
@@ -93,10 +90,7 @@ class EmployeeDBController {
                     DNI: employeeJSON.DNI,
                     genero: employeeJSON.genero,
                     email: employeeJSON.email,
-                    hashPassword: employeeJSON.password,
-                    horasPorSemana: employeeJSON.horasPorSemana,
-                    fechaAlta: employeeJSON.fechaAlta,
-                    diasLibresDisponibles: employeeJSON.diasLibres
+                    fechaBaja: employeeJSON.fechaBaja
                 });
                 if (employeeUpdated.modifiedCount > 0) {
                     return res.status(200).json({ message: `El empleado ${employeeToUpdate} ha sido actualizado correctamente`, success: true });
@@ -109,4 +103,4 @@ class EmployeeDBController {
         });
     }
 }
-exports.EmployeeDBController = EmployeeDBController;
+exports.OldEmployeeDBController = OldEmployeeDBController;

@@ -1,17 +1,16 @@
 import mongoose from 'mongoose';
-import { IEmployee } from '../types/Empleado';
+import { IOldEmployee } from '../types/Empleado';
 import IDBController from './IDBController';
 import { Request, Response } from 'express';
 
-export class EmployeeDBController implements IDBController {
+export class OldEmployeeDBController implements IDBController {
 
-    public CollectionModel: mongoose.Model<IEmployee>;
+    public CollectionModel: mongoose.Model<IOldEmployee>;
 
-    constructor(modelo: mongoose.Model<IEmployee>) {
+    constructor(modelo: mongoose.Model<IOldEmployee>) {
         this.CollectionModel = modelo
     }
 
-    // TODO
     public async Add(req: Request, res: Response): Promise<Response> {
 		
 		// El empleado en JSON de la petición
@@ -21,16 +20,13 @@ export class EmployeeDBController implements IDBController {
 		if(!employeeJSON.DNI) return res.status(200).json({message: `El empleado debe tener un DNI/NIE`, success: false}); 
 
 		// Crea el empleado
-		const employeeToAdd: mongoose.Document<IEmployee> = new this.CollectionModel({
+		const employeeToAdd: mongoose.Document<IOldEmployee> = new this.CollectionModel({
 			nombre: employeeJSON.nombre,
-			apellidos: employeeJSON.apellidos,
-			DNI: employeeJSON.DNI,
-			genero: employeeJSON.genero,
-			email: employeeJSON.email,
-			hashPassword: employeeJSON.password,
-			horasPorSemana: employeeJSON.horasPorSemana,
-			fechaAlta: employeeJSON.fechaAlta,
-			diasLibresDisponibles: employeeJSON.diasLibres
+            apellidos: employeeJSON.apellidos,
+            DNI: employeeJSON.DNI,
+            genero: employeeJSON.genero,
+            email: employeeJSON.email,
+            fechaBaja: employeeJSON.fechaBaja
 		});
 
 		try{			
@@ -45,7 +41,6 @@ export class EmployeeDBController implements IDBController {
 		}
 	}
 
-	// TODO
 	public async GetAll(res: Response): Promise<Response> {
 		try {
 			const employeeArr = await this.CollectionModel.find({});
@@ -56,7 +51,6 @@ export class EmployeeDBController implements IDBController {
 		}
 	}
 
-	// TODO
 	public async Get(req: Request, res: Response): Promise<Response> {		
 		try {
             const employeeAttr = req.params.id;
@@ -75,7 +69,6 @@ export class EmployeeDBController implements IDBController {
 		}		
 	}
 
-	// TODO
 	public async Remove(req: Request, res: Response): Promise<Response> {
 		const employeeName = req.params.id;
 		try {
@@ -90,21 +83,17 @@ export class EmployeeDBController implements IDBController {
 		}
 	}
 
-	// TODO
 	public async Update(req: Request, res: Response): Promise<Response> {
 		const employeeToUpdate = req.params.id;
         try {
 			const employeeJSON = req.body;
 			const employeeUpdated = await this.CollectionModel.updateOne({nombre: employeeToUpdate}, {
 				nombre: employeeJSON.nombre,
-				apellidos: employeeJSON.apellidos,
-				DNI: employeeJSON.DNI,
-				genero: employeeJSON.genero,
-				email: employeeJSON.email,
-				hashPassword: employeeJSON.password,
-				horasPorSemana: employeeJSON.horasPorSemana,
-				fechaAlta: employeeJSON.fechaAlta,
-				diasLibresDisponibles: employeeJSON.diasLibres
+                apellidos: employeeJSON.apellidos,
+                DNI: employeeJSON.DNI,
+                genero: employeeJSON.genero,
+                email: employeeJSON.email,
+                fechaBaja: employeeJSON.fechaBaja
 			});
 
 			if(employeeUpdated.modifiedCount > 0) {

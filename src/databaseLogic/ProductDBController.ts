@@ -49,10 +49,8 @@ export class ProductoDBController implements IDBController {
 	}
 
 	public async GetAll(res: Response): Promise<Response> {
-		const filter = {};
-		
 		try {
-			const prodArray = await this.CollectionModel.find(filter);
+			const prodArray = await this.CollectionModel.find({});
 			return res.status(200).json({message: prodArray, success: true});
 		}
 		catch(err) {
