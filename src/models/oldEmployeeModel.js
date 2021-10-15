@@ -7,7 +7,7 @@ class OldEmpleado {
         const EmpleadoSchema = new mongoose_1.Schema({
             nombre: { type: String, required: true },
             apellidos: { type: String, required: true },
-            DNI: { type: String, required: true, unique: true },
+            dni: { type: String, required: true, unique: true },
             genero: { type: String, required: true },
             email: { type: String, required: true },
         }, { strict: true });

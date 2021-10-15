@@ -6,10 +6,10 @@ export class Cliente {
 
     constructor(){
         const ClientSchema = new Schema({
-            NIF: {type: String, required: true},
-            Nombre: {type: String, required: true},
-            Calle: {type: String, required: true},
-            CP: {type: String, required: true},
+            nif: {type: String, required: true},
+            nombre: {type: String, required: true},
+            calle: {type: String, required: true},
+            cp: {type: String, required: true},
         });
 
         this.modelo = model<IClient>('Cliente', ClientSchema);

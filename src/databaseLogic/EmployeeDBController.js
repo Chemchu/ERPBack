@@ -58,7 +58,7 @@ class EmployeeDBController {
             try {
                 const employeeAttr = req.params.id;
                 const employees = yield this.CollectionModel.find({
-                    $or: [{ 'nombre': { $regex: employeeAttr, $options: "i" } }, { 'DNI': { $regex: employeeAttr, $options: "i" } }]
+                    $or: [{ 'nombre': { $regex: employeeAttr, $options: "i" } }, { 'apellidos': { $regex: employeeAttr, $options: "i" } }, { 'DNI': { $regex: employeeAttr, $options: "i" } }]
                 }).exec();
                 return res.status(200).json({ message: employees, success: true });
             }

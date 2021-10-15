@@ -1,10 +1,10 @@
 import prodRouter from './routes/productRoutes.js';
 import clientRouter from './routes/clientRoutes.js';
-import saleRouter from './routes/saleRoutes.js';
-import express, { Request, Response } from 'express';
-import { Database } from './databaseLogic/database.js';
 import employeeRouter from './routes/employeeRoutes.js';
 import sessionRouter from './routes/sessionRoutes.js';
+import saleRouter from './routes/saleRoutes.js';
+import { Database } from './databaseLogic/database.js';
+import express, { Request, Response } from 'express';
 const cors = require('cors');
 
 export class Router {

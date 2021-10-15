@@ -6,11 +6,10 @@ export class Venta {
 
     constructor(){
         const VentaSchema = new Schema({
-            Productos: [{type: Types.ObjectId, ref: 'Producto'}],
-            PrecioVentaTotal: {type: Number, required: true},
-            Fecha: {type: Date, required: true},
-            Cliente: {type: Types.ObjectId, ref: 'Cliente'},
-        });
+            productos: [{type: Types.ObjectId, ref: 'Producto'}],
+            precioVentaTotal: {type: Number, required: true},
+            cliente: {type: Types.ObjectId, ref: 'Cliente'},
+        }, {timestamps: true});
 
         this.modelo = model<ISale>('Venta', VentaSchema);
     }

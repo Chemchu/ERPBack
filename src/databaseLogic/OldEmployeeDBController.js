@@ -17,12 +17,12 @@ class OldEmployeeDBController {
     Add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const employeeJSON = req.body;
-            if (!employeeJSON.DNI)
+            if (!employeeJSON.dni)
                 return res.status(200).json({ message: `El empleado debe tener un DNI/NIE`, success: false });
             const employeeToAdd = new this.CollectionModel({
                 nombre: employeeJSON.nombre,
                 apellidos: employeeJSON.apellidos,
-                DNI: employeeJSON.DNI,
+                dni: employeeJSON.dni,
                 genero: employeeJSON.genero,
                 email: employeeJSON.email,
                 fechaBaja: employeeJSON.fechaBaja
@@ -87,7 +87,7 @@ class OldEmployeeDBController {
                 const employeeUpdated = yield this.CollectionModel.updateOne({ nombre: employeeToUpdate }, {
                     nombre: employeeJSON.nombre,
                     apellidos: employeeJSON.apellidos,
-                    DNI: employeeJSON.DNI,
+                    dni: employeeJSON.dni,
                     genero: employeeJSON.genero,
                     email: employeeJSON.email,
                     fechaBaja: employeeJSON.fechaBaja

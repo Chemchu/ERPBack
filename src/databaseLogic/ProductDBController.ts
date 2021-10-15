@@ -102,8 +102,8 @@ export class ProductoDBController implements IDBController {
 				familia: prodJSON.familia,
 				precioVenta: prodJSON.precioVenta,
 				precioCompra: prodJSON.precioCompra,
-				IVA: prodJSON.IVA,
-				EAN: prodJSON.EAN,
+				iva: prodJSON.iva,
+				ean: prodJSON.ean,
 				alta: prodJSON.alta,
 				tags: prodJSON.tags,
 				cantidad: prodJSON.cantidad
@@ -126,10 +126,10 @@ export class ProductoDBController implements IDBController {
 			if(productUpdated.modifiedCount > 0) {
 				return res.status(200).json({message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true});
 			}
-			return res.status(200).json({message: `Error al actualizar ${productoToUpdate} en la BBDD: el producto no existe`, success: false});
+			return res.status(200).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: el producto no existe`, success: false});
 		}
 		catch(err) {
-			return res.status(500).json({message: `Error al actualizar ${productoToUpdate} en la BBDD: ${err}`, success: false});
+			return res.status(500).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: ${err}`, success: false});
 		}
 	}
 }

@@ -16,27 +16,81 @@ class ClientDBController {
     }
     Add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return res;
+            const clientJSON = req.body;
+            const clientToAdd = new this.CollectionModel({
+                nif: clientJSON.nif,
+                nombre: clientJSON.nombre,
+                calle: clientJSON.calle,
+                cp: clientJSON.cp,
+            });
+            try {
+                yield clientToAdd.save();
+                return res.status(200).json({ message: `El cliente ha sido añadido en la base de datos`, success: true });
+            }
+            catch (err) {
+                return res.status(500).json({ message: `Error al añadir el cliente a la base de datos: ${err}`, success: false });
+            }
         });
     }
     GetAll(res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return res;
+            try {
+                const clientArray = yield this.CollectionModel.find({});
+                return res.status(200).json({ message: clientArray, success: true });
+            }
+            catch (err) {
+                return res.status(500).json({ message: `Error al buscar los clientes: ${err}`, success: false });
+            }
         });
     }
     Get(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return res;
+            try {
+                const clientAttr = req.params.id;
+                const clients = yield this.CollectionModel.find({
+                    $or: [{ 'nombre': { $regex: clientAttr, $options: "i" } }, { 'nif': { $regex: clientAttr, $options: "i" } }]
+                }).exec();
+                return res.status(200).json({ message: clients, success: true });
+            }
+            catch (err) {
+                return res.status(500).json({ message: `Error al buscar los clientes: ${err}`, success: false });
+            }
         });
     }
     Remove(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return res;
+            const clientID = req.params.id;
+            try {
+                const clientDeleted = yield this.CollectionModel.deleteOne({ _id: clientID });
+                if (clientDeleted.deletedCount > 0) {
+                    return res.status(200).json({ message: `El cliente ${clientID} ha sido borrado correctamente de la base de datos`, success: true });
+                }
+                return res.status(200).json({ message: `Error al borrar ${clientID} de la base de datos: el cliente no existe`, success: false });
+            }
+            catch (err) {
+                return res.status(500).json({ message: `Error al borrar ${clientID} de la base de datos: ${err}`, success: false });
+            }
         });
     }
     Update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return res;
+            const clientToUpdate = req.params.id;
+            try {
+                const clientJSON = req.body;
+                const clientUpdated = yield this.CollectionModel.updateOne({ _id: clientToUpdate }, {
+                    nif: clientJSON.nif,
+                    nombre: clientJSON.nombre,
+                    calle: clientJSON.calle,
+                    cp: clientJSON.cp,
+                });
+                if (clientUpdated.modifiedCount > 0) {
+                    return res.status(200).json({ message: `El cliente ${clientJSON.nombre} ha sido actualizada correctamente`, success: true });
+                }
+                return res.status(200).json({ message: `Error al actualizar ${clientJSON.nombre} en la base de datos: el cliente no existe`, success: false });
+            }
+            catch (err) {
+                return res.status(500).json({ message: `Error al actualizar ${clientToUpdate} en la base de datos: ${err}`, success: false });
+            }
         });
     }
 }

@@ -17,13 +17,13 @@ export class OldEmployeeDBController implements IDBController {
 		const employeeJSON = req.body;
 
 		// Comprueba que el empleado tenga DNI/NIE
-		if(!employeeJSON.DNI) return res.status(200).json({message: `El empleado debe tener un DNI/NIE`, success: false}); 
+		if(!employeeJSON.dni) return res.status(200).json({message: `El empleado debe tener un DNI/NIE`, success: false}); 
 
 		// Crea el empleado
 		const employeeToAdd: mongoose.Document<IOldEmployee> = new this.CollectionModel({
 			nombre: employeeJSON.nombre,
             apellidos: employeeJSON.apellidos,
-            DNI: employeeJSON.DNI,
+            dni: employeeJSON.dni,
             genero: employeeJSON.genero,
             email: employeeJSON.email,
             fechaBaja: employeeJSON.fechaBaja
@@ -90,7 +90,7 @@ export class OldEmployeeDBController implements IDBController {
 			const employeeUpdated = await this.CollectionModel.updateOne({nombre: employeeToUpdate}, {
 				nombre: employeeJSON.nombre,
                 apellidos: employeeJSON.apellidos,
-                DNI: employeeJSON.DNI,
+                dni: employeeJSON.dni,
                 genero: employeeJSON.genero,
                 email: employeeJSON.email,
                 fechaBaja: employeeJSON.fechaBaja

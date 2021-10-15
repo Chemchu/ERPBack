@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Router = void 0;
 const productRoutes_js_1 = __importDefault(require("./routes/productRoutes.js"));
 const clientRoutes_js_1 = __importDefault(require("./routes/clientRoutes.js"));
-const saleRoutes_js_1 = __importDefault(require("./routes/saleRoutes.js"));
-const express_1 = __importDefault(require("express"));
-const database_js_1 = require("./databaseLogic/database.js");
 const employeeRoutes_js_1 = __importDefault(require("./routes/employeeRoutes.js"));
 const sessionRoutes_js_1 = __importDefault(require("./routes/sessionRoutes.js"));
+const saleRoutes_js_1 = __importDefault(require("./routes/saleRoutes.js"));
+const database_js_1 = require("./databaseLogic/database.js");
+const express_1 = __importDefault(require("express"));
 const cors = require('cors');
 class Router {
     constructor() {

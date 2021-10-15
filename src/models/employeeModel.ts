@@ -8,7 +8,7 @@ export class Empleado {
       const EmpleadoSchema = new Schema({
         nombre: {type: String, required: true},
         apellidos: {type: String, required: true},
-        DNI: {type: String, required: true, unique: true},
+        dni: {type: String, required: true, unique: true},
         genero: {type: String, required: true},
         email: {type: String, required: true},
         hashPassword: {type: String, required: true},

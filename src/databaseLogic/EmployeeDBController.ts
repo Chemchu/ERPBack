@@ -62,7 +62,7 @@ export class EmployeeDBController implements IDBController {
             const employeeAttr = req.params.id;
 			const employees = await this.CollectionModel.find(
 			{ 
-				$or:[{'nombre': {$regex : employeeAttr, $options: "i"} }, {'DNI': {$regex : employeeAttr, $options: "i"} }]
+				$or:[{'nombre': {$regex : employeeAttr, $options: "i"} }, {'apellidos': {$regex : employeeAttr, $options: "i"} }, {'DNI': {$regex : employeeAttr, $options: "i"} }]
 			}
 			).exec();	
 

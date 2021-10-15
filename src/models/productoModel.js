@@ -10,8 +10,8 @@ class Producto {
             familia: { type: String, required: false },
             precioVenta: { type: Number, required: true },
             precioCompra: { type: Number, required: false },
-            IVA: { type: Number, required: false },
-            EAN: { type: [String], required: false },
+            iva: { type: Number, required: false },
+            ean: { type: [String], required: false },
             alta: { type: Boolean, required: true },
             tag: { type: [String], required: false },
         });
