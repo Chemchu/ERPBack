@@ -10,6 +10,7 @@ export class Empleado {
         apellidos: {type: String, required: true},
         genero: {type: String, required: true},
         correoElectrónico: {type: String, required: true},
+        hashPassword: {type: String, required: true},
         horasPorSemana: {type: Number, required: true},
         fechaAlta: {type: Date, required: true},
         fechaBaja: {type: Date, required: true},
