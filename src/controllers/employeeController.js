@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("../databaseLogic/database");
+const database_1 = require("../databases/database");
 const db = database_1.Database.Instance();
 const EmployeeController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {

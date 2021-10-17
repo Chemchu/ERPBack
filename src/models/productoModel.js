@@ -14,6 +14,8 @@ class Producto {
             ean: { type: [String], required: false },
             alta: { type: Boolean, required: true },
             tags: { type: [String], required: true },
+            img: { type: Buffer, required: false },
+            cantidad: { type: Number, required: true }
         }, { strict: true });
         this.modelo = (0, mongoose_1.model)('Producto', ProductSchema);
     }

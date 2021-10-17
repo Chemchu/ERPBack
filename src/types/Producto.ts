@@ -10,4 +10,5 @@ export interface IProduct extends Document {
     ean: string[]
     alta: boolean
     tags: string[]
+    img: Buffer
 }

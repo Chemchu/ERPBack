@@ -28,7 +28,8 @@ class ProductoDBController {
                     ean: prodJSON.ean,
                     alta: prodJSON.alta,
                     tags: prodJSON.tags,
-                    cantidad: prodJSON.cantidad
+                    cantidad: prodJSON.cantidad,
+                    img: Buffer.from(prodJSON.img, 'base64')
                 });
                 const prodName = productoToAdd.get('nombre');
                 const prodEAN = productoToAdd.get('ean');
@@ -107,7 +108,8 @@ class ProductoDBController {
                     ean: prodJSON.ean,
                     alta: prodJSON.alta,
                     tags: prodJSON.tags,
-                    cantidad: prodJSON.cantidad
+                    cantidad: prodJSON.cantidad,
+                    img: Buffer.from(prodJSON.img, 'base64')
                 });
                 if (productUpdated.modifiedCount > 0) {
                     res.status(200).json({ message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true });

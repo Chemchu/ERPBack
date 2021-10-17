@@ -27,7 +27,8 @@ export class ProductoDBController implements IDBController {
 				ean: prodJSON.ean,
 				alta: prodJSON.alta,
 				tags: prodJSON.tags,
-				cantidad: prodJSON.cantidad
+				cantidad: prodJSON.cantidad,
+				img: Buffer.from(prodJSON.img, 'base64')
 			});
 
 			const prodName = productoToAdd.get('nombre');
@@ -107,22 +108,9 @@ export class ProductoDBController implements IDBController {
 				ean: prodJSON.ean,
 				alta: prodJSON.alta,
 				tags: prodJSON.tags,
-				cantidad: prodJSON.cantidad
+				cantidad: prodJSON.cantidad,
+				img: Buffer.from(prodJSON.img, 'base64')
 			});
-
-			// Ejemplo del JSON del request.body 
-			// {
-			// 	"nombre": "Aquarel",
-			// 	"descripcion": "Agua barata",
-			// 	"familia": "Bebida",
-			// 	"precioVenta": 0.26,
-			// 	"precioCompra": 0.15,
-			// 	"IVA": 0,
-			// 	"EAN": ["Aquarel"],
-			// 	"alta": true,
-			// 	"tags": [""],
-			// 	"cantidad": 1000
-			// }
 
 			if(productUpdated.modifiedCount > 0) {
 				res.status(200).json({message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true});

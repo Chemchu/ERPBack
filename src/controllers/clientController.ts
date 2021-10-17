@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Database } from '../databaseLogic/database';
+import { Database } from '../databases/database';
 
 const db = Database.Instance();
 

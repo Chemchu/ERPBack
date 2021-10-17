@@ -3,7 +3,7 @@ import clientRouter from './routes/clientRoutes.js';
 import employeeRouter from './routes/employeeRoutes.js';
 import sessionRouter from './routes/sessionRoutes.js';
 import saleRouter from './routes/saleRoutes.js';
-import { Database } from './databaseLogic/database.js';
+import { Database } from './databases/database.js';
 import express, { Request, Response } from 'express';
 const cors = require('cors');
 

@@ -1,3 +1,4 @@
+import { truncate } from 'fs';
 import {Schema, model, Model} from 'mongoose';
 import { IProduct } from '../types/Producto';
 
@@ -15,6 +16,8 @@ export class Producto {
         ean: {type: [String], required: false},
         alta: {type: Boolean, required: true},
         tags: {type: [String], required: true},
+        img: {type: Buffer, required: false},
+        cantidad: {type: Number, required: true}
       }, {strict: true});
 
       this.modelo = model<IProduct>('Producto', ProductSchema);
