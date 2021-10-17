@@ -13,16 +13,13 @@ const database_1 = require("../databaseLogic/database");
 const db = database_1.Database.Instance();
 const SessionController = {
     authenticate: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.Authenticate(req, res);
-        return res;
+        yield db.EmployeeDBController.Authenticate(req, res);
     }),
     logout: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.GetAll(res);
-        return res;
+        yield db.EmployeeDBController.GetAll(res);
     }),
     restoreSession: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.Get(req, res);
-        return res;
+        yield db.EmployeeDBController.Get(req, res);
     })
 };
 module.exports = SessionController;

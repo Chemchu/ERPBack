@@ -5,28 +5,23 @@ const db = Database.Instance();
 
 const ClientController = {
     create: async (req : Request, res : Response) => {   
-        res = await db.ClientDBController.Add(req, res);
-        return res;
+        await db.ClientDBController.Add(req, res);
     },
 
     findAll: async (req : Request, res : Response) => {
-        res = await db.ClientDBController.GetAll(res);
-        return res;
+        await db.ClientDBController.GetAll(res);
     },
 
     findOne: async (req : Request, res : Response) => {
-        res = await db.ClientDBController.Get(req, res);
-        return res;
+        await db.ClientDBController.Get(req, res);
     },
 
     update: async (req : Request, res : Response) => {
-        res = await db.ClientDBController.Update(req, res);
-        return res;
+        await db.ClientDBController.Update(req, res);
     },
 
     delete: async(req : Request, res : Response) => {
-        res = await db.ClientDBController.Remove(req, res);
-        return res;
+        await db.ClientDBController.Remove(req, res);
     },
 }
 

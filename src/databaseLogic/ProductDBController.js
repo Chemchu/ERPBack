@@ -16,33 +16,38 @@ class ProductoDBController {
     }
     Add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const prodJSON = req.body;
-            const productoToAdd = new this.CollectionModel({
-                nombre: prodJSON.nombre,
-                descripcion: prodJSON.descripcion,
-                familia: prodJSON.familia,
-                precioVenta: prodJSON.precioVenta,
-                precioCompra: prodJSON.precioCompra,
-                IVA: prodJSON.IVA,
-                EAN: [prodJSON.EAN],
-                alta: prodJSON.alta,
-                tags: prodJSON.tags,
-                cantidad: prodJSON.cantidad
-            });
-            const prodName = productoToAdd.get('nombre');
-            const prodEAN = productoToAdd.get('EAN');
             try {
+                const prodJSON = req.body;
+                const productoToAdd = new this.CollectionModel({
+                    nombre: prodJSON.nombre,
+                    descripcion: prodJSON.descripcion,
+                    familia: prodJSON.familia,
+                    precioVenta: prodJSON.precioVenta,
+                    precioCompra: prodJSON.precioCompra,
+                    iva: prodJSON.iva,
+                    ean: prodJSON.ean,
+                    alta: prodJSON.alta,
+                    tags: prodJSON.tags,
+                    cantidad: prodJSON.cantidad
+                });
+                const prodName = productoToAdd.get('nombre');
+                const prodEAN = productoToAdd.get('ean');
                 const yaExisteProducto = yield this.CollectionModel.exists({ nombre: prodName });
-                if (yaExisteProducto)
-                    return res.status(200).json({ message: `Error al añadir ${prodJSON.nombre} en la BBDD: nombre en uso`, success: false });
-                const yaExisteEAN = yield this.CollectionModel.exists({ EAN: prodEAN });
-                if (yaExisteEAN)
-                    return res.status(200).json({ message: `Error al añadir ${prodJSON.nombre} en la BBDD: EAN en uso`, success: false });
+                if (yaExisteProducto) {
+                    res.status(200).json({ message: `Error al añadir ${prodJSON.nombre} en la base de datos: nombre en uso`, success: false });
+                    return;
+                }
+                const yaExisteEAN = yield this.CollectionModel.exists({ ean: prodEAN });
+                if (yaExisteEAN) {
+                    res.status(200).json({ message: `Error al añadir ${prodJSON.nombre} en la base de datos: EAN en uso`, success: false });
+                    return;
+                }
                 yield productoToAdd.save();
-                return res.status(200).json({ message: `El producto ${prodName} ha sido añadido en la base de datos`, success: true });
+                res.status(200).json({ message: `El producto ${prodName} ha sido añadido en la base de datos`, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al añadir ${prodJSON.nombre} a la BBDD: ${err}`, success: false });
+                console.log(err);
+                res.status(500).json({ message: `Error al añadir el producto en la base de datos`, success: false });
             }
         });
     }
@@ -50,10 +55,10 @@ class ProductoDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const prodArray = yield this.CollectionModel.find({});
-                return res.status(200).json({ message: prodArray, success: true });
+                res.status(200).json({ message: prodArray, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los productos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los productos: ${err}`, success: false });
             }
         });
     }
@@ -64,10 +69,10 @@ class ProductoDBController {
                 const products = yield this.CollectionModel.find({
                     $or: [{ 'nombre': { $regex: prodAttr, $options: "i" } }, { 'familia': { $regex: prodAttr, $options: "i" } }, { 'EAN': { $regex: prodAttr, $options: "i" } }]
                 }).exec();
-                return res.status(200).json({ message: products, success: true });
+                res.status(200).json({ message: products, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los productos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los productos: ${err}`, success: false });
             }
         });
     }
@@ -77,12 +82,13 @@ class ProductoDBController {
             try {
                 const productDeleted = yield this.CollectionModel.deleteOne({ nombre: productName });
                 if (productDeleted.deletedCount > 0) {
-                    return res.status(200).json({ message: `El producto ${productName} ha sido borrado correctamente de la base de datos`, success: true });
+                    res.status(200).json({ message: `El producto ${productName} ha sido borrado correctamente de la base de datos`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al borrar ${productName} de la BBDD: el producto no existe`, success: false });
+                res.status(200).json({ message: `Error al borrar ${productName} de la base de datos: el producto no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al borrar ${productName} de la BBDD: ${err}`, success: false });
+                res.status(500).json({ message: `Error al borrar ${productName} de la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -104,12 +110,13 @@ class ProductoDBController {
                     cantidad: prodJSON.cantidad
                 });
                 if (productUpdated.modifiedCount > 0) {
-                    return res.status(200).json({ message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true });
+                    res.status(200).json({ message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al actualizar ${productoToUpdate} en la base de datos: el producto no existe`, success: false });
+                res.status(200).json({ message: `Error al actualizar ${productoToUpdate} en la base de datos: el producto no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al actualizar ${productoToUpdate} en la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al actualizar ${productoToUpdate} en la base de datos: ${err}`, success: false });
             }
         });
     }

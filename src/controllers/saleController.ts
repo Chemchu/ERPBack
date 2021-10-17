@@ -5,28 +5,23 @@ const db = Database.Instance();
 
 const SaleController = {
     create: async (req : Request, res : Response) => {   
-        res = await db.VentasDBController.Add(req, res);
-        return res;
+        await db.VentasDBController.Add(req, res);
     },
 
     findAll: async (req : Request, res : Response) => {
-        res = await db.VentasDBController.GetAll(res);
-        return res;
+        await db.VentasDBController.GetAll(res);
     },
 
     findOne: async (req : Request, res : Response) => {
-        res = await db.VentasDBController.Get(req, res);
-        return res;
+        await db.VentasDBController.Get(req, res);
     },
 
     update: async (req : Request, res : Response) => {
-        res = await db.VentasDBController.Update(req, res);
-        return res;
+        await db.VentasDBController.Update(req, res);
     },
 
     delete: async(req : Request, res : Response) => {
-        res = await db.VentasDBController.Remove(req, res);
-        return res;
+        await db.VentasDBController.Remove(req, res);
     }
 }
 

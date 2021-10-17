@@ -17,8 +17,10 @@ class OldEmployeeDBController {
     Add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const employeeJSON = req.body;
-            if (!employeeJSON.dni)
-                return res.status(200).json({ message: `El empleado debe tener un DNI/NIE`, success: false });
+            if (!employeeJSON.dni) {
+                res.status(200).json({ message: `El empleado debe tener un DNI/NIE`, success: false });
+                return;
+            }
             const employeeToAdd = new this.CollectionModel({
                 nombre: employeeJSON.nombre,
                 apellidos: employeeJSON.apellidos,
@@ -29,13 +31,15 @@ class OldEmployeeDBController {
             });
             try {
                 const empleadoExistente = yield this.CollectionModel.exists({ DNI: employeeJSON.DNI });
-                if (empleadoExistente)
-                    return res.status(200).json({ message: `Error al añadir el empleado en la base de datos: el empleado ya existe`, success: false });
+                if (empleadoExistente) {
+                    res.status(200).json({ message: `Error al añadir el empleado en la base de datos: el empleado ya existe`, success: false });
+                    return;
+                }
                 yield employeeToAdd.save();
-                return res.status(200).json({ message: `El empleado ha sido añadido en la base de datos`, success: true });
+                res.status(200).json({ message: `El empleado ha sido añadido en la base de datos`, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al añadir el empleado en la BBDD: ${err}`, success: false });
+                res.status(500).json({ message: `Error al añadir el empleado en la BBDD: ${err}`, success: false });
             }
         });
     }
@@ -43,10 +47,10 @@ class OldEmployeeDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const employeeArr = yield this.CollectionModel.find({});
-                return res.status(200).json({ message: employeeArr, success: true });
+                res.status(200).json({ message: employeeArr, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
             }
         });
     }
@@ -57,10 +61,10 @@ class OldEmployeeDBController {
                 const employees = yield this.CollectionModel.find({
                     $or: [{ 'nombre': { $regex: employeeAttr, $options: "i" } }, { 'DNI': { $regex: employeeAttr, $options: "i" } }]
                 }).exec();
-                return res.status(200).json({ message: employees, success: true });
+                res.status(200).json({ message: employees, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
             }
         });
     }
@@ -70,12 +74,13 @@ class OldEmployeeDBController {
             try {
                 const employeeDeleted = yield this.CollectionModel.deleteOne({ nombre: employeeName });
                 if (employeeDeleted.deletedCount > 0) {
-                    return res.status(200).json({ message: `El empleado ${employeeName} ha sido borrado correctamente de la base de datos`, success: true });
+                    res.status(200).json({ message: `El empleado ${employeeName} ha sido borrado correctamente de la base de datos`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al borrar ${employeeName} de la base de datos: el empleado no existe`, success: false });
+                res.status(200).json({ message: `Error al borrar ${employeeName} de la base de datos: el empleado no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al borrar ${employeeName} de la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al borrar ${employeeName} de la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -93,12 +98,13 @@ class OldEmployeeDBController {
                     fechaBaja: employeeJSON.fechaBaja
                 });
                 if (employeeUpdated.modifiedCount > 0) {
-                    return res.status(200).json({ message: `El empleado ${employeeToUpdate} ha sido actualizado correctamente`, success: true });
+                    res.status(200).json({ message: `El empleado ${employeeToUpdate} ha sido actualizado correctamente`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: el empleado no existe`, success: false });
+                res.status(200).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: el empleado no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: ${err}`, success: false });
             }
         });
     }

@@ -5,28 +5,23 @@ const db = Database.Instance();
 
 const EmployeeController = {
     create: async (req : Request, res : Response) => {   
-        res = await db.EmployeeDBController.Add(req, res);
-        return res;
+        await db.EmployeeDBController.Add(req, res);
     },
 
     findAll: async (req : Request, res : Response) => {
-        res = await db.EmployeeDBController.GetAll(res);
-        return res;
+        await db.EmployeeDBController.GetAll(res);
     },
 
     find: async (req : Request, res : Response) => {
-        res = await db.EmployeeDBController.Get(req, res);
-        return res;
+        await db.EmployeeDBController.Get(req, res);
     },
 
     update: async (req : Request, res : Response) => {
-        res = await db.EmployeeDBController.Update(req, res);
-        return res;
+        await db.EmployeeDBController.Update(req, res);
     },
 
     delete: async(req : Request, res : Response) => {
-        res = await db.EmployeeDBController.Remove(req, res);
-        return res;
+        await db.EmployeeDBController.Remove(req, res);
     }
 }
 

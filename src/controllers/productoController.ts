@@ -6,28 +6,23 @@ const db = Database.Instance();
 const ProductController = {
     create: async (req : Request, res : Response) => {   
         // Añade el producto en la db
-        res = await db.ProductDBController.Add(req, res);
-        res.send();
+        await db.ProductDBController.Add(req, res);
     },
 
     findAll: async (req : Request, res : Response) => {
-        res = await db.ProductDBController.GetAll(res);
-        res.send();
+        await db.ProductDBController.GetAll(res);
     },
 
     find: async (req : Request, res : Response) => {
-        res = await db.ProductDBController.Get(req, res);
-        res.send();
+        await db.ProductDBController.Get(req, res);
     },
 
     update: async (req : Request, res : Response) => {
-        res = await db.ProductDBController.Update(req, res);
-        res.send();
+        await db.ProductDBController.Update(req, res);
     },
 
     delete: async(req : Request, res : Response) => {
-        res = await db.ProductDBController.Remove(req, res);
-        res.send();
+        await db.ProductDBController.Remove(req, res);
     },
 }
 

@@ -13,24 +13,19 @@ const database_1 = require("../databaseLogic/database");
 const db = database_1.Database.Instance();
 const ClientController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Add(req, res);
-        return res;
+        yield db.ClientDBController.Add(req, res);
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.GetAll(res);
-        return res;
+        yield db.ClientDBController.GetAll(res);
     }),
     findOne: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Get(req, res);
-        return res;
+        yield db.ClientDBController.Get(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Update(req, res);
-        return res;
+        yield db.ClientDBController.Update(req, res);
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ClientDBController.Remove(req, res);
-        return res;
+        yield db.ClientDBController.Remove(req, res);
     }),
 };
 module.exports = ClientController;

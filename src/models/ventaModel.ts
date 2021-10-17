@@ -9,7 +9,7 @@ export class Venta {
             productos: [{type: Types.ObjectId, ref: 'Producto'}],
             precioVentaTotal: {type: Number, required: true},
             cliente: {type: Types.ObjectId, ref: 'Cliente'},
-        }, {timestamps: true});
+        }, {strict: true, timestamps: true});
 
         this.modelo = model<ISale>('Venta', VentaSchema);
     }

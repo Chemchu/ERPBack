@@ -5,18 +5,15 @@ const db = Database.Instance();
 
 const SessionController = {
     authenticate: async (req : Request, res : Response) => {   
-        res = await db.EmployeeDBController.Authenticate(req, res);
-        return res;
+        await db.EmployeeDBController.Authenticate(req, res);
     },
 
     logout: async (req : Request, res : Response) => {
-        res = await db.EmployeeDBController.GetAll(res);
-        return res;
+        await db.EmployeeDBController.GetAll(res);
     },
 
     restoreSession: async (req : Request, res : Response) => {
-        res = await db.EmployeeDBController.Get(req, res);
-        return res;
+        await db.EmployeeDBController.Get(req, res);
     }
 }
 

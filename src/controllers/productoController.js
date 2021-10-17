@@ -13,24 +13,19 @@ const database_1 = require("../databaseLogic/database");
 const db = database_1.Database.Instance();
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ProductDBController.Add(req, res);
-        res.send();
+        yield db.ProductDBController.Add(req, res);
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ProductDBController.GetAll(res);
-        res.send();
+        yield db.ProductDBController.GetAll(res);
     }),
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ProductDBController.Get(req, res);
-        res.send();
+        yield db.ProductDBController.Get(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ProductDBController.Update(req, res);
-        res.send();
+        yield db.ProductDBController.Update(req, res);
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.ProductDBController.Remove(req, res);
-        res.send();
+        yield db.ProductDBController.Remove(req, res);
     }),
 };
 module.exports = ProductController;

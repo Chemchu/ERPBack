@@ -13,24 +13,19 @@ const database_1 = require("../databaseLogic/database");
 const db = database_1.Database.Instance();
 const EmployeeController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.Add(req, res);
-        return res;
+        yield db.EmployeeDBController.Add(req, res);
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.GetAll(res);
-        return res;
+        yield db.EmployeeDBController.GetAll(res);
     }),
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.Get(req, res);
-        return res;
+        yield db.EmployeeDBController.Get(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.Update(req, res);
-        return res;
+        yield db.EmployeeDBController.Update(req, res);
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res = yield db.EmployeeDBController.Remove(req, res);
-        return res;
+        yield db.EmployeeDBController.Remove(req, res);
     })
 };
 module.exports = EmployeeController;

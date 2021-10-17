@@ -24,10 +24,10 @@ class SaleDBController {
             });
             try {
                 yield saleToAdd.save();
-                return res.status(200).json({ message: `La venta ha sido añadido en la base de datos`, success: true });
+                res.status(200).json({ message: `La venta ha sido añadido en la base de datos`, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al añadir la venta a la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al añadir la venta a la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -35,10 +35,10 @@ class SaleDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const saleArray = yield this.CollectionModel.find({});
-                return res.status(200).json({ message: saleArray, success: true });
+                res.status(200).json({ message: saleArray, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
             }
         });
     }
@@ -49,10 +49,10 @@ class SaleDBController {
                 const sales = yield this.CollectionModel.find({
                     'created_at': new Date(saleDate)
                 }).exec();
-                return res.status(200).json({ message: sales, success: true });
+                res.status(200).json({ message: sales, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
             }
         });
     }
@@ -62,12 +62,13 @@ class SaleDBController {
             try {
                 const saleDeleted = yield this.CollectionModel.deleteOne({ _id: saleID });
                 if (saleDeleted.deletedCount > 0) {
-                    return res.status(200).json({ message: `La venta ${saleID} ha sido borrada correctamente de la base de datos`, success: true });
+                    res.status(200).json({ message: `La venta ${saleID} ha sido borrada correctamente de la base de datos`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al borrar ${saleID} de la base de datos: la venta no existe`, success: false });
+                res.status(200).json({ message: `Error al borrar ${saleID} de la base de datos: la venta no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al borrar ${saleID} de la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al borrar ${saleID} de la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -82,12 +83,13 @@ class SaleDBController {
                     cliente: saleJSON.clientID,
                 });
                 if (saleUpdated.modifiedCount > 0) {
-                    return res.status(200).json({ message: `La venta ${saleToUpdate} ha sido actualizada correctamente`, success: true });
+                    res.status(200).json({ message: `La venta ${saleToUpdate} ha sido actualizada correctamente`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: la venta no existe`, success: false });
+                res.status(200).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: la venta no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: ${err}`, success: false });
             }
         });
     }

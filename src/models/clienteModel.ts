@@ -10,7 +10,7 @@ export class Cliente {
             nombre: {type: String, required: true},
             calle: {type: String, required: true},
             cp: {type: String, required: true},
-        });
+        }, {strict: true});
 
         this.modelo = model<IClient>('Cliente', ClientSchema);
     }

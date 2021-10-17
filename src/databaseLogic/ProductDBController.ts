@@ -11,54 +11,54 @@ export class ProductoDBController implements IDBController {
         this.CollectionModel = modelo
     }
 
-    public async Add(req: Request, res: Response): Promise<Response> {
-		
-		// El producto en JSON de la petición
-		const prodJSON = req.body;
-
-		// Crea el producto
-		const productoToAdd: mongoose.Document<IProduct> = new this.CollectionModel({
-			nombre: prodJSON.nombre,
-			descripcion: prodJSON.descripcion,
-			familia: prodJSON.familia,
-			precioVenta: prodJSON.precioVenta,
-			precioCompra: prodJSON.precioCompra,
-			IVA: prodJSON.IVA,
-			EAN: [prodJSON.EAN],
-			alta: prodJSON.alta,
-			tags: prodJSON.tags,
-			cantidad: prodJSON.cantidad
-		});
-
-		const prodName = productoToAdd.get('nombre');
-		const prodEAN = productoToAdd.get('EAN');
-
+    public async Add(req: Request, res: Response): Promise<void> {
 		try{			
+			// El producto en JSON de la petición
+			const prodJSON = req.body;
+
+			// Crea el producto
+			const productoToAdd: mongoose.Document<IProduct> = new this.CollectionModel({
+				nombre: prodJSON.nombre,
+				descripcion: prodJSON.descripcion,
+				familia: prodJSON.familia,
+				precioVenta: prodJSON.precioVenta,
+				precioCompra: prodJSON.precioCompra,
+				iva: prodJSON.iva,
+				ean: prodJSON.ean,
+				alta: prodJSON.alta,
+				tags: prodJSON.tags,
+				cantidad: prodJSON.cantidad
+			});
+
+			const prodName = productoToAdd.get('nombre');
+			const prodEAN = productoToAdd.get('ean');
+
 			const yaExisteProducto = await this.CollectionModel.exists({nombre: prodName});
-			if(yaExisteProducto) return res.status(200).json({message: `Error al añadir ${prodJSON.nombre} en la BBDD: nombre en uso`, success: false});
+			if(yaExisteProducto) {res.status(200).json({message: `Error al añadir ${prodJSON.nombre} en la base de datos: nombre en uso`, success: false}); return;}
 			
-			const yaExisteEAN = await this.CollectionModel.exists({EAN: prodEAN});
-			if(yaExisteEAN) return res.status(200).json({message: `Error al añadir ${prodJSON.nombre} en la BBDD: EAN en uso`, success: false});
+			const yaExisteEAN = await this.CollectionModel.exists({ean: prodEAN});
+			if(yaExisteEAN) {res.status(200).json({message: `Error al añadir ${prodJSON.nombre} en la base de datos: EAN en uso`, success: false}); return;}
 		
 			await productoToAdd.save();
-			return res.status(200).json({message: `El producto ${prodName} ha sido añadido en la base de datos`, success: true});
+			res.status(200).json({message: `El producto ${prodName} ha sido añadido en la base de datos`, success: true});
 		}
 		catch(err) {
-			return res.status(500).json({message: `Error al añadir ${prodJSON.nombre} a la BBDD: ${err}`, success: false});
+			console.log(err);
+			res.status(500).json({message: `Error al añadir el producto en la base de datos`, success: false});
 		}
 	}
 
-	public async GetAll(res: Response): Promise<Response> {
+	public async GetAll(res: Response) : Promise<void>{
 		try {
 			const prodArray = await this.CollectionModel.find({});
-			return res.status(200).json({message: prodArray, success: true});
+			res.status(200).json({message: prodArray, success: true});
 		}
 		catch(err) {
-			return res.status(500).json({message: `Error al buscar los productos: ${err}`, success: false});
+			res.status(500).json({message: `Error al buscar los productos: ${err}`, success: false});
 		}
 	}
 
-	public async Get(req: Request, res: Response): Promise<Response> {		
+	public async Get(req: Request, res: Response): Promise<void> {		
 		try {
             const prodAttr = req.params.id;
 			const products = await this.CollectionModel.find(
@@ -69,30 +69,31 @@ export class ProductoDBController implements IDBController {
 
 			//console.log(products.length); // ---> Para contar cuantos productos devuelve la db
 				
-			return res.status(200).json({message: products, success: true});
+			res.status(200).json({message: products, success: true});
 		}
 		catch(err) {
-			return res.status(500).json({message: `Error al buscar los productos: ${err}`, success: false});
+			res.status(500).json({message: `Error al buscar los productos: ${err}`, success: false});
 		}		
 	}
 
 	// TODO
-	public async Remove(req: Request, res: Response): Promise<Response> {
+	public async Remove(req: Request, res: Response): Promise<void> {
         const productName = req.params.id;
 		try {
 			const productDeleted = await this.CollectionModel.deleteOne({nombre: productName});
 			if(productDeleted.deletedCount > 0) {
-				return res.status(200).json({message: `El producto ${productName} ha sido borrado correctamente de la base de datos`, success: true});
+				res.status(200).json({message: `El producto ${productName} ha sido borrado correctamente de la base de datos`, success: true});
+				return;
 			}
-			return res.status(200).json({message: `Error al borrar ${productName} de la BBDD: el producto no existe`, success: false});
+			res.status(200).json({message: `Error al borrar ${productName} de la base de datos: el producto no existe`, success: false});
 		}
 		catch(err) {
-			return res.status(500).json({message: `Error al borrar ${productName} de la BBDD: ${err}`, success: false});
+			res.status(500).json({message: `Error al borrar ${productName} de la base de datos: ${err}`, success: false});
 		}
 	}
 
 	// TODO
-	public async Update(req: Request, res: Response): Promise<Response> {
+	public async Update(req: Request, res: Response): Promise<void> {
 		const productoToUpdate = req.params.id;
         try {
 			const prodJSON = req.body;
@@ -124,12 +125,13 @@ export class ProductoDBController implements IDBController {
 			// }
 
 			if(productUpdated.modifiedCount > 0) {
-				return res.status(200).json({message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true});
+				res.status(200).json({message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true});
+				return;
 			}
-			return res.status(200).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: el producto no existe`, success: false});
+			res.status(200).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: el producto no existe`, success: false});
 		}
 		catch(err) {
-			return res.status(500).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: ${err}`, success: false});
+			res.status(500).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: ${err}`, success: false});
 		}
 	}
 }

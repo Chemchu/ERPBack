@@ -33,13 +33,15 @@ class EmployeeDBController {
             });
             try {
                 const empleadoExistente = yield this.CollectionModel.exists({ dni: employeeJSON.dni });
-                if (empleadoExistente)
-                    return res.status(200).json({ message: `Error al añadir el empleado en la base de datos: el empleado ya existe`, success: false });
+                if (empleadoExistente) {
+                    res.status(200).json({ message: `Error al añadir el empleado en la base de datos: el empleado ya existe`, success: false });
+                    return;
+                }
                 yield employeeToAdd.save();
-                return res.status(200).json({ message: `El empleado ha sido añadido en la base de datos`, success: true });
+                res.status(200).json({ message: `El empleado ha sido añadido en la base de datos`, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al añadir el empleado en la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al añadir el empleado en la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -47,10 +49,10 @@ class EmployeeDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const employeeArr = yield this.CollectionModel.find({});
-                return res.status(200).json({ message: employeeArr, success: true });
+                res.status(200).json({ message: employeeArr, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
             }
         });
     }
@@ -61,10 +63,10 @@ class EmployeeDBController {
                 const employees = yield this.CollectionModel.find({
                     $or: [{ 'nombre': { $regex: employeeAttr, $options: "i" } }, { 'apellidos': { $regex: employeeAttr, $options: "i" } }, { 'dni': { $regex: employeeAttr, $options: "i" } }]
                 }).exec();
-                return res.status(200).json({ message: employees, success: true });
+                res.status(200).json({ message: employees, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los empleados: ${err}`, success: false });
             }
         });
     }
@@ -75,16 +77,18 @@ class EmployeeDBController {
                 const employeeToAuthenticate = yield this.CollectionModel.findOne({
                     email: employeeJSON.email
                 }).exec();
-                if (!employeeToAuthenticate)
-                    return res.status(200).json({ message: "Nombre de usuario o contraseña incorrecto", success: false });
+                if (!employeeToAuthenticate) {
+                    res.status(200).json({ message: "Nombre de usuario o contraseña incorrecto", success: false });
+                    return;
+                }
                 let doesPasswordsMatch = yield bcrypt.compare(employeeJSON.password, employeeToAuthenticate === null || employeeToAuthenticate === void 0 ? void 0 : employeeToAuthenticate.hashPassword);
                 if (doesPasswordsMatch)
-                    return res.status(200).json({ message: "Autenticado con éxito", success: true });
+                    res.status(200).json({ message: "Autenticado con éxito", success: true });
                 else
-                    return res.status(200).json({ message: "Fallo en la autenticación", success: false });
+                    res.status(200).json({ message: "Fallo en la autenticación", success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al autenticar: ${err}`, success: false });
+                res.status(500).json({ message: `Error al autenticar: ${err}`, success: false });
             }
         });
     }
@@ -94,12 +98,13 @@ class EmployeeDBController {
             try {
                 const employeeDeleted = yield this.CollectionModel.deleteOne({ nombre: employeeName });
                 if (employeeDeleted.deletedCount > 0) {
-                    return res.status(200).json({ message: `El empleado ${employeeName} ha sido borrado correctamente de la base de datos`, success: true });
+                    res.status(200).json({ message: `El empleado ${employeeName} ha sido borrado correctamente de la base de datos`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al borrar ${employeeName} de la base de datos: el empleado no existe`, success: false });
+                res.status(200).json({ message: `Error al borrar ${employeeName} de la base de datos: el empleado no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al borrar ${employeeName} de la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al borrar ${employeeName} de la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -121,12 +126,13 @@ class EmployeeDBController {
                     diasLibresDisponibles: employeeJSON.diasLibresDisponibles
                 });
                 if (employeeUpdated.modifiedCount > 0) {
-                    return res.status(200).json({ message: `El empleado ${employeeToUpdate} ha sido actualizado correctamente`, success: true });
+                    res.status(200).json({ message: `El empleado ${employeeToUpdate} ha sido actualizado correctamente`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: el empleado no existe`, success: false });
+                res.status(200).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: el empleado no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al actualizar ${employeeToUpdate} en la base de datos: ${err}`, success: false });
             }
         });
     }

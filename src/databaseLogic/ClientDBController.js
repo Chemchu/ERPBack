@@ -25,10 +25,10 @@ class ClientDBController {
             });
             try {
                 yield clientToAdd.save();
-                return res.status(200).json({ message: `El cliente ha sido añadido en la base de datos`, success: true });
+                res.status(200).json({ message: `El cliente ha sido añadido en la base de datos`, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al añadir el cliente a la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al añadir el cliente a la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -36,10 +36,10 @@ class ClientDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const clientArray = yield this.CollectionModel.find({});
-                return res.status(200).json({ message: clientArray, success: true });
+                res.status(200).json({ message: clientArray, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los clientes: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los clientes: ${err}`, success: false });
             }
         });
     }
@@ -50,10 +50,10 @@ class ClientDBController {
                 const clients = yield this.CollectionModel.find({
                     $or: [{ 'nombre': { $regex: clientAttr, $options: "i" } }, { 'nif': { $regex: clientAttr, $options: "i" } }]
                 }).exec();
-                return res.status(200).json({ message: clients, success: true });
+                res.status(200).json({ message: clients, success: true });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al buscar los clientes: ${err}`, success: false });
+                res.status(500).json({ message: `Error al buscar los clientes: ${err}`, success: false });
             }
         });
     }
@@ -63,12 +63,13 @@ class ClientDBController {
             try {
                 const clientDeleted = yield this.CollectionModel.deleteOne({ _id: clientID });
                 if (clientDeleted.deletedCount > 0) {
-                    return res.status(200).json({ message: `El cliente ${clientID} ha sido borrado correctamente de la base de datos`, success: true });
+                    res.status(200).json({ message: `El cliente ${clientID} ha sido borrado correctamente de la base de datos`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al borrar ${clientID} de la base de datos: el cliente no existe`, success: false });
+                res.status(200).json({ message: `Error al borrar ${clientID} de la base de datos: el cliente no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al borrar ${clientID} de la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al borrar ${clientID} de la base de datos: ${err}`, success: false });
             }
         });
     }
@@ -84,12 +85,13 @@ class ClientDBController {
                     cp: clientJSON.cp,
                 });
                 if (clientUpdated.modifiedCount > 0) {
-                    return res.status(200).json({ message: `El cliente ${clientJSON.nombre} ha sido actualizada correctamente`, success: true });
+                    res.status(200).json({ message: `El cliente ${clientJSON.nombre} ha sido actualizada correctamente`, success: true });
+                    return;
                 }
-                return res.status(200).json({ message: `Error al actualizar ${clientJSON.nombre} en la base de datos: el cliente no existe`, success: false });
+                res.status(200).json({ message: `Error al actualizar ${clientJSON.nombre} en la base de datos: el cliente no existe`, success: false });
             }
             catch (err) {
-                return res.status(500).json({ message: `Error al actualizar ${clientToUpdate} en la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al actualizar ${clientToUpdate} en la base de datos: ${err}`, success: false });
             }
         });
     }

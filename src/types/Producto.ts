@@ -6,8 +6,8 @@ export interface IProduct extends Document {
     familia: string
     precioVenta: number
     precioCompra: number
-    IVA: number
-    EAN: string[]
+    iva: number
+    ean: string[]
     alta: boolean
     tags: string[]
 }
