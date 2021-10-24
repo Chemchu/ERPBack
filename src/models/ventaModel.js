@@ -7,7 +7,9 @@ class Venta {
         const VentaSchema = new mongoose_1.Schema({
             productos: [{ type: mongoose_1.Types.ObjectId, ref: 'Producto' }],
             precioVentaTotal: { type: Number, required: true },
+            cambio: { type: Number, required: true },
             cliente: { type: mongoose_1.Types.ObjectId, ref: 'Cliente' },
+            tipo: { type: String, required: true }
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('Venta', VentaSchema);
     }

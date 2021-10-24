@@ -25,7 +25,7 @@ class Router {
         this.setRoutes();
     }
     setRoutes() {
-        this.app.get("/", (req, res) => {
+        this.app.get("/api", (req, res) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
         this.app.use('/api/productos/', productRoutes_js_1.default);

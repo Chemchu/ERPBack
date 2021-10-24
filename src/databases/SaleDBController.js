@@ -17,16 +17,20 @@ class SaleDBController {
     Add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const saleJSON = req.body;
+            console.log(saleJSON);
             const saleToAdd = new this.CollectionModel({
                 productos: saleJSON.productsID,
-                precioVentaTotal: saleJSON.price,
+                precioVentaTotal: saleJSON.precioVentaTotal,
+                cambio: saleJSON.cambio,
                 cliente: saleJSON.clientID,
+                tipo: saleJSON.tipo
             });
             try {
                 yield saleToAdd.save();
                 res.status(200).json({ message: `La venta ha sido añadido en la base de datos`, success: true });
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({ message: `Error al añadir la venta a la base de datos: ${err}`, success: false });
             }
         });
@@ -38,6 +42,7 @@ class SaleDBController {
                 res.status(200).json({ message: saleArray, success: true });
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
             }
         });
@@ -52,6 +57,7 @@ class SaleDBController {
                 res.status(200).json({ message: sales, success: true });
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
             }
         });
@@ -68,6 +74,7 @@ class SaleDBController {
                 res.status(200).json({ message: `Error al borrar ${saleID} de la base de datos: la venta no existe`, success: false });
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({ message: `Error al borrar ${saleID} de la base de datos: ${err}`, success: false });
             }
         });
@@ -79,8 +86,10 @@ class SaleDBController {
                 const saleJSON = req.body;
                 const saleUpdated = yield this.CollectionModel.updateOne({ _id: saleToUpdate }, {
                     productos: saleJSON.productsID,
-                    precioVentaTotal: saleJSON.price,
+                    precioVentaTotal: saleJSON.precioVentaTotal,
+                    cambio: saleJSON.cambio,
                     cliente: saleJSON.clientID,
+                    tipo: saleJSON.tipo
                 });
                 if (saleUpdated.modifiedCount > 0) {
                     res.status(200).json({ message: `La venta ${saleToUpdate} ha sido actualizada correctamente`, success: true });
@@ -89,6 +98,7 @@ class SaleDBController {
                 res.status(200).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: la venta no existe`, success: false });
             }
             catch (err) {
+                console.log(err);
                 res.status(500).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: ${err}`, success: false });
             }
         });

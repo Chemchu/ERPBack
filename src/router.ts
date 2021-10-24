@@ -32,7 +32,7 @@ export class Router {
     }
   
     private setRoutes(): void {
-        this.app.get("/", (req:Request, res:Response) => {
+        this.app.get("/api", (req:Request, res:Response) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
 

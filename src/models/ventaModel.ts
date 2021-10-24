@@ -8,7 +8,9 @@ export class Venta {
         const VentaSchema = new Schema({
             productos: [{type: Types.ObjectId, ref: 'Producto'}],
             precioVentaTotal: {type: Number, required: true},
+            cambio: {type: Number, required: true},
             cliente: {type: Types.ObjectId, ref: 'Cliente'},
+            tipo: {type: String, required: true}
         }, {strict: true, timestamps: true});
 
         this.modelo = model<ISale>('Venta', VentaSchema);

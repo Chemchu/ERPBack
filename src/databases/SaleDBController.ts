@@ -16,11 +16,15 @@ export class SaleDBController implements IDBController {
 		// La venta en JSON de la petición
 		const saleJSON = req.body;
 
+		console.log(saleJSON);
+
 		// Crea el producto
 		const saleToAdd: mongoose.Document<ISale> = new this.CollectionModel({
 			productos: saleJSON.productsID,
-            precioVentaTotal: saleJSON.price,
+            precioVentaTotal: saleJSON.precioVentaTotal,
+			cambio: saleJSON.cambio,
             cliente: saleJSON.clientID,
+			tipo: saleJSON.tipo
 		});
 
 		try{					
@@ -28,6 +32,7 @@ export class SaleDBController implements IDBController {
 			res.status(200).json({message: `La venta ha sido añadido en la base de datos`, success: true});
 		}
 		catch(err) {
+			console.log(err);
 			res.status(500).json({message: `Error al añadir la venta a la base de datos: ${err}`, success: false});
 		}
 	}
@@ -38,6 +43,7 @@ export class SaleDBController implements IDBController {
 			res.status(200).json({message: saleArray, success: true});
 		}
 		catch(err) {
+			console.log(err);
 			res.status(500).json({message: `Error al buscar las ventas: ${err}`, success: false});
 		}
 	}
@@ -54,6 +60,7 @@ export class SaleDBController implements IDBController {
 			res.status(200).json({message: sales, success: true});
 		}
 		catch(err) {
+			console.log(err);
 			res.status(500).json({message: `Error al buscar las ventas: ${err}`, success: false});
 		}		
 	}
@@ -69,6 +76,7 @@ export class SaleDBController implements IDBController {
 			res.status(200).json({message: `Error al borrar ${saleID} de la base de datos: la venta no existe`, success: false});
 		}
 		catch(err) {
+			console.log(err);
 			res.status(500).json({message: `Error al borrar ${saleID} de la base de datos: ${err}`, success: false});
 		}
 	}
@@ -79,8 +87,10 @@ export class SaleDBController implements IDBController {
 			const saleJSON = req.body;
 			const saleUpdated = await this.CollectionModel.updateOne({_id: saleToUpdate}, {
 				productos: saleJSON.productsID,
-				precioVentaTotal: saleJSON.price,
+				precioVentaTotal: saleJSON.precioVentaTotal,
+				cambio: saleJSON.cambio,
 				cliente: saleJSON.clientID,
+				tipo: saleJSON.tipo
 			});
 
 			if(saleUpdated.modifiedCount > 0) {
@@ -90,6 +100,7 @@ export class SaleDBController implements IDBController {
 			res.status(200).json({message: `Error al actualizar ${saleToUpdate} en la base de datos: la venta no existe`, success: false});
 		}
 		catch(err) {
+			console.log(err);
 			res.status(500).json({message: `Error al actualizar ${saleToUpdate} en la base de datos: ${err}`, success: false});
 		}
 	}
