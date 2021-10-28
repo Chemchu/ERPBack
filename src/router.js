@@ -20,7 +20,7 @@ class Router {
             origin: "*"
         };
         this.app.use(cors(corsOptions));
-        this.app.use(express_1.default.json());
+        this.app.use(express_1.default.json({ limit: '50mb' }));
         this.app.use(express_1.default.urlencoded({ extended: true }));
         this.setRoutes();
     }

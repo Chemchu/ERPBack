@@ -22,7 +22,7 @@ export class Router {
         this.app.use(cors(corsOptions));
 
         // parse requests of content-type - application/json
-        this.app.use(express.json());
+        this.app.use(express.json({limit: '50mb'}));
 
         // parse requests of content-type - application/x-www-form-urlencoded
         this.app.use(express.urlencoded({extended: true}));
