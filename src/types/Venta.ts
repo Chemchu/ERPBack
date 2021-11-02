@@ -3,8 +3,11 @@ import { IClient } from './Cliente';
 import { IProduct } from './Producto';
 
 export interface ISale extends Document {
-    Productos: [IProduct],
-    PrecioVentaTotal: number,
-    Fecha: Date,
-    Cliente?: IClient
+    productos: string[],
+    dineroEntregadoEfectivo: number,
+    dineroEntregadoTarjeta: number,
+    precioVentaTotal: number,
+    cambio: number,
+    cliente?: IClient,
+    tipo: string
 }

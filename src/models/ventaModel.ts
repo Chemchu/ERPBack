@@ -1,19 +1,21 @@
 import {Schema, model, Model, Types} from 'mongoose';
 import { ISale } from '../types/Venta';
-import { Tupla } from '../types/Tupla';
+
 
 export class Venta {
     private modelo: Model<ISale>;
-
+    
     constructor(){
+        const ProductoVendidoSchema = new Schema({ _id: String, cantidad: Number, dto: Number });
         const VentaSchema = new Schema({
-            productos: [{type: Types.ObjectId, ref: 'Producto'}],
+            productos: [ProductoVendidoSchema],
             precioVentaTotal: {type: Number, required: true},
-            dineroEntregado: {type: [String, Number], required: true},
+            dineroEntregadoEfectivo: { type: Number, required: true},
+            dineroEntregadoTarjeta: { type: Number, required: true},
             cambio: {type: Number, required: true},
             cliente: {type: Types.ObjectId, ref: 'Cliente'},
             tipo: {type: String, required: true}
-        }, {strict: true, timestamps: true});
+        }, {strict: true, timestamps: true}) as Schema<ISale>;
 
         this.modelo = model<ISale>('Venta', VentaSchema);
     }
