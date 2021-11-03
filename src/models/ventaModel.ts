@@ -6,7 +6,7 @@ export class Venta {
     private modelo: Model<ISale>;
     
     constructor(){
-        const ProductoVendidoSchema = new Schema({ _id: String, cantidad: Number, dto: Number });
+        const ProductoVendidoSchema = new Schema({ _id: String, cantidad: Number, dto: Number, precioUnidad: Number });
         const VentaSchema = new Schema({
             productos: [ProductoVendidoSchema],
             precioVentaTotal: {type: Number, required: true},

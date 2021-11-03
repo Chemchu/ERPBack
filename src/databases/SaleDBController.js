@@ -19,8 +19,10 @@ class SaleDBController {
             const saleJSON = req.body;
             console.log(saleJSON);
             const saleToAdd = new this.CollectionModel({
-                productos: saleJSON.productsID,
+                productos: saleJSON.productos,
                 precioVentaTotal: saleJSON.precioVentaTotal,
+                dineroEntregadoEfectivo: saleJSON.precioVentaEfectivo,
+                dineroEntregadoTarjeta: saleJSON.precioVentaTarjeta,
                 cambio: saleJSON.cambio,
                 cliente: saleJSON.clientID,
                 tipo: saleJSON.tipo

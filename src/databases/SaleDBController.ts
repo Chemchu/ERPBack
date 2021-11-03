@@ -20,8 +20,10 @@ export class SaleDBController implements IDBController {
 
 		// Crea el producto
 		const saleToAdd: mongoose.Document<ISale> = new this.CollectionModel({
-			productos: saleJSON.productsID,
+			productos: saleJSON.productos,
             precioVentaTotal: saleJSON.precioVentaTotal,
+			dineroEntregadoEfectivo: saleJSON.precioVentaEfectivo,
+			dineroEntregadoTarjeta: saleJSON.precioVentaTarjeta,
 			cambio: saleJSON.cambio,
             cliente: saleJSON.clientID,
 			tipo: saleJSON.tipo

@@ -4,7 +4,7 @@ exports.Venta = void 0;
 const mongoose_1 = require("mongoose");
 class Venta {
     constructor() {
-        const ProductoVendidoSchema = new mongoose_1.Schema({ _id: String, cantidad: Number, dto: Number });
+        const ProductoVendidoSchema = new mongoose_1.Schema({ _id: String, cantidad: Number, dto: Number, precioUnidad: Number });
         const VentaSchema = new mongoose_1.Schema({
             productos: [ProductoVendidoSchema],
             precioVentaTotal: { type: Number, required: true },
