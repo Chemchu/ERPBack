@@ -67,8 +67,6 @@ export class ProductoDBController implements IDBController {
 				$or:[{'nombre': {$regex : prodAttr, $options: "i"} }, {'familia': {$regex : prodAttr, $options: "i"} }, {'EAN': {$regex : prodAttr, $options: "i"} }]
 			}
 			).exec();	
-
-			//console.log(products.length); // ---> Para contar cuantos productos devuelve la db
 				
 			res.status(200).json({message: products, success: true});
 		}
@@ -95,10 +93,10 @@ export class ProductoDBController implements IDBController {
 
 	// TODO
 	public async Update(req: Request, res: Response): Promise<void> {
-		const productoToUpdate = req.params.id;
+		const productoToUpdateId = req.params.id;
         try {
 			const prodJSON = req.body;
-			const productUpdated = await this.CollectionModel.updateOne({nombre: productoToUpdate}, {
+			const productUpdated = await this.CollectionModel.updateOne({_id: productoToUpdateId}, {
 				nombre: prodJSON.nombre,
 				descripcion: prodJSON.descripcion,
 				familia: prodJSON.familia,
@@ -113,13 +111,13 @@ export class ProductoDBController implements IDBController {
 			});
 
 			if(productUpdated.modifiedCount > 0) {
-				res.status(200).json({message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true});
+				res.status(200).json({message: `El producto ${productoToUpdateId} ha sido actualizado correctamente`, success: true});
 				return;
 			}
-			res.status(200).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: el producto no existe`, success: false});
+			res.status(200).json({message: `Error al actualizar ${productoToUpdateId} en la base de datos: el producto no existe`, success: false});
 		}
 		catch(err) {
-			res.status(500).json({message: `Error al actualizar ${productoToUpdate} en la base de datos: ${err}`, success: false});
+			res.status(500).json({message: `Error al actualizar ${productoToUpdateId} en la base de datos: ${err}`, success: false});
 		}
 	}
 }

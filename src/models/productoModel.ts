@@ -6,21 +6,23 @@ export class Producto {
   private modelo: Model<IProduct>;
 
   constructor(){
-      const ProductSchema = new Schema({
-        nombre: {type: String, required: true},
-        descripcion: {type: String, required: false},
-        familia: {type: String, required: false},
-        precioVenta: {type: Number, required: true},
-        precioCompra: {type: Number, required: false},
-        iva: {type: Number, required: false},
-        ean: {type: [String], required: false},
-        alta: {type: Boolean, required: true},
-        tags: {type: [String], required: true},
-        img: {type: Buffer, required: false},
-        cantidad: {type: Number, required: true}
-      }, {strict: true});
+    const Promocion = new Schema({ cantidadNecesaria: Number, dto: Number, precioFijo: Number });
+    const ProductSchema = new Schema({
+      nombre: {type: String, required: true},
+      descripcion: {type: String, required: false},
+      familia: {type: String, required: false},
+      precioVenta: {type: Number, required: true},
+      precioCompra: {type: Number, required: false},
+      promociones: {type: [Promocion], required: false},
+      iva: {type: Number, required: false},
+      ean: {type: [String], required: false},
+      alta: {type: Boolean, required: true},
+      tags: {type: [String], required: true},
+      img: {type: Buffer as unknown as Buffer, required: false},
+      cantidad: {type: Number, required: true}
+    }, {strict: true}) as Schema<IProduct>;
 
-      this.modelo = model<IProduct>('Producto', ProductSchema);
+    this.modelo = model<IProduct>('Producto', ProductSchema);
   }
 
   public get Model(): Model<IProduct> {

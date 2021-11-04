@@ -95,10 +95,10 @@ class ProductoDBController {
     }
     Update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const productoToUpdate = req.params.id;
+            const productoToUpdateId = req.params.id;
             try {
                 const prodJSON = req.body;
-                const productUpdated = yield this.CollectionModel.updateOne({ nombre: productoToUpdate }, {
+                const productUpdated = yield this.CollectionModel.updateOne({ _id: productoToUpdateId }, {
                     nombre: prodJSON.nombre,
                     descripcion: prodJSON.descripcion,
                     familia: prodJSON.familia,
@@ -112,13 +112,13 @@ class ProductoDBController {
                     img: Buffer.from(prodJSON.img, 'base64')
                 });
                 if (productUpdated.modifiedCount > 0) {
-                    res.status(200).json({ message: `El producto ${productoToUpdate} ha sido actualizado correctamente`, success: true });
+                    res.status(200).json({ message: `El producto ${productoToUpdateId} ha sido actualizado correctamente`, success: true });
                     return;
                 }
-                res.status(200).json({ message: `Error al actualizar ${productoToUpdate} en la base de datos: el producto no existe`, success: false });
+                res.status(200).json({ message: `Error al actualizar ${productoToUpdateId} en la base de datos: el producto no existe`, success: false });
             }
             catch (err) {
-                res.status(500).json({ message: `Error al actualizar ${productoToUpdate} en la base de datos: ${err}`, success: false });
+                res.status(500).json({ message: `Error al actualizar ${productoToUpdateId} en la base de datos: ${err}`, success: false });
             }
         });
     }

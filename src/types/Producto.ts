@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, SchemaDefinition } from 'mongoose';
 
 export interface IProduct extends Document {
     nombre: string
@@ -6,9 +6,11 @@ export interface IProduct extends Document {
     familia: string
     precioVenta: number
     precioCompra: number
+    promociones: SchemaDefinition[]
     iva: number
     ean: string[]
     alta: boolean
     tags: string[]
     img: Buffer
+    cantidad: number
 }
