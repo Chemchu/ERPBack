@@ -12,21 +12,26 @@ export class SaleDBController implements IDBController {
     }
 
 	public async Add(req: Request, res: Response): Promise<void> {
-		
 		// La venta en JSON de la petición
 		const saleJSON = req.body;
 
-		console.log(saleJSON);
+		/* Esquema de saleJSON.productos
+			{ _id: String, cantidad: Number, dto: Number, precioUnidad: Number } 
+		*/
 
 		// Crea el producto
 		const saleToAdd: mongoose.Document<ISale> = new this.CollectionModel({
 			productos: saleJSON.productos,
-            precioVentaTotal: saleJSON.precioVentaTotal,
 			dineroEntregadoEfectivo: saleJSON.precioVentaEfectivo,
 			dineroEntregadoTarjeta: saleJSON.precioVentaTarjeta,
+            precioVentaTotal: saleJSON.precioVentaTotal,
 			cambio: saleJSON.cambio,
             cliente: saleJSON.clientID,
-			tipo: saleJSON.tipo
+			vendidoPor: saleJSON.empleadoID,
+			modificadoPor: saleJSON.empleadoID,
+			tipo: saleJSON.tipo,
+			descuentoEfectivo: saleJSON.dtoEfectivo,
+			descuentoTarjeta: saleJSON.dtoTarjeta,
 		});
 
 		try{					

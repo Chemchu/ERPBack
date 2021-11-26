@@ -10,21 +10,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../databases/database");
+const log4js_1 = require("log4js");
+(0, log4js_1.configure)("./filename");
+const logger = (0, log4js_1.getLogger)();
+logger.level = "debug";
 const db = database_1.Database.Instance();
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("REQUEST: Se intenta crear producto");
         yield db.ProductDBController.Add(req, res);
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("REQUEST: Petición de todos los productos");
         yield db.ProductDBController.GetAll(res);
     }),
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("REQUEST: Petición de un solo producto");
         yield db.ProductDBController.Get(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("REQUEST: Actualización de producto");
         yield db.ProductDBController.Update(req, res);
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("REQUEST: Borrado de producto");
         yield db.ProductDBController.Remove(req, res);
     }),
 };

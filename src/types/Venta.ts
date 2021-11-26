@@ -4,7 +4,6 @@ import { IEmployee } from './Empleado';
 
 export interface ISale extends Document {
     productos: SchemaDefinition[],
-    dineroEntregadoTotal: number,
     dineroEntregadoEfectivo: number,
     dineroEntregadoTarjeta: number,
     precioVentaTotal: number,
@@ -12,5 +11,7 @@ export interface ISale extends Document {
     cliente: IClient["_id"],
     vendidoPor: IEmployee["_id"],
     modificadoPor: IEmployee["_id"],
-    tipo: string
+    tipo: string,
+    descuentoEfectivo: number,
+    descuentoTarjeta: number,
 }

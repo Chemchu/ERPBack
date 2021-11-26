@@ -17,15 +17,18 @@ class SaleDBController {
     Add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const saleJSON = req.body;
-            console.log(saleJSON);
             const saleToAdd = new this.CollectionModel({
                 productos: saleJSON.productos,
-                precioVentaTotal: saleJSON.precioVentaTotal,
                 dineroEntregadoEfectivo: saleJSON.precioVentaEfectivo,
                 dineroEntregadoTarjeta: saleJSON.precioVentaTarjeta,
+                precioVentaTotal: saleJSON.precioVentaTotal,
                 cambio: saleJSON.cambio,
                 cliente: saleJSON.clientID,
-                tipo: saleJSON.tipo
+                vendidoPor: saleJSON.empleadoID,
+                modificadoPor: saleJSON.empleadoID,
+                tipo: saleJSON.tipo,
+                descuentoEfectivo: saleJSON.dtoEfectivo,
+                descuentoTarjeta: saleJSON.dtoTarjeta,
             });
             try {
                 yield saleToAdd.save();
