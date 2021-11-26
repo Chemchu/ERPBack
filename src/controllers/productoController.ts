@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { Database } from '../databases/database';
-import { configure, getLogger } from "log4js";
+import { getLogger } from "log4js";
 
-configure("./filename");
 const logger = getLogger();
 logger.level = "debug";
  
