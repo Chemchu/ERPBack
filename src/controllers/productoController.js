@@ -16,23 +16,23 @@ logger.level = "debug";
 const db = database_1.Database.Instance();
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("REQUEST: Se intenta crear producto");
+        logger.info("PRODUCT-REQUEST: Se intenta crear producto");
         yield db.ProductDBController.Add(req, res);
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("REQUEST: Petición de todos los productos");
+        logger.info("PRODUCT-REQUEST: Petición de todos los productos");
         yield db.ProductDBController.GetAll(res);
     }),
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("REQUEST: Petición de un solo producto");
+        logger.info("PRODUCT-REQUEST: Petición de un solo producto");
         yield db.ProductDBController.Get(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("REQUEST: Actualización de producto");
+        logger.info("PRODUCT-REQUEST: Actualización de producto");
         yield db.ProductDBController.Update(req, res);
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("REQUEST: Borrado de producto");
+        logger.info("PRODUCT-REQUEST: Borrado de producto");
         yield db.ProductDBController.Remove(req, res);
     }),
 };
