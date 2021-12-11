@@ -8,27 +8,27 @@ logger.level = "debug";
 const db = Database.Instance();
 
 const ClientController = {
-    create: async (req : Request, res : Response) => {   
+    create: async (req: Request, res: Response) => {
         logger.info("CLIENT-REQUEST: Se intenta crear un nuevo cliente");
         await db.ClientDBController.Add(req, res);
     },
 
-    findAll: async (req : Request, res : Response) => {
+    findAll: async (req: Request, res: Response) => {
         logger.info("CLIENT-REQUEST: Petición de todos los clientes");
         await db.ClientDBController.GetAll(res);
     },
 
-    findOne: async (req : Request, res : Response) => {
+    findOne: async (req: Request, res: Response) => {
         logger.info("CLIENT-REQUEST: Petición de un solo cliente");
         await db.ClientDBController.Get(req, res);
     },
 
-    update: async (req : Request, res : Response) => {
+    update: async (req: Request, res: Response) => {
         logger.info("CLIENT-REQUEST: Actualización de cliente");
         await db.ClientDBController.Update(req, res);
     },
 
-    delete: async(req : Request, res : Response) => {
+    delete: async (req: Request, res: Response) => {
         logger.info("CLIENT-REQUEST: Borrado de cliente");
         await db.ClientDBController.Remove(req, res);
     },

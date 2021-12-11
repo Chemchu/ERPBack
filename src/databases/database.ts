@@ -13,25 +13,25 @@ import { OldEmployeeDBController } from './OldEmployeeDBController';
 import { OldEmpleado } from '../models/oldEmployeeModel';
 
 mongoose.Promise = global.Promise;
-		
+
 dotenv.config();
 
-const dbInformation : any = {
-	mongo : mongoose,
+const dbInformation: any = {
+	mongo: mongoose,
 	url: process.env.MONGO_URI == "" ? "mongodb://localhost:27017/" : process.env.MONGO_URI,
-	dbName : process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
+	dbName: process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
 };
 export class Database {
-    private static instance: Database;
+	private static instance: Database;
 	private db: mongoose.Mongoose;
 
-	public ProductDBController : ProductoDBController;
-	public VentasDBController : SaleDBController; 
-	public ClientDBController : ClientDBController;
-	public EmployeeDBController : EmployeeDBController;
-	public OldEmployeeDBController : OldEmployeeDBController
+	public ProductDBController: ProductoDBController;
+	public VentasDBController: SaleDBController;
+	public ClientDBController: ClientDBController;
+	public EmployeeDBController: EmployeeDBController;
+	public OldEmployeeDBController: OldEmployeeDBController
 
-    private constructor () {
+	private constructor() {
 		this.db = dbInformation.mongo;
 
 		this.ProductDBController = new ProductoDBController(new Producto().Model);
@@ -41,20 +41,19 @@ export class Database {
 		this.OldEmployeeDBController = new OldEmployeeDBController(new OldEmpleado().Model);
 
 		this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
-            console.log("¡Conexión realizada con la base de datos!");
-        }).catch((err: ErrorRequestHandler) => {
-            console.log("¡No se pudo realizar la conexión con la base de datos!", err);
-            process.exit();
-        });
+			console.log("¡Conexión realizada con la base de datos!");
+		}).catch((err: ErrorRequestHandler) => {
+			console.log("¡No se pudo realizar la conexión con la base de datos!", err);
+			process.exit();
+		});
+	}
 
-    }
-
-    public static Instance(): Database  {
-		if(!this.instance) {
+	public static Instance(): Database {
+		if (!this.instance) {
 			this.instance = new Database();
 		}
 		return this.instance;
-    }
+	}
 
 	public get MongooseInstance(): mongoose.Mongoose {
 		return this.db;
