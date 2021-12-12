@@ -67,6 +67,17 @@ class SaleDBController {
             }
         });
     }
+    GetDBState(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const databaseState = yield this.CollectionModel.find({ "databaseState": { $ne: null } });
+                res.status(200).json({ message: databaseState, success: true });
+            }
+            catch (err) {
+                res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });
+            }
+        });
+    }
     Remove(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const saleID = req.params.id;

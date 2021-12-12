@@ -76,6 +76,17 @@ export class ProductoDBController implements IDBController {
 		}
 	}
 
+	public async GetDBState(req: Request, res: Response): Promise<void> {
+		try {
+			const databaseState = await this.CollectionModel.find({ "databaseState": { $ne: null } });
+
+			res.status(200).json({ message: databaseState, success: true });
+		}
+		catch (err) {
+			res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });
+		}
+	}
+
 	// TODO
 	public async Remove(req: Request, res: Response): Promise<void> {
 		const productName = req.params.id;

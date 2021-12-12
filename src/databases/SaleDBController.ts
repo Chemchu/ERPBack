@@ -5,11 +5,11 @@ import { Request, Response } from 'express';
 
 export class SaleDBController implements IDBController {
 
-    public CollectionModel: mongoose.Model<ISale>;
+	public CollectionModel: mongoose.Model<ISale>;
 
-    constructor(modelo: mongoose.Model<ISale>) {
-        this.CollectionModel = modelo
-    }
+	constructor(modelo: mongoose.Model<ISale>) {
+		this.CollectionModel = modelo
+	}
 
 	public async Add(req: Request, res: Response): Promise<void> {
 		// La venta en JSON de la petición
@@ -24,9 +24,9 @@ export class SaleDBController implements IDBController {
 			productos: saleJSON.productos,
 			dineroEntregadoEfectivo: saleJSON.precioVentaEfectivo,
 			dineroEntregadoTarjeta: saleJSON.precioVentaTarjeta,
-            precioVentaTotal: saleJSON.precioVentaTotal,
+			precioVentaTotal: saleJSON.precioVentaTotal,
 			cambio: saleJSON.cambio,
-            cliente: saleJSON.clientID,
+			cliente: saleJSON.clientID,
 			vendidoPor: saleJSON.empleadoID,
 			modificadoPor: saleJSON.empleadoID,
 			tipo: saleJSON.tipo,
@@ -34,13 +34,13 @@ export class SaleDBController implements IDBController {
 			descuentoTarjeta: saleJSON.dtoTarjeta,
 		});
 
-		try{					
+		try {
 			await saleToAdd.save();
-			res.status(200).json({message: `La venta ha sido añadido en la base de datos`, success: true});
+			res.status(200).json({ message: `La venta ha sido añadido en la base de datos`, success: true });
 		}
-		catch(err) {
+		catch (err) {
 			console.log(err);
-			res.status(500).json({message: `Error al añadir la venta a la base de datos: ${err}`, success: false});
+			res.status(500).json({ message: `Error al añadir la venta a la base de datos: ${err}`, success: false });
 		}
 	}
 
@@ -48,52 +48,63 @@ export class SaleDBController implements IDBController {
 		try {
 			// Hacer sort reverse en lugar de ejecutar el metodo reverse del array
 			const saleArray = await this.CollectionModel.find({})
-			res.status(200).json({message: saleArray, success: true});
+			res.status(200).json({ message: saleArray, success: true });
 		}
-		catch(err) {
+		catch (err) {
 			console.log(err);
-			res.status(500).json({message: `Error al buscar las ventas: ${err}`, success: false});
+			res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
 		}
 	}
 
-	public async Get(req: Request, res: Response): Promise<void> {		
+	public async Get(req: Request, res: Response): Promise<void> {
 		try {
-            const saleDate = req.params.id;
+			const saleDate = req.params.id;
 			const sales = await this.CollectionModel.find(
-			{ 
-				'created_at': new Date(saleDate)
-			}
-			).exec();	
-				
-			res.status(200).json({message: sales, success: true});
+				{
+					'created_at': new Date(saleDate)
+				}
+			).exec();
+
+			res.status(200).json({ message: sales, success: true });
 		}
-		catch(err) {
+		catch (err) {
 			console.log(err);
-			res.status(500).json({message: `Error al buscar las ventas: ${err}`, success: false});
-		}		
+			res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
+		}
+	}
+
+	public async GetDBState(req: Request, res: Response): Promise<void> {
+		try {
+			const databaseState = await this.CollectionModel.find({ "databaseState": { $ne: null } });
+
+			res.status(200).json({ message: databaseState, success: true });
+		}
+		catch (err) {
+			res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });
+		}
 	}
 
 	public async Remove(req: Request, res: Response): Promise<void> {
 		const saleID = req.params.id;
 		try {
-			const saleDeleted = await this.CollectionModel.deleteOne({_id: saleID});
-			if(saleDeleted.deletedCount > 0) {
-				res.status(200).json({message: `La venta ${saleID} ha sido borrada correctamente de la base de datos`, success: true});
+			const saleDeleted = await this.CollectionModel.deleteOne({ _id: saleID });
+			if (saleDeleted.deletedCount > 0) {
+				res.status(200).json({ message: `La venta ${saleID} ha sido borrada correctamente de la base de datos`, success: true });
 				return;
 			}
-			res.status(200).json({message: `Error al borrar ${saleID} de la base de datos: la venta no existe`, success: false});
+			res.status(200).json({ message: `Error al borrar ${saleID} de la base de datos: la venta no existe`, success: false });
 		}
-		catch(err) {
+		catch (err) {
 			console.log(err);
-			res.status(500).json({message: `Error al borrar ${saleID} de la base de datos: ${err}`, success: false});
+			res.status(500).json({ message: `Error al borrar ${saleID} de la base de datos: ${err}`, success: false });
 		}
 	}
 
 	public async Update(req: Request, res: Response): Promise<void> {
 		const saleToUpdate = req.params.id;
-        try {
+		try {
 			const saleJSON = req.body;
-			const saleUpdated = await this.CollectionModel.updateOne({_id: saleToUpdate}, {
+			const saleUpdated = await this.CollectionModel.updateOne({ _id: saleToUpdate }, {
 				productos: saleJSON.productsID,
 				precioVentaTotal: saleJSON.precioVentaTotal,
 				cambio: saleJSON.cambio,
@@ -101,15 +112,15 @@ export class SaleDBController implements IDBController {
 				tipo: saleJSON.tipo
 			});
 
-			if(saleUpdated.modifiedCount > 0) {
-				res.status(200).json({message: `La venta ${saleToUpdate} ha sido actualizada correctamente`, success: true});
+			if (saleUpdated.modifiedCount > 0) {
+				res.status(200).json({ message: `La venta ${saleToUpdate} ha sido actualizada correctamente`, success: true });
 				return;
 			}
-			res.status(200).json({message: `Error al actualizar ${saleToUpdate} en la base de datos: la venta no existe`, success: false});
+			res.status(200).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: la venta no existe`, success: false });
 		}
-		catch(err) {
+		catch (err) {
 			console.log(err);
-			res.status(500).json({message: `Error al actualizar ${saleToUpdate} en la base de datos: ${err}`, success: false});
+			res.status(500).json({ message: `Error al actualizar ${saleToUpdate} en la base de datos: ${err}`, success: false });
 		}
 	}
 }
