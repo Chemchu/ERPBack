@@ -81,6 +81,7 @@ class ProductoDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const databaseState = yield this.CollectionModel.find({ "databaseState": { $ne: null } });
+                console.log(databaseState);
                 res.status(200).json({ message: databaseState, success: true });
             }
             catch (err) {

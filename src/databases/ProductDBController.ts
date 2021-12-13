@@ -80,6 +80,8 @@ export class ProductoDBController implements IDBController {
 		try {
 			const databaseState = await this.CollectionModel.find({ "databaseState": { $ne: null } });
 
+			console.log(databaseState)
+
 			res.status(200).json({ message: databaseState, success: true });
 		}
 		catch (err) {

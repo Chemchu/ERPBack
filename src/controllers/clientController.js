@@ -23,9 +23,13 @@ const ClientController = {
         logger.info("CLIENT-REQUEST: Petición de todos los clientes");
         yield db.ClientDBController.GetAll(res);
     }),
-    findOne: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("CLIENT-REQUEST: Petición de un solo cliente");
         yield db.ClientDBController.Get(req, res);
+    }),
+    getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("CLIENT-REQUEST: Petición del estado de los clientes");
+        yield db.ProductDBController.GetDBState(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("CLIENT-REQUEST: Actualización de cliente");

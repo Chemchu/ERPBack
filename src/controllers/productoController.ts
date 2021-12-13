@@ -25,8 +25,8 @@ const ProductController = {
     },
 
     getState: async (req: Request, res: Response) => {
-        logger.info("PRODUCT-REQUEST: Petición del estado del producto");
-        await db.ProductDBController.Get(req, res);
+        logger.info("PRODUCT-REQUEST: Petición del estado de los productos");
+        await db.ProductDBController.GetDBState(req, res);
     },
 
     update: async (req: Request, res: Response) => {

@@ -23,9 +23,13 @@ const SaleController = {
         logger.info("SALE-REQUEST: Petición de todas las ventas");
         yield db.VentasDBController.GetAll(res);
     }),
-    findOne: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("SALE-REQUEST: Petición de una sola venta");
         yield db.VentasDBController.Get(req, res);
+    }),
+    getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("SALE-REQUEST: Petición del estado de las ventas");
+        yield db.ProductDBController.Get(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("SALE-REQUEST: Actualización de venta");

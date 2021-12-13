@@ -28,8 +28,8 @@ const ProductController = {
         yield db.ProductDBController.Get(req, res);
     }),
     getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Petición del estado del producto");
-        yield db.ProductDBController.Get(req, res);
+        logger.info("PRODUCT-REQUEST: Petición del estado de los productos");
+        yield db.ProductDBController.GetDBState(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("PRODUCT-REQUEST: Actualización de producto");

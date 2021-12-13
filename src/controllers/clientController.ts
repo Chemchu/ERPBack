@@ -18,9 +18,14 @@ const ClientController = {
         await db.ClientDBController.GetAll(res);
     },
 
-    findOne: async (req: Request, res: Response) => {
+    find: async (req: Request, res: Response) => {
         logger.info("CLIENT-REQUEST: Petición de un solo cliente");
         await db.ClientDBController.Get(req, res);
+    },
+
+    getState: async (req: Request, res: Response) => {
+        logger.info("CLIENT-REQUEST: Petición del estado de los clientes");
+        await db.ProductDBController.GetDBState(req, res);
     },
 
     update: async (req: Request, res: Response) => {
