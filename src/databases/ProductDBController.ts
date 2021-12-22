@@ -2,14 +2,14 @@ import mongoose from 'mongoose';
 import { IProduct } from '../types/Producto';
 import IDBController from './IDBController';
 import { Request, Response } from 'express';
+import { IDBState } from '../types/DBState';
 
 export class ProductoDBController implements IDBController {
 
-	public CollectionModel: mongoose.Model<IProduct>;
+	public CollectionModel: mongoose.Model<IProduct & IDBState>;
 
-	constructor(modelo: mongoose.Model<IProduct>) {
+	constructor(modelo: mongoose.Model<IProduct & IDBState>) {
 		this.CollectionModel = modelo
-		//this.CollectionModel.watch().on('change', (change) => { console.log("Watch event emitido") })
 	}
 
 	public async Add(req: Request, res: Response): Promise<void> {
@@ -78,11 +78,18 @@ export class ProductoDBController implements IDBController {
 
 	public async GetDBState(req: Request, res: Response): Promise<void> {
 		try {
-			const databaseState = await this.CollectionModel.find({ "databaseState": { $ne: null } });
+			const dbState = await this.CollectionModel.find({}).select('databaseState');
+			let resState;
+			dbState.forEach(d => {
+				console.log(d.databaseState);
 
-			console.log(databaseState)
+				if (d.databaseState) {
+					console.log(d);
+					resState = d;
+				}
+			})
 
-			res.status(200).json({ message: databaseState, success: true });
+			res.status(200).json({ message: resState, success: true });
 		}
 		catch (err) {
 			res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });

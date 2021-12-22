@@ -80,9 +80,16 @@ class ProductoDBController {
     GetDBState(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const databaseState = yield this.CollectionModel.find({ "databaseState": { $ne: null } });
-                console.log(databaseState);
-                res.status(200).json({ message: databaseState, success: true });
+                const dbState = yield this.CollectionModel.find({}).select('databaseState');
+                let resState;
+                dbState.forEach(d => {
+                    console.log(d.databaseState);
+                    if (d.databaseState) {
+                        console.log(d);
+                        resState = d;
+                    }
+                });
+                res.status(200).json({ message: resState, success: true });
             }
             catch (err) {
                 res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });
