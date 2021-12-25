@@ -25,7 +25,7 @@ const ClientController = {
 
     getState: async (req: Request, res: Response) => {
         logger.info("CLIENT-REQUEST: Petición del estado de los clientes");
-        await db.ProductDBController.GetDBState(req, res);
+        await db.ClientDBController.GetDBState(req, res);
     },
 
     update: async (req: Request, res: Response) => {

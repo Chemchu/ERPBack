@@ -9,19 +9,20 @@ export class Producto {
   constructor() {
     const Promocion = new Schema({ cantidadNecesaria: Number, dto: Number, precioFijo: Number });
     const ProductSchema = new Schema({
-      nombre: { type: String, required: true },
+      nombre: { type: String, required: false },
       descripcion: { type: String, required: false },
       familia: { type: String, required: false },
-      precioVenta: { type: Number, required: true },
+      precioVenta: { type: Number, required: false },
       precioCompra: { type: Number, required: false },
       promociones: { type: [Promocion], required: false },
       iva: { type: Number, required: false },
-      ean: { type: [String], required: false },
-      alta: { type: Boolean, required: true },
-      tags: { type: [String], required: true },
+      ean: { type: [], required: false },
+      alta: { type: Boolean, required: false },
+      tags: { type: [], required: false },
       img: { type: Buffer as unknown as Buffer, required: false },
-      cantidad: { type: Number, required: true }
-    }, { strict: true }) as Schema<IProduct>;
+      cantidad: { type: Number, required: false },
+      databaseState: { type: String, required: false }
+    }, { strict: true }) as Schema<IProduct & IDBState>;
 
     this.modelo = model<IProduct & IDBState>('Producto', ProductSchema);
   }

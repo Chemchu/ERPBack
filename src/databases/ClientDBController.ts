@@ -2,12 +2,14 @@ import mongoose from 'mongoose';
 import { IClient } from '../types/Cliente';
 import IDBController from './IDBController';
 import { Request, Response } from 'express';
+import { IDBState } from '../types/DBState';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ClientDBController implements IDBController {
 
-	public CollectionModel: mongoose.Model<IClient>;
+	public CollectionModel: mongoose.Model<IClient & IDBState>;
 
-	constructor(modelo: mongoose.Model<IClient>) {
+	constructor(modelo: mongoose.Model<IClient & IDBState>) {
 		this.CollectionModel = modelo
 	}
 
@@ -62,10 +64,25 @@ export class ClientDBController implements IDBController {
 	}
 
 	public async GetDBState(req: Request, res: Response): Promise<void> {
-		try {
-			const databaseState = await this.CollectionModel.find({ "databaseState": { $ne: null } });
 
-			res.status(200).json({ message: databaseState, success: true });
+		try {
+			const dbState = await this.CollectionModel.find({}).select({ 'databaseState': 1 }).lean();
+
+			for (var i = 0; i < dbState.length; i++) {
+				if (dbState[i].databaseState) {
+					res.status(200).json({ message: dbState[i], success: true });
+					return;
+				}
+			}
+
+			const stateUid = uuidv4();
+			const databaseStateToAdd = new this.CollectionModel({
+				databaseState: stateUid
+			} as IDBState);
+
+			await databaseStateToAdd.save();
+
+			res.status(300).json({ message: 'El databaseState no se encuentra en la base de datos. Uno nuevo ha sido creado', success: false });
 		}
 		catch (err) {
 			res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });

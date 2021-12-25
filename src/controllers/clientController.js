@@ -29,7 +29,7 @@ const ClientController = {
     }),
     getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("CLIENT-REQUEST: Petición del estado de los clientes");
-        yield db.ProductDBController.GetDBState(req, res);
+        yield db.ClientDBController.GetDBState(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("CLIENT-REQUEST: Actualización de cliente");

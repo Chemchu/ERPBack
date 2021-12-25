@@ -5,10 +5,11 @@ const mongoose_1 = require("mongoose");
 class Cliente {
     constructor() {
         const ClientSchema = new mongoose_1.Schema({
-            nif: { type: String, required: true },
-            nombre: { type: String, required: true },
-            calle: { type: String, required: true },
-            cp: { type: String, required: true },
+            nif: { type: String, required: false },
+            nombre: { type: String, required: false },
+            calle: { type: String, required: false },
+            cp: { type: String, required: false },
+            databaseState: { type: String, required: false }
         }, { strict: true });
         this.modelo = (0, mongoose_1.model)('Cliente', ClientSchema);
     }
