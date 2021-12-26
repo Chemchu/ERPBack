@@ -46,8 +46,7 @@ export class SaleDBController implements IDBController {
 
 	public async GetAll(res: Response): Promise<void> {
 		try {
-			// Hacer sort reverse en lugar de ejecutar el metodo reverse del array
-			const saleArray = await this.CollectionModel.find({})
+			const saleArray = await this.CollectionModel.find({}).sort({ 'createdAt': -1 });
 			res.status(200).json({ message: saleArray, success: true });
 		}
 		catch (err) {

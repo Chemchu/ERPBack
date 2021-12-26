@@ -43,7 +43,7 @@ class SaleDBController {
     GetAll(res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const saleArray = yield this.CollectionModel.find({});
+                const saleArray = yield this.CollectionModel.find({}).sort({ 'createdAt': -1 });
                 res.status(200).json({ message: saleArray, success: true });
             }
             catch (err) {
