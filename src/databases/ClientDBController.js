@@ -36,7 +36,7 @@ class ClientDBController {
     GetAll(res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const clientArray = yield this.CollectionModel.find({});
+                const clientArray = yield this.CollectionModel.find({ databaseState: { "$exists": false } });
                 res.status(200).json({ message: clientArray, success: true });
             }
             catch (err) {

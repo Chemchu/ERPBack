@@ -48,7 +48,7 @@ class EmployeeDBController {
     GetAll(res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const employeeArr = yield this.CollectionModel.find({});
+                const employeeArr = yield this.CollectionModel.find({ databaseState: { "$exists": false } });
                 res.status(200).json({ message: employeeArr, success: true });
             }
             catch (err) {

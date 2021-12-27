@@ -25,7 +25,7 @@ const EmployeeController = {
 
     getState: async (req: Request, res: Response) => {
         logger.info("EMPLOYEE-REQUEST: Petición del estado de los empleados");
-        await db.ProductDBController.Get(req, res);
+        await db.EmployeeDBController.GetDBState(req, res);
     },
 
     update: async (req: Request, res: Response) => {

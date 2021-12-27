@@ -29,7 +29,7 @@ const EmployeeController = {
     }),
     getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("EMPLOYEE-REQUEST: Petición del estado de los empleados");
-        yield db.ProductDBController.Get(req, res);
+        yield db.EmployeeDBController.GetDBState(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("EMPLOYEE-REQUEST: Actualización de empleado");

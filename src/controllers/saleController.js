@@ -29,7 +29,7 @@ const SaleController = {
     }),
     getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("SALE-REQUEST: Petición del estado de las ventas");
-        yield db.ProductDBController.Get(req, res);
+        yield db.VentasDBController.GetDBState(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("SALE-REQUEST: Actualización de venta");

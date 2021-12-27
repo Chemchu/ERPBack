@@ -2,12 +2,13 @@ import mongoose from 'mongoose';
 import { ISale } from '../types/Venta';
 import IDBController from './IDBController';
 import { Request, Response } from 'express';
-
+import { v4 as uuidv4 } from 'uuid';
+import { IDBState } from '../types/DBState';
 export class SaleDBController implements IDBController {
 
-	public CollectionModel: mongoose.Model<ISale>;
+	public CollectionModel: mongoose.Model<ISale & IDBState>;
 
-	constructor(modelo: mongoose.Model<ISale>) {
+	constructor(modelo: mongoose.Model<ISale & IDBState>) {
 		this.CollectionModel = modelo
 	}
 
@@ -46,7 +47,7 @@ export class SaleDBController implements IDBController {
 
 	public async GetAll(res: Response): Promise<void> {
 		try {
-			const saleArray = await this.CollectionModel.find({}).sort({ 'createdAt': -1 });
+			const saleArray = await this.CollectionModel.find({ databaseState: { "$exists": false } }).sort({ 'createdAt': -1 });
 			res.status(200).json({ message: saleArray, success: true });
 		}
 		catch (err) {
@@ -58,11 +59,7 @@ export class SaleDBController implements IDBController {
 	public async Get(req: Request, res: Response): Promise<void> {
 		try {
 			const saleDate = req.params.id;
-			const sales = await this.CollectionModel.find(
-				{
-					'created_at': new Date(saleDate)
-				}
-			).exec();
+			const sales = await this.CollectionModel.find({ 'createdAt': new Date(saleDate) }).exec();
 
 			res.status(200).json({ message: sales, success: true });
 		}
@@ -74,9 +71,23 @@ export class SaleDBController implements IDBController {
 
 	public async GetDBState(req: Request, res: Response): Promise<void> {
 		try {
-			const databaseState = await this.CollectionModel.find({ "databaseState": { $ne: null } });
+			const dbState = await this.CollectionModel.find({}).select({ 'databaseState': 1 }).lean();
 
-			res.status(200).json({ message: databaseState, success: true });
+			for (var i = 0; i < dbState.length; i++) {
+				if (dbState[i].databaseState) {
+					res.status(200).json({ message: dbState[i], success: true });
+					return;
+				}
+			}
+
+			const stateUid = uuidv4();
+			const databaseStateToAdd = new this.CollectionModel({
+				databaseState: stateUid
+			});
+
+			await databaseStateToAdd.save();
+
+			res.status(300).json({ message: 'El databaseState no se encuentra en la base de datos. Uno nuevo ha sido creado', success: false });
 		}
 		catch (err) {
 			res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });

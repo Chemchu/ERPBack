@@ -45,7 +45,7 @@ export class EmployeeDBController implements IDBController {
 
 	public async GetAll(res: Response): Promise<void> {
 		try {
-			const employeeArr = await this.CollectionModel.find({});
+			const employeeArr = await this.CollectionModel.find({ databaseState: { "$exists": false } });
 			res.status(200).json({ message: employeeArr, success: true });
 		}
 		catch (err) {

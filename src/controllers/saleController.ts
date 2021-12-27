@@ -25,7 +25,7 @@ const SaleController = {
 
     getState: async (req: Request, res: Response) => {
         logger.info("SALE-REQUEST: Petición del estado de las ventas");
-        await db.ProductDBController.Get(req, res);
+        await db.VentasDBController.GetDBState(req, res);
     },
 
     update: async (req: Request, res: Response) => {

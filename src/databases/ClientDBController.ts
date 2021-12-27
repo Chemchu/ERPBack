@@ -37,7 +37,7 @@ export class ClientDBController implements IDBController {
 
 	public async GetAll(res: Response): Promise<void> {
 		try {
-			const clientArray = await this.CollectionModel.find({});
+			const clientArray = await this.CollectionModel.find({ databaseState: { "$exists": false } });
 			res.status(200).json({ message: clientArray, success: true });
 		}
 		catch (err) {

@@ -56,7 +56,7 @@ class ProductoDBController {
     GetAll(res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const prodArray = yield this.CollectionModel.find({});
+                const prodArray = yield this.CollectionModel.find({ databaseState: { "$exists": false } });
                 res.status(200).json({ message: prodArray, success: true });
             }
             catch (err) {
