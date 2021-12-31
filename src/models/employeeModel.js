@@ -8,6 +8,7 @@ class Empleado {
             nombre: { type: String, required: true },
             apellidos: { type: String, required: true },
             dni: { type: String, required: true, unique: true },
+            rol: { type: String, required: true },
             genero: { type: String, required: false },
             email: { type: String, required: true },
             hashPassword: { type: String, required: true },

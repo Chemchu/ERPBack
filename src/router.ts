@@ -10,8 +10,8 @@ const cors = require('cors');
 export class Router {
     public app;
     public database: Database;
-  
-    constructor () {
+
+    constructor() {
         this.app = express();
         this.database = Database.Instance();
 
@@ -22,17 +22,17 @@ export class Router {
         this.app.use(cors(corsOptions));
 
         // parse requests of content-type - application/json
-        this.app.use(express.json({limit: '50mb'}));
+        this.app.use(express.json({ limit: '50mb' }));
 
         // parse requests of content-type - application/x-www-form-urlencoded
-        this.app.use(express.urlencoded({extended: true}));
-        
+        this.app.use(express.urlencoded({ extended: true }));
+
         // Enruta los diferentes componentes del api
         this.setRoutes();
     }
-  
+
     private setRoutes(): void {
-        this.app.get("/api", (req:Request, res:Response) => {
+        this.app.get("/api", (req: Request, res: Response) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
 
@@ -40,10 +40,10 @@ export class Router {
         this.app.use('/api/clientes/', clientRouter);
         this.app.use('/api/ventas/', saleRouter);
         this.app.use('/api/empleados/', employeeRouter);
-        this.app.use('/api/login/', sessionRouter);
+        this.app.use('/api/session/', sessionRouter);
     }
 
-    public get App(): Express.Application  {
+    public get App(): Express.Application {
         return this.app;
     }
 }

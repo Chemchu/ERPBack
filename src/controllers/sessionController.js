@@ -19,13 +19,5 @@ const SessionController = {
         logger.info("SESSION-REQUEST: Se intenta iniciar sesión (autenticar)");
         yield db.EmployeeDBController.Authenticate(req, res);
     }),
-    logout: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("SESSION-REQUEST: Se intenta cerrar sesión");
-        yield db.EmployeeDBController.GetAll(res);
-    }),
-    restoreSession: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("SESSION-REQUEST: Se intenta restaurar sesión");
-        yield db.EmployeeDBController.Get(req, res);
-    })
 };
 module.exports = SessionController;

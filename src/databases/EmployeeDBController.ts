@@ -86,14 +86,14 @@ export class EmployeeDBController implements IDBController {
 			const employeeToAuthenticate = await this.CollectionModel.findOne(
 				{
 					email: employeeJSON.email
-				}).exec();
+				}).lean();
 
-			if (!employeeToAuthenticate) { res.status(200).json({ message: "Nombre de usuario o contraseña incorrecto", success: false }); return; }
+			if (!employeeToAuthenticate?._id) { res.status(200).json({ message: "Nombre de usuario incorrecto", success: false }); return; }
 
 			let doesPasswordsMatch = await bcrypt.compare(employeeJSON.password, employeeToAuthenticate?.hashPassword);
 
-			if (doesPasswordsMatch) res.status(200).json({ message: "Autenticado con éxito", success: true });
-			else res.status(200).json({ message: "Fallo en la autenticación", success: false });
+			if (doesPasswordsMatch) { res.status(200).json({ message: { _id: employeeToAuthenticate._id, nombre: employeeToAuthenticate.nombre, apellidos: employeeToAuthenticate.apellidos, email: employeeToAuthenticate.email, rol: employeeToAuthenticate.rol }, success: true }); }
+			else { res.status(200).json({ message: "Fallo en la autenticación", success: false }); }
 		}
 		catch (err) {
 			res.status(500).json({ message: `Error al autenticar: ${err}`, success: false });

@@ -87,16 +87,18 @@ class EmployeeDBController {
                 const employeeJSON = req.body;
                 const employeeToAuthenticate = yield this.CollectionModel.findOne({
                     email: employeeJSON.email
-                }).exec();
-                if (!employeeToAuthenticate) {
-                    res.status(200).json({ message: "Nombre de usuario o contraseña incorrecto", success: false });
+                }).lean();
+                if (!(employeeToAuthenticate === null || employeeToAuthenticate === void 0 ? void 0 : employeeToAuthenticate._id)) {
+                    res.status(200).json({ message: "Nombre de usuario incorrecto", success: false });
                     return;
                 }
                 let doesPasswordsMatch = yield bcrypt.compare(employeeJSON.password, employeeToAuthenticate === null || employeeToAuthenticate === void 0 ? void 0 : employeeToAuthenticate.hashPassword);
-                if (doesPasswordsMatch)
-                    res.status(200).json({ message: "Autenticado con éxito", success: true });
-                else
+                if (doesPasswordsMatch) {
+                    res.status(200).json({ message: { _id: employeeToAuthenticate._id, nombre: employeeToAuthenticate.nombre, apellidos: employeeToAuthenticate.apellidos, email: employeeToAuthenticate.email, rol: employeeToAuthenticate.rol }, success: true });
+                }
+                else {
                     res.status(200).json({ message: "Fallo en la autenticación", success: false });
+                }
             }
             catch (err) {
                 res.status(500).json({ message: `Error al autenticar: ${err}`, success: false });

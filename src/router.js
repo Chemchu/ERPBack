@@ -32,7 +32,7 @@ class Router {
         this.app.use('/api/clientes/', clientRoutes_js_1.default);
         this.app.use('/api/ventas/', saleRoutes_js_1.default);
         this.app.use('/api/empleados/', employeeRoutes_js_1.default);
-        this.app.use('/api/login/', sessionRoutes_js_1.default);
+        this.app.use('/api/session/', sessionRoutes_js_1.default);
     }
     get App() {
         return this.app;
