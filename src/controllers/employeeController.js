@@ -14,34 +14,30 @@ const log4js_1 = require("log4js");
 const logger = (0, log4js_1.getLogger)();
 logger.level = "debug";
 const db = database_1.Database.Instance();
-const ProductController = {
+const EmployeeController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Se intenta crear producto");
-        yield db.ProductDBController.Add(req, res);
-    }),
-    createMany: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Se intenta crear varios producto");
-        yield db.ProductDBController.AddMany(req, res);
+        logger.info("EMPLOYEE-REQUEST: Se intenta crear un empleado");
+        yield db.EmployeeDBController.Add(req, res);
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Petición de todos los productos");
-        yield db.ProductDBController.GetAll(res);
+        logger.info("EMPLOYEE-REQUEST: Petición de todos los empleados");
+        yield db.EmployeeDBController.GetAll(res);
     }),
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Petición de un solo producto");
-        yield db.ProductDBController.Get(req, res);
+        logger.info("EMPLOYEE-REQUEST: Petición de un solo empleado");
+        yield db.EmployeeDBController.Get(req, res);
     }),
     getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Petición del estado de los productos");
-        yield db.ProductDBController.GetDBState(req, res);
+        logger.info("EMPLOYEE-REQUEST: Petición del estado de los empleados");
+        yield db.EmployeeDBController.GetDBState(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Actualización de producto");
-        yield db.ProductDBController.Update(req, res);
+        logger.info("EMPLOYEE-REQUEST: Actualización de empleado");
+        yield db.EmployeeDBController.Update(req, res);
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Borrado de producto");
-        yield db.ProductDBController.Remove(req, res);
-    }),
+        logger.info("EMPLOYEE-REQUEST: Borrado de empleado");
+        yield db.EmployeeDBController.Remove(req, res);
+    })
 };
-module.exports = ProductController;
+module.exports = EmployeeController;

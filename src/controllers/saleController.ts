@@ -1,46 +1,41 @@
 import { Request, Response } from 'express';
-import { Database } from '../databaseLogic/database';
+import { Database } from '../databases/database';
+import { getLogger } from "log4js";
+
+const logger = getLogger();
+logger.level = "debug";
 
 const db = Database.Instance();
-//const ProdModel: Model<IProduct> = db.MongooseInstance.connection.model('productos', ProductSchema);
 
 const SaleController = {
-    create: async (req : Request, res : Response) => {   
-        // Añade el producto en la db
-        let saleAddedCorrectly = await db.AddSale(req);
-
-        if(saleAddedCorrectly){
-            res.status(200);
-            res.send({message: 'Venta añadido'});
-        }
-        else {
-            res.status(200);
-            res.send({message: 'La venta no se ha podido añadir a la base de datos'});
-        }
+    create: async (req: Request, res: Response) => {
+        logger.info("SALE-REQUEST: Se intenta crear una venta");
+        await db.VentasDBController.Add(req, res);
     },
 
-    findAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie findAll"});
+    findAll: async (req: Request, res: Response) => {
+        logger.info("SALE-REQUEST: Petición de todas las ventas");
+        await db.VentasDBController.GetAll(res);
     },
 
-    findOne: async (req : Request, res : Response) => {
-        res.send({message: "opsie findOne"});
+    find: async (req: Request, res: Response) => {
+        logger.info("SALE-REQUEST: Petición de una sola venta");
+        await db.VentasDBController.Get(req, res);
     },
 
-    update: async (req : Request, res : Response) => {
-        res.send({message: "opsie update"});
+    getState: async (req: Request, res: Response) => {
+        logger.info("SALE-REQUEST: Petición del estado de las ventas");
+        await db.VentasDBController.GetDBState(req, res);
     },
 
-    delete: async(req : Request, res : Response) => {
-        res.send({message: "opsie delete"});
+    update: async (req: Request, res: Response) => {
+        logger.info("SALE-REQUEST: Actualización de venta");
+        await db.VentasDBController.Update(req, res);
     },
 
-    deleteAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie deleteAll"});
-    },
-
-    findAllPublished: async (req : Request, res : Response) => {
-        res.send({message: "opsie"});
+    delete: async (req: Request, res: Response) => {
+        logger.info("SALE-REQUEST: Borrado de venta");
+        await db.VentasDBController.Remove(req, res);
     }
 }
 

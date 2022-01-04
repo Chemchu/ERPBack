@@ -1,13 +1,19 @@
-import { Document } from 'mongoose';
+import { Document, SchemaDefinition } from 'mongoose';
+import { IProveedor } from './Proveedor';
 
 export interface IProduct extends Document {
     nombre: string
-    descripcion: string
+    //proveedor: IProveedor['_id']
+    proveedor: string
     familia: string
     precioVenta: number
     precioCompra: number
-    IVA: number
-    EAN: string[]
+    iva: number
+    margen: number
+    promociones: string[]
+    ean: string
+    cantidad: number
+    cantidadRestock: number
     alta: boolean
-    tags: string[]
+    img: Buffer
 }

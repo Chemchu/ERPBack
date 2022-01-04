@@ -1,10 +1,17 @@
-import { Document } from 'mongoose';
+import { Document, SchemaDefinition } from 'mongoose';
 import { IClient } from './Cliente';
-import { IProduct } from './Producto';
+import { IEmployee } from './Empleado';
 
 export interface ISale extends Document {
-    Productos: [IProduct],
-    PrecioVentaTotal: number,
-    Fecha: Date,
-    Cliente?: IClient
+    productos: SchemaDefinition[],
+    dineroEntregadoEfectivo: number,
+    dineroEntregadoTarjeta: number,
+    precioVentaTotal: number,
+    cambio: number,
+    cliente: IClient["_id"],
+    vendidoPor: IEmployee["_id"],
+    modificadoPor: IEmployee["_id"],
+    tipo: string,
+    descuentoEfectivo: number,
+    descuentoTarjeta: number,
 }

@@ -1,47 +1,42 @@
 import { Request, Response } from 'express';
-import { Database } from '../databaseLogic/database';
+import { Database } from '../databases/database';
+import { getLogger } from "log4js";
+
+const logger = getLogger();
+logger.level = "debug";
 
 const db = Database.Instance();
-//const ProdModel: Model<IProduct> = db.MongooseInstance.connection.model('productos', ProductSchema);
 
 const ClientController = {
-    create: async (req : Request, res : Response) => {   
-        // Añade el producto en la db
-        //let prodAddedCorrectly = await db.AddProduct(req);
-
-        // if(prodAddedCorrectly){
-        //     res.status(200);
-        //     res.send({message: 'Producto añadido'});
-        // }
-        // else {
-        //     res.status(200);
-        //     res.send({message: 'Nombre o código de barras repetido'});
-        // }
+    create: async (req: Request, res: Response) => {
+        logger.info("CLIENT-REQUEST: Se intenta crear un nuevo cliente");
+        await db.ClientDBController.Add(req, res);
     },
 
-    findAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie findAll cliente"});
+    findAll: async (req: Request, res: Response) => {
+        logger.info("CLIENT-REQUEST: Petición de todos los clientes");
+        await db.ClientDBController.GetAll(res);
     },
 
-    findOne: async (req : Request, res : Response) => {
-        res.send({message: "opsie findOne"});
+    find: async (req: Request, res: Response) => {
+        logger.info("CLIENT-REQUEST: Petición de un solo cliente");
+        await db.ClientDBController.Get(req, res);
     },
 
-    update: async (req : Request, res : Response) => {
-        res.send({message: "opsie update"});
+    getState: async (req: Request, res: Response) => {
+        logger.info("CLIENT-REQUEST: Petición del estado de los clientes");
+        await db.ClientDBController.GetDBState(req, res);
     },
 
-    delete: async(req : Request, res : Response) => {
-        res.send({message: "opsie delete"});
+    update: async (req: Request, res: Response) => {
+        logger.info("CLIENT-REQUEST: Actualización de cliente");
+        await db.ClientDBController.Update(req, res);
     },
 
-    deleteAll: async (req : Request, res : Response) => {
-        res.send({message: "opsie deleteAll"});
+    delete: async (req: Request, res: Response) => {
+        logger.info("CLIENT-REQUEST: Borrado de cliente");
+        await db.ClientDBController.Remove(req, res);
     },
-
-    findAllPublished: async (req : Request, res : Response) => {
-        res.send({message: "opsie"});
-    }
 }
 
 module.exports = ClientController;

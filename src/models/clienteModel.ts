@@ -1,21 +1,23 @@
-import {Schema, model, Model} from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 import { IClient } from '../types/Cliente';
+import { IDBState } from '../types/DBState';
 
 export class Cliente {
-    private modelo: Model<IClient>;
+    private modelo: Model<IClient & IDBState>;
 
-    constructor(){
+    constructor() {
         const ClientSchema = new Schema({
-            NIF: {type: String, required: true},
-            Nombre: {type: String, required: true},
-            Calle: {type: String, required: true},
-            CP: {type: String, required: true},
-        });
+            nif: { type: String, required: false },
+            nombre: { type: String, required: false },
+            calle: { type: String, required: false },
+            cp: { type: String, required: false },
+            databaseState: { type: String, required: false }
+        }, { strict: true }) as Schema<IClient & IDBState>;
 
-        this.modelo = model<IClient>('Cliente', ClientSchema);
+        this.modelo = model<IClient & IDBState>('Cliente', ClientSchema);
     }
 
-    public get Model(): Model<IClient> {
+    public get Model(): Model<IClient & IDBState> {
         return this.modelo;
     }
 }

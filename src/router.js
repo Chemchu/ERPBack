@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Router = void 0;
 const productRoutes_js_1 = __importDefault(require("./routes/productRoutes.js"));
 const clientRoutes_js_1 = __importDefault(require("./routes/clientRoutes.js"));
+const employeeRoutes_js_1 = __importDefault(require("./routes/employeeRoutes.js"));
+const sessionRoutes_js_1 = __importDefault(require("./routes/sessionRoutes.js"));
 const saleRoutes_js_1 = __importDefault(require("./routes/saleRoutes.js"));
+const database_js_1 = require("./databases/database.js");
 const express_1 = __importDefault(require("express"));
-const database_js_1 = require("./databaseLogic/database.js");
 const cors = require('cors');
 class Router {
     constructor() {
@@ -18,17 +20,19 @@ class Router {
             origin: "*"
         };
         this.app.use(cors(corsOptions));
-        this.app.use(express_1.default.json());
+        this.app.use(express_1.default.json({ limit: '50mb' }));
         this.app.use(express_1.default.urlencoded({ extended: true }));
         this.setRoutes();
     }
     setRoutes() {
-        this.app.get("/", (req, res) => {
+        this.app.get("/api", (req, res) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
         this.app.use('/api/productos/', productRoutes_js_1.default);
         this.app.use('/api/clientes/', clientRoutes_js_1.default);
         this.app.use('/api/ventas/', saleRoutes_js_1.default);
+        this.app.use('/api/empleados/', employeeRoutes_js_1.default);
+        this.app.use('/api/session/', sessionRoutes_js_1.default);
     }
     get App() {
         return this.app;
