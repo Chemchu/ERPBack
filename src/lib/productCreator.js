@@ -8,7 +8,7 @@ const CreateProduct = (jsonData) => {
         familia: jsonData.FAMILIA,
         precioVenta: jsonData.PRECIO_VENTA,
         precioCompra: jsonData.PRECIO_COMPRA,
-        iva: jsonData.IVA,
+        iva: jsonData.IVA || 0,
         margen: jsonData.MARGEN,
         promociones: jsonData.promociones,
         ean: jsonData.EAN,

@@ -62,22 +62,23 @@ class ProductoDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pArray = (0, processCSV_1.ProcessCSV)(req.body.csv);
-                const productList = (0, productCreator_1.CreateProductList)(pArray);
-                let nombresEnUso = [];
-                let eanEnUso = [];
-                for (var i = 0; i < productList.length; i++) {
-                    const prodName = productList[i].nombre;
-                    const prodEAN = productList[i].ean;
+                const auxProductList = (0, productCreator_1.CreateProductList)(pArray);
+                let prodList = [];
+                for (var i = 0; i < auxProductList.length; i++) {
+                    const prodName = auxProductList[i].nombre;
+                    const prodEAN = auxProductList[i].ean;
+                    const prodRepetidoEnCSV = prodList.some(p => p.nombre === auxProductList[i].nombre || p.ean === auxProductList[i].ean);
                     const yaExisteProducto = yield this.CollectionModel.exists({ nombre: prodName });
-                    if (yaExisteProducto) {
-                        nombresEnUso.push(prodName);
+                    if (yaExisteProducto || prodRepetidoEnCSV) {
+                        continue;
                     }
                     const yaExisteEAN = yield this.CollectionModel.exists({ ean: prodEAN });
                     if (yaExisteEAN) {
-                        eanEnUso.push(prodEAN);
+                        continue;
                     }
+                    prodList.push(auxProductList[i]);
                 }
-                yield this.CollectionModel.insertMany(productList);
+                yield this.CollectionModel.insertMany(prodList);
                 res.status(200).json({ message: `Los productos han sido añadidos en la base de datos`, success: true });
             }
             catch (err) {

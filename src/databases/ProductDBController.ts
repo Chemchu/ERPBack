@@ -62,21 +62,25 @@ export class ProductoDBController implements IDBController {
 			// El producto en JSON de la petición
 			const pArray = ProcessCSV(req.body.csv);
 
-			const productList: IProduct[] = CreateProductList(pArray);
-			let nombresEnUso: string[] = [];
-			let eanEnUso: string[] = [];
+			const auxProductList: IProduct[] = CreateProductList(pArray);
+			let prodList: IProduct[] = [];
 
-			for (var i = 0; i < productList.length; i++) {
-				const prodName = productList[i].nombre;
-				const prodEAN = productList[i].ean;
+			for (var i = 0; i < auxProductList.length; i++) {
+				const prodName = auxProductList[i].nombre;
+				const prodEAN = auxProductList[i].ean;
+				const prodRepetidoEnCSV = prodList.some(p => p.nombre === auxProductList[i].nombre || p.ean === auxProductList[i].ean);
 
 				const yaExisteProducto = await this.CollectionModel.exists({ nombre: prodName });
-				if (yaExisteProducto) { nombresEnUso.push(prodName) }
+				if (yaExisteProducto || prodRepetidoEnCSV) { continue; }
 
 				const yaExisteEAN = await this.CollectionModel.exists({ ean: prodEAN });
-				if (yaExisteEAN) { eanEnUso.push(prodEAN) }
+				if (yaExisteEAN) { continue; }
+
+				prodList.push(auxProductList[i]);
 			}
-			await this.CollectionModel.insertMany(productList);
+
+			// Solo se añaden productos no existentes
+			await this.CollectionModel.insertMany(prodList);
 
 			res.status(200).json({ message: `Los productos han sido añadidos en la base de datos`, success: true });
 		}

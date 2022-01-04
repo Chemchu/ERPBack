@@ -3,13 +3,14 @@ import { IProveedor } from './Proveedor';
 
 export interface IProduct extends Document {
     nombre: string
-    proveedor: IProveedor['_id']
+    //proveedor: IProveedor['_id']
+    proveedor: string
     familia: string
     precioVenta: number
     precioCompra: number
     iva: number
     margen: number
-    promociones: SchemaDefinition[]
+    promociones: string[]
     ean: string
     cantidad: number
     cantidadRestock: number

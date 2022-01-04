@@ -7,7 +7,7 @@ export const ProcessCSV = (str: string, delim = ',') => {
     const newArray = rows.map(row => {
         const values = row.split(delim);
         const eachObject = headers.reduce((_obj: { [k: string]: any }, header: string, i: number) => {
-            _obj[header] = values[i].replace(/(\r\n|\n|\r)/gm, "");
+            _obj[header] = values[i]?.replace(/(\r\n|\n|\r)/gm, "");
             return _obj;
         }, {})
 
