@@ -18,7 +18,7 @@ export class Producto {
       iva: { type: Number, required: false },
       ean: { type: String, required: false },
       margen: { type: Number, required: false },
-      promociones: { type: [Promocion], required: false },
+      promociones: { type: [String], required: false },
       alta: { type: Boolean, required: false },
       img: { type: Buffer as unknown as Buffer, required: false },
       cantidad: { type: Number, required: false },

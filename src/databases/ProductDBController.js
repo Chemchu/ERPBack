@@ -116,6 +116,7 @@ class ProductoDBController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const dbState = yield this.CollectionModel.find({}).select({ 'databaseState': 1 }).lean();
+                console.log("dbState");
                 for (var i = 0; i < dbState.length; i++) {
                     if (dbState[i].databaseState) {
                         res.status(200).json({ message: dbState[i], success: true });
