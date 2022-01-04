@@ -19,6 +19,10 @@ const ProductController = {
         logger.info("PRODUCT-REQUEST: Se intenta crear producto");
         yield db.ProductDBController.Add(req, res);
     }),
+    createMany: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        logger.info("PRODUCT-REQUEST: Se intenta crear varios producto");
+        yield db.ProductDBController.AddMany(req, res);
+    }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         logger.info("PRODUCT-REQUEST: Petición de todos los productos");
         yield db.ProductDBController.GetAll(res);

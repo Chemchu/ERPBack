@@ -4,9 +4,9 @@ const employeeRouter = express.Router();
 
 employeeRouter.get('/', EmployeeController.findAll);
 employeeRouter.get('/:id', EmployeeController.find);
-employeeRouter.put('/authenticate', EmployeeController.find);
-employeeRouter.put('/add/', EmployeeController.create);
-employeeRouter.put('/update/:id', EmployeeController.update);
+employeeRouter.post('/authenticate', EmployeeController.find);
+employeeRouter.post('/add/', EmployeeController.create);
+employeeRouter.post('/update/:id', EmployeeController.update);
 employeeRouter.delete('/remove/:id', EmployeeController.delete);
 
 export default employeeRouter;

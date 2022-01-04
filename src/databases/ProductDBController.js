@@ -11,6 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductoDBController = void 0;
 const uuid_1 = require("uuid");
+const productCreator_1 = require("../lib/productCreator");
+const log4js_1 = require("log4js");
+const processCSV_1 = require("../lib/processCSV");
+const logger = (0, log4js_1.getLogger)();
+logger.level = "debug";
 class ProductoDBController {
     constructor(modelo) {
         this.CollectionModel = modelo;
@@ -50,6 +55,34 @@ class ProductoDBController {
             catch (err) {
                 console.log(err);
                 res.status(500).json({ message: `Error al añadir el producto en la base de datos`, success: false });
+            }
+        });
+    }
+    AddMany(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const pArray = (0, processCSV_1.ProcessCSV)(req.body.csv);
+                const productList = (0, productCreator_1.CreateProductList)(pArray);
+                let nombresEnUso = [];
+                let eanEnUso = [];
+                for (var i = 0; i < productList.length; i++) {
+                    const prodName = productList[i].nombre;
+                    const prodEAN = productList[i].ean;
+                    const yaExisteProducto = yield this.CollectionModel.exists({ nombre: prodName });
+                    if (yaExisteProducto) {
+                        nombresEnUso.push(prodName);
+                    }
+                    const yaExisteEAN = yield this.CollectionModel.exists({ ean: prodEAN });
+                    if (yaExisteEAN) {
+                        eanEnUso.push(prodEAN);
+                    }
+                }
+                yield this.CollectionModel.insertMany(productList);
+                res.status(200).json({ message: `Los productos han sido añadidos en la base de datos`, success: true });
+            }
+            catch (err) {
+                console.log(err);
+                res.status(500).json({ message: `Error al añadir los productos en la base de datos`, success: false });
             }
         });
     }

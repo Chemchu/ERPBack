@@ -4,6 +4,12 @@ import IDBController from './IDBController';
 import { Request, Response } from 'express';
 import { IDBState } from '../types/DBState';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateProductList } from '../lib/productCreator';
+import { getLogger } from "log4js";
+import { ProcessCSV } from '../lib/processCSV';
+
+const logger = getLogger();
+logger.level = "debug";
 
 export class ProductoDBController implements IDBController {
 
@@ -48,6 +54,35 @@ export class ProductoDBController implements IDBController {
 		catch (err) {
 			console.log(err);
 			res.status(500).json({ message: `Error al añadir el producto en la base de datos`, success: false });
+		}
+	}
+
+	public async AddMany(req: Request, res: Response): Promise<void> {
+		try {
+			// El producto en JSON de la petición
+			const pArray = ProcessCSV(req.body.csv);
+
+			const productList: IProduct[] = CreateProductList(pArray);
+			let nombresEnUso: string[] = [];
+			let eanEnUso: string[] = [];
+
+			for (var i = 0; i < productList.length; i++) {
+				const prodName = productList[i].nombre;
+				const prodEAN = productList[i].ean;
+
+				const yaExisteProducto = await this.CollectionModel.exists({ nombre: prodName });
+				if (yaExisteProducto) { nombresEnUso.push(prodName) }
+
+				const yaExisteEAN = await this.CollectionModel.exists({ ean: prodEAN });
+				if (yaExisteEAN) { eanEnUso.push(prodEAN) }
+			}
+			await this.CollectionModel.insertMany(productList);
+
+			res.status(200).json({ message: `Los productos han sido añadidos en la base de datos`, success: true });
+		}
+		catch (err) {
+			console.log(err);
+			res.status(500).json({ message: `Error al añadir los productos en la base de datos`, success: false });
 		}
 	}
 

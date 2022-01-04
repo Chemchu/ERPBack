@@ -14,6 +14,12 @@ const ProductController = {
         await db.ProductDBController.Add(req, res);
     },
 
+    createMany: async (req: Request, res: Response) => {
+        logger.info("PRODUCT-REQUEST: Se intenta crear varios producto");
+        // Añade el producto en la db
+        await db.ProductDBController.AddMany(req, res);
+    },
+
     findAll: async (req: Request, res: Response) => {
         logger.info("PRODUCT-REQUEST: Petición de todos los productos");
         await db.ProductDBController.GetAll(res);

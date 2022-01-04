@@ -1,16 +1,18 @@
 import { Document, SchemaDefinition } from 'mongoose';
+import { IProveedor } from './Proveedor';
 
 export interface IProduct extends Document {
     nombre: string
-    descripcion: string
+    proveedor: IProveedor['_id']
     familia: string
     precioVenta: number
     precioCompra: number
-    promociones: SchemaDefinition[]
     iva: number
-    ean: string[]
-    alta: boolean
-    tags: string[]
-    img: Buffer
+    margen: number
+    promociones: SchemaDefinition[]
+    ean: string
     cantidad: number
+    cantidadRestock: number
+    alta: boolean
+    img: Buffer
 }
