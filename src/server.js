@@ -15,20 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const router_1 = require("./router");
 const apollo_server_express_1 = require("apollo-server-express");
+const TypeDefs_1 = __importDefault(require("./apollo/TypeDefs"));
+const Resolvers_1 = __importDefault(require("./apollo/Resolvers"));
 dotenv_1.default.config();
 let apiRouter = new router_1.Router();
 const PORT = process.env.PORT || 5151;
 const server = new apollo_server_express_1.ApolloServer({
-    typeDefs: (0, apollo_server_express_1.gql) `
-    type Query {
-      hello: String
-    }
-  `,
-    resolvers: {
-        Query: {
-            hello: () => 'Hello world!',
-        },
-    }
+    typeDefs: TypeDefs_1.default,
+    resolvers: Resolvers_1.default
 });
 function startApolloServer() {
     return __awaiter(this, void 0, void 0, function* () {

@@ -176,7 +176,7 @@ export class ProductoDBController implements IDBController {
 				alta: prodJSON.alta,
 				tags: prodJSON.tags,
 				cantidad: prodJSON.cantidad,
-				img: Buffer.from(prodJSON.img, 'base64')
+				img: prodJSON.img
 			});
 
 			if (productUpdated.modifiedCount > 0) {

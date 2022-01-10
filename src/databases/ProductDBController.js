@@ -167,7 +167,7 @@ class ProductoDBController {
                     alta: prodJSON.alta,
                     tags: prodJSON.tags,
                     cantidad: prodJSON.cantidad,
-                    img: Buffer.from(prodJSON.img, 'base64')
+                    img: prodJSON.img
                 });
                 if (productUpdated.modifiedCount > 0) {
                     res.status(200).json({ message: `El producto ${productoToUpdateId} ha sido actualizado correctamente`, success: true });

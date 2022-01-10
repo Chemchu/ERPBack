@@ -3,7 +3,6 @@ import { IProveedor } from './Proveedor';
 
 export interface IProduct extends Document {
     nombre: string
-    //proveedor: IProveedor['_id']
     proveedor: string
     familia: string
     precioVenta: number
@@ -15,5 +14,5 @@ export interface IProduct extends Document {
     cantidad: number
     cantidadRestock: number
     alta: boolean
-    img: Buffer
+    img: string
 }

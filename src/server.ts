@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import { Router } from './router';
-import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloServer } from 'apollo-server-express';
+import TypeDefs from './apollo/TypeDefs';
+import Resolvers from './apollo/Resolvers';
 
 // Para leer en la variable .env
 dotenv.config();
@@ -12,16 +14,8 @@ let apiRouter = new Router();
 const PORT = process.env.PORT || 5151;
 
 const server = new ApolloServer({
-  typeDefs: gql`
-    type Query {
-      hello: String
-    }
-  `,
-  resolvers: {
-    Query: {
-      hello: () => 'Hello world!',
-    },
-  }
+  typeDefs: TypeDefs,
+  resolvers: Resolvers
 });
 
 async function startApolloServer() {

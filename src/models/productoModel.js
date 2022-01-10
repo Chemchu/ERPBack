@@ -16,7 +16,7 @@ class Producto {
             margen: { type: Number, required: false },
             promociones: { type: [String], required: false },
             alta: { type: Boolean, required: false },
-            img: { type: Buffer, required: false },
+            img: { type: String, required: false },
             cantidad: { type: Number, required: false },
             cantidadRestock: { type: Number, required: false },
             databaseState: { type: String, required: false }
