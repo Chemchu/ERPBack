@@ -16,15 +16,14 @@ class Router {
     constructor() {
         this.app = (0, express_1.default)();
         this.database = database_js_1.Database.Instance();
+    }
+    SetRoutes() {
         var corsOptions = {
             origin: "*"
         };
         this.app.use(cors(corsOptions));
         this.app.use(express_1.default.json({ limit: '50mb' }));
         this.app.use(express_1.default.urlencoded({ extended: true }));
-        this.setRoutes();
-    }
-    setRoutes() {
         this.app.get("/api", (req, res) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
