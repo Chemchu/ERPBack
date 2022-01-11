@@ -22,7 +22,7 @@ export class Venta {
             descuentoEfectivo: { type: Number, required: false },
             descuentoTarjeta: { type: Number, required: false },
             databaseState: { type: String, required: false }
-        }, { strict: false, timestamps: false }) as Schema<ISale & IDBState>;
+        }, { strict: false, timestamps: true }) as Schema<ISale & IDBState>;
 
         this.modelo = model<ISale & IDBState>('Venta', VentaSchema);
     }

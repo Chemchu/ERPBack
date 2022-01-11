@@ -1,11 +1,11 @@
 import { gql } from "apollo-server-express"
 import { Database } from "../databases/database";
+import { productoResolver, productosResolver } from "./schema/producto/productoResolver";
 
 const Resolvers = {
     Query: {
-        // productos: () => {
-        //     //Database.Instance.
-        // },
+        producto: productoResolver,
+        productos: productosResolver,
     },
 };
 

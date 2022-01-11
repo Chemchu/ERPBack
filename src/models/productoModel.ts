@@ -25,7 +25,7 @@ export class Producto {
       cantidadRestock: { type: Number, required: false },
       databaseState: { type: String, required: false }
 
-    }, { strict: true }) as Schema<IProduct & IDBState>;
+    }, { strict: true, timestamps: true }) as Schema<IProduct & IDBState>;
 
     this.modelo = model<IProduct & IDBState>('Producto', ProductSchema);
   }
