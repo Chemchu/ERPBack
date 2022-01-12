@@ -14,7 +14,9 @@ export class Router {
     constructor() {
         this.app = express();
         this.database = Database.Instance();
+    }
 
+    public SetRoutes(): void {
         var corsOptions = {
             origin: "*"
         };
@@ -27,11 +29,6 @@ export class Router {
         // parse requests of content-type - application/x-www-form-urlencoded
         this.app.use(express.urlencoded({ extended: true }));
 
-        // Enruta los diferentes componentes del api
-        this.setRoutes();
-    }
-
-    private setRoutes(): void {
         this.app.get("/api", (req: Request, res: Response) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });
         });
@@ -43,7 +40,7 @@ export class Router {
         this.app.use('/api/session/', sessionRouter);
     }
 
-    public get App(): Express.Application {
+    public get App() {
         return this.app;
     }
 }

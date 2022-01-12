@@ -16,7 +16,7 @@ logger.level = "debug";
 const db = database_1.Database.Instance();
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Se intenta crear producto");
+        logger.info("PRODUCT-REQUEST: Se intenta crear un producto");
         yield db.ProductDBController.Add(req, res);
     }),
     createMany: (req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -18,7 +18,7 @@ class Venta {
             descuentoEfectivo: { type: Number, required: false },
             descuentoTarjeta: { type: Number, required: false },
             databaseState: { type: String, required: false }
-        }, { strict: false, timestamps: false });
+        }, { strict: false, timestamps: true });
         this.modelo = (0, mongoose_1.model)('Venta', VentaSchema);
     }
     get Model() {

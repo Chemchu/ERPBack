@@ -120,6 +120,9 @@ export class ProductoDBController implements IDBController {
 		try {
 			const dbState = await this.CollectionModel.find({}).select({ 'databaseState': 1 }).lean();
 
+			console.log("dbState");
+
+
 			for (var i = 0; i < dbState.length; i++) {
 				if (dbState[i].databaseState) {
 					res.status(200).json({ message: dbState[i], success: true });
@@ -173,7 +176,7 @@ export class ProductoDBController implements IDBController {
 				alta: prodJSON.alta,
 				tags: prodJSON.tags,
 				cantidad: prodJSON.cantidad,
-				img: Buffer.from(prodJSON.img, 'base64')
+				img: prodJSON.img
 			});
 
 			if (productUpdated.modifiedCount > 0) {
