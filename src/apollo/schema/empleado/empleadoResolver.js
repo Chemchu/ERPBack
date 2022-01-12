@@ -13,7 +13,7 @@ exports.empleadosResolver = exports.empleadoResolver = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const empleadoResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    if (args === null || !args || Object.keys(args).length === 0 && args.constructor === Object)
+    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object)
         throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
     const db = database_1.Database.Instance();
     if (args.find._id) {
@@ -35,35 +35,28 @@ const empleadoResolver = (parent, args, context, info) => __awaiter(void 0, void
 });
 exports.empleadoResolver = empleadoResolver;
 const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const empleados = yield db.EmployeeDBController.CollectionModel.find({}).limit(args.limit || 3000).exec();
         if (empleados)
             return empleados;
     }
-    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._id) {
-        const empleados = yield db.EmployeeDBController.CollectionModel.find({ _id: args.find._id })
+    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
+        const empleados = yield db.EmployeeDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
         if (empleados)
             return empleados;
     }
-    if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.dni) {
-        const empleados = yield db.EmployeeDBController.CollectionModel.find({ dni: args.find.dni })
-            .limit(args.limit || 3000)
-            .exec();
-        if (empleados)
-            return empleados;
-    }
-    if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.nombre) {
+    if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nombre) {
         const empleados = yield db.EmployeeDBController.CollectionModel.find({ nombre: args.find.nombre })
             .limit(args.limit || 3000)
             .exec();
         if (empleados)
             return empleados;
     }
-    if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.rol) {
+    if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.rol) {
         const empleados = yield db.EmployeeDBController.CollectionModel.find({ rol: args.find.rol })
             .limit(args.limit || 3000)
             .exec();

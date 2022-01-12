@@ -3,7 +3,7 @@ import { Database } from "../../../databases/database"
 import { EmpleadoFind, EmpleadosFind } from "../../../types/types";
 
 export const empleadoResolver = async (parent: any, args: EmpleadoFind, context: any, info: any) => {
-    if (args === null || !args || Object.keys(args).length === 0 && args.constructor === Object) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
+    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
 
     const db = Database.Instance();
 
@@ -38,16 +38,8 @@ export const empleadosResolver = async (parent: any, args: EmpleadosFind, contex
         if (empleados) return empleados;
     }
 
-    if (args.find?._id) {
-        const empleados = await db.EmployeeDBController.CollectionModel.find({ _id: args.find._id })
-            .limit(args.limit || 3000)
-            .exec();
-
-        if (empleados) return empleados;
-    }
-
-    if (args.find?.dni) {
-        const empleados = await db.EmployeeDBController.CollectionModel.find({ dni: args.find.dni })
+    if (args.find?._ids) {
+        const empleados = await db.EmployeeDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
 

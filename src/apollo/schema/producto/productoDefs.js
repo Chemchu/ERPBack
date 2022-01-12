@@ -30,7 +30,7 @@ const productoDefs = (0, apollo_server_express_1.gql) `
     }
 
     input ProductosFind {
-        _id: [ID!]
+        _ids: [ID!]
         nombre: String
         familia: String
         proveedor: String

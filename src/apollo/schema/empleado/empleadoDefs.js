@@ -24,9 +24,8 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
     }
 
     input EmpleadosFind {
-        _id: ID
+        _ids: [ID!]
         nombre: String
-        dni: String
         rol: String
     }
 

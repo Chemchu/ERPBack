@@ -3,7 +3,7 @@ import { Database } from "../../../databases/database"
 import { ClienteFind, ClientesFind } from "../../../types/types";
 
 export const clienteResolver = async (parent: any, args: ClienteFind, context: any, info: any) => {
-    if (args === null || !args || Object.keys(args).length === 0 && args.constructor === Object) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
+    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
 
     const db = Database.Instance();
 
@@ -38,16 +38,8 @@ export const clientesResolver = async (parent: any, args: ClientesFind, context:
         if (clientes) return clientes;
     }
 
-    if (args.find?._id) {
-        const clientes = await db.ClientDBController.CollectionModel.find({ _id: args.find._id })
-            .limit(args.limit || 3000)
-            .exec();
-
-        if (clientes) return clientes;
-    }
-
-    if (args.find?.nif) {
-        const clientes = await db.ClientDBController.CollectionModel.find({ nif: args.find.nif })
+    if (args.find?._ids) {
+        const clientes = await db.ClientDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
 
@@ -55,7 +47,7 @@ export const clientesResolver = async (parent: any, args: ClientesFind, context:
     }
 
     if (args.find?.nombre) {
-        const clientes = await db.ClientDBController.CollectionModel.find({ nombre: args.find.nombre })
+        const clientes = await db.ClientDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
 

@@ -8,7 +8,7 @@ export interface ProductoFind {
 
 export interface ProductosFind {
     find?: {
-        _id?: string
+        _ids?: string[]
         nombre?: string
         familia?: string
         proveedor?: string
@@ -22,7 +22,7 @@ export interface VentaFind {
 
 export interface VentasFind {
     find?: {
-        _id?: string
+        _ids?: string[]
         clienteId?: string
         tipo?: string
         vendedorId?: string
@@ -43,9 +43,8 @@ export interface EmpleadoFind {
 
 export interface EmpleadosFind {
     find?: {
-        _id?: string
+        _ids?: string[]
         nombre?: string
-        dni?: string
         rol?: string
     }
     limit?: number
@@ -61,9 +60,8 @@ export interface ClienteFind {
 
 export interface ClientesFind {
     find?: {
-        _id?: string
+        _ids?: string[]
         nombre?: string
-        nif?: string
     }
     limit?: number
 }

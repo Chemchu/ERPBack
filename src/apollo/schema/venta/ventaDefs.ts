@@ -36,7 +36,7 @@ const VentaDefs = gql`
     }
 
     input VentasFind {
-        _id: [ID!]
+        _ids: [ID!]
         clienteId: String
         tipo: String
         vendedorId: String

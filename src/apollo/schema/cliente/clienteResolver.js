@@ -13,7 +13,7 @@ exports.clientesResolver = exports.clienteResolver = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const clienteResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    if (args === null || !args || Object.keys(args).length === 0 && args.constructor === Object)
+    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object)
         throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
     const db = database_1.Database.Instance();
     if (args.find._id) {
@@ -35,29 +35,22 @@ const clienteResolver = (parent, args, context, info) => __awaiter(void 0, void 
 });
 exports.clienteResolver = clienteResolver;
 const clientesResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a, _b;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const clientes = yield db.ClientDBController.CollectionModel.find({}).limit(args.limit || 3000).exec();
         if (clientes)
             return clientes;
     }
-    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._id) {
-        const clientes = yield db.ClientDBController.CollectionModel.find({ _id: args.find._id })
+    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
+        const clientes = yield db.ClientDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
         if (clientes)
             return clientes;
     }
-    if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nif) {
-        const clientes = yield db.ClientDBController.CollectionModel.find({ nif: args.find.nif })
-            .limit(args.limit || 3000)
-            .exec();
-        if (clientes)
-            return clientes;
-    }
-    if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.nombre) {
-        const clientes = yield db.ClientDBController.CollectionModel.find({ nombre: args.find.nombre })
+    if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nombre) {
+        const clientes = yield db.ClientDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
         if (clientes)

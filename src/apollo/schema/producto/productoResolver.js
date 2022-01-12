@@ -44,8 +44,8 @@ const productosResolver = (parent, args, context, info) => __awaiter(void 0, voi
         if (productos)
             return productos;
     }
-    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._id) {
-        const productos = yield db.ProductDBController.CollectionModel.find({ _id: args.find._id })
+    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
+        const productos = yield db.ProductDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
         if (productos)

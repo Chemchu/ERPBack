@@ -40,8 +40,8 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find?._id) {
-        const productos = await db.ProductDBController.CollectionModel.find({ _id: args.find._id })
+    if (args.find?._ids) {
+        const productos = await db.ProductDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
 

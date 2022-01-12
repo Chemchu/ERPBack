@@ -26,8 +26,8 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find._id) {
-        const ventas = await db.VentasDBController.CollectionModel.find({ _id: args.find._id })
+    if (args.find?._ids) {
+        const ventas = await db.VentasDBController.CollectionModel.find({ _id: args.find._ids })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
@@ -36,7 +36,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.clienteId) {
+    if (args.find?.clienteId) {
         const ventas = await db.VentasDBController.CollectionModel.find({ cliente: args.find.clienteId })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -46,7 +46,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.tipo) {
+    if (args.find?.tipo) {
         const ventas = await db.VentasDBController.CollectionModel.find({ tipo: args.find.tipo })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -56,7 +56,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.vendedorId) {
+    if (args.find?.vendedorId) {
         const ventas = await db.VentasDBController.CollectionModel.find({ vendidoPor: args.find.vendedorId })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -66,7 +66,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.createdAt) {
+    if (args.find?.createdAt) {
         const ventas = await db.VentasDBController.CollectionModel.find({ createdAt: args.find.createdAt })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
