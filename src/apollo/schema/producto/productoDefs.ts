@@ -22,6 +22,12 @@ const productoDefs = gql`
         updatedAt: String
     }
 
+    input ProductoFind {
+        _id: ID
+        nombre: String
+        ean: String
+    }
+
     input ProductosFind {
         _id: [ID!]
         nombre: String
@@ -33,8 +39,8 @@ const productoDefs = gql`
     ##### Query #####
 
     type Query {
-        producto(_id: ID!): Producto
-        productos(find: ProductosFind, limit: Int, order: String): [Producto]
+        producto(find: ProductoFind!): Producto
+        productos(find: ProductosFind, limit: Int): [Producto]
     }
 `;
 

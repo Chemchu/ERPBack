@@ -23,6 +23,12 @@ const productoDefs = (0, apollo_server_express_1.gql) `
         updatedAt: String
     }
 
+    input ProductoFind {
+        _id: ID
+        nombre: String
+        ean: String
+    }
+
     input ProductosFind {
         _id: [ID!]
         nombre: String
@@ -34,8 +40,8 @@ const productoDefs = (0, apollo_server_express_1.gql) `
     ##### Query #####
 
     type Query {
-        producto(_id: ID!): Producto
-        productos(find: ProductosFind, limit: Int, order: String): [Producto]
+        producto(find: ProductoFind!): Producto
+        productos(find: ProductosFind, limit: Int): [Producto]
     }
 `;
 exports.default = productoDefs;

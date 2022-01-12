@@ -1,27 +1,77 @@
+import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database"
+import { ProductoFind, ProductosFind } from "../../../types/types";
 
-export const productoResolver = async (parent: any, args: any, context: any, info: any) => {
+export const productoResolver = async (parent: any, args: ProductoFind, context: any, info: any) => {
+    if (!args.find._id && !args.find.nombre && !args.find.ean) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
+
     const db = Database.Instance();
-    const producto = await db.ProductDBController.CollectionModel.findOne({ _id: args._id }).exec();
 
-    if (producto) {
-        return producto;
+    if (args.find._id) {
+        const producto = await db.ProductDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+
+        if (producto) return producto;
+    }
+
+    if (args.find.nombre) {
+        const producto = await db.ProductDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+
+        if (producto) return producto;
+    }
+
+    if (args.find.ean) {
+        const producto = await db.ProductDBController.CollectionModel.findOne({ ean: args.find.ean }).exec();
+
+        if (producto) return producto;
     }
 
     return null;
 }
 
-export const productosResolver = async (parent: any, args: any, context: any, info: any) => {
+export const productosResolver = async (parent: any, args: ProductosFind, context: any, info: any) => {
     const db = Database.Instance();
 
-    // Usar los otros argumentos
-    const productos = await db.ProductDBController.CollectionModel.find({ nombre: args.find.nombre }).exec();
+    // Comprueba si find es null, undefined o vacío
+    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
+        const productos = await db.ProductDBController.CollectionModel.find({})
+            .limit(args.limit || 3000)
+            .exec();
 
-    if (productos) {
-        return productos;
+        if (productos) return productos;
     }
 
-    // Si le paso null, me devuelve el databaseState. Arreglar.
-    return null;
+    if (args.find._id) {
+        const productos = await db.ProductDBController.CollectionModel.find({ _id: args.find._id })
+            .limit(args.limit || 3000)
+            .exec();
+
+        if (productos) return productos;
+    }
+
+    if (args.find.nombre) {
+        const productos = await db.ProductDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
+            .limit(args.limit || 3000)
+            .exec();
+
+        if (productos) return productos;
+    }
+
+    if (args.find.familia) {
+        const productos = await db.ProductDBController.CollectionModel.find({ familia: { "$regex": args.find.familia, "$options": "i" } })
+            .limit(args.limit || 3000)
+            .exec();
+
+        if (productos) return productos;
+    }
+
+    if (args.find.proveedor) {
+        const productos = await db.ProductDBController.CollectionModel.find({ proveedor: { "$regex": args.find.proveedor, "$options": "i" } })
+            .limit(args.limit || 3000)
+            .exec();
+
+        if (productos) return productos;
+    }
+
+    return [];
 }
 
