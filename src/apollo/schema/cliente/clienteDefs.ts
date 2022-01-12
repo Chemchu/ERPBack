@@ -20,7 +20,7 @@ const ClienteDefs = gql`
     ##### Query #####
 
     type Query {
-        cliente(_id: ID!, ): Cliente
+        cliente(_id: ID!): Cliente
         clientes(find: ClientesFind, limit: Int): [Cliente]
     }
 `;

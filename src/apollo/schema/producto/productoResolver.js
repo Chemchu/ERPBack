@@ -35,6 +35,7 @@ const productoResolver = (parent, args, context, info) => __awaiter(void 0, void
 });
 exports.productoResolver = productoResolver;
 const productosResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const productos = yield db.ProductDBController.CollectionModel.find({})
@@ -43,28 +44,28 @@ const productosResolver = (parent, args, context, info) => __awaiter(void 0, voi
         if (productos)
             return productos;
     }
-    if (args.find._id) {
+    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._id) {
         const productos = yield db.ProductDBController.CollectionModel.find({ _id: args.find._id })
             .limit(args.limit || 3000)
             .exec();
         if (productos)
             return productos;
     }
-    if (args.find.nombre) {
+    if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nombre) {
         const productos = yield db.ProductDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
         if (productos)
             return productos;
     }
-    if (args.find.familia) {
+    if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.familia) {
         const productos = yield db.ProductDBController.CollectionModel.find({ familia: { "$regex": args.find.familia, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
         if (productos)
             return productos;
     }
-    if (args.find.proveedor) {
+    if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.proveedor) {
         const productos = yield db.ProductDBController.CollectionModel.find({ proveedor: { "$regex": args.find.proveedor, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();

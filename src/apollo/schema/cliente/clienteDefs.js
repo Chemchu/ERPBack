@@ -21,7 +21,7 @@ const ClienteDefs = (0, apollo_server_express_1.gql) `
     ##### Query #####
 
     type Query {
-        cliente(_id: ID!, ): Cliente
+        cliente(_id: ID!): Cliente
         clientes(find: ClientesFind, limit: Int): [Cliente]
     }
 `;

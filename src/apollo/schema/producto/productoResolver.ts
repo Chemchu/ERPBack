@@ -40,7 +40,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find._id) {
+    if (args.find?._id) {
         const productos = await db.ProductDBController.CollectionModel.find({ _id: args.find._id })
             .limit(args.limit || 3000)
             .exec();
@@ -48,7 +48,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find.nombre) {
+    if (args.find?.nombre) {
         const productos = await db.ProductDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
@@ -56,7 +56,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find.familia) {
+    if (args.find?.familia) {
         const productos = await db.ProductDBController.CollectionModel.find({ familia: { "$regex": args.find.familia, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
@@ -64,7 +64,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find.proveedor) {
+    if (args.find?.proveedor) {
         const productos = await db.ProductDBController.CollectionModel.find({ proveedor: { "$regex": args.find.proveedor, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();

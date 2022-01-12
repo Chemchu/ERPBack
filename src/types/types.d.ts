@@ -7,7 +7,7 @@ export interface ProductoFind {
 }
 
 export interface ProductosFind {
-    find: {
+    find?: {
         _id?: string
         nombre?: string
         familia?: string
@@ -21,7 +21,7 @@ export interface VentaFind {
 }
 
 export interface VentasFind {
-    find: {
+    find?: {
         _id?: string
         clienteId?: string
         tipo?: string
@@ -31,4 +31,39 @@ export interface VentasFind {
     limit?: number
     order?: string
     offset?: number
+}
+
+export interface EmpleadoFind {
+    find: {
+        _id?: string
+        nombre?: string
+        dni?: string
+    }
+}
+
+export interface EmpleadosFind {
+    find?: {
+        _id?: string
+        nombre?: string
+        dni?: string
+        rol?: string
+    }
+    limit?: number
+}
+
+export interface ClienteFind {
+    find: {
+        _id?: string
+        nombre?: string
+        nif?: string
+    }
+}
+
+export interface ClientesFind {
+    find?: {
+        _id?: string
+        nombre?: string
+        nif?: string
+    }
+    limit?: number
 }

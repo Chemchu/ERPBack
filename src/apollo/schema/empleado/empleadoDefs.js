@@ -17,16 +17,23 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
         diasLibresDisponibles: Int
     }
 
+    input EmpleadoFind {
+        _id: ID
+        nombre: String
+        dni: String
+    }
+
     input EmpleadosFind {
         _id: ID
         nombre: String
-        nif: String
+        dni: String
+        rol: String
     }
 
     ##### Query #####
 
     type Query {        
-        empleado(_id: ID!): Empleado
+        empleado(find: EmpleadoFind!): Empleado
         empleados(find: EmpleadosFind, limit: Int): [Empleado]
     }
 `;
