@@ -22,7 +22,7 @@ const productoResolver = (parent, args, context, info) => __awaiter(void 0, void
             return producto;
     }
     if (args.find.nombre) {
-        const producto = yield db.ProductDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+        const producto = yield db.ProductDBController.CollectionModel.findOne({ nombre: { "$regex": args.find.nombre, "$options": "i" } }).exec();
         if (producto)
             return producto;
     }

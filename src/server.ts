@@ -15,7 +15,10 @@ const PORT = process.env.PORT || 5151;
 
 const server = new ApolloServer({
   typeDefs: TypeDefs,
-  resolvers: Resolvers
+  resolvers: Resolvers,
+  context: ({ req }) => ({
+    user: req.user
+  })
 });
 
 async function startApolloServer() {
@@ -24,13 +27,13 @@ async function startApolloServer() {
 
   // Añadir serverRegistration a Apollo
   server.applyMiddleware({ app: apiRouter.App });
+
+  // Enruta los diferentes componentes del api
+  await apiRouter.SetRoutes();
 }
 
 // Inicia el servidor
 startApolloServer();
-
-// Enruta los diferentes componentes del api
-apiRouter.SetRoutes();
 
 // Inicia el listener en los puertos
 apiRouter.App.listen(PORT, () => {

@@ -65,3 +65,10 @@ export interface ClientesFind {
     }
     limit?: number
 }
+
+export interface Credentials {
+    loginValues: {
+        email: string,
+        password: string
+    }
+}

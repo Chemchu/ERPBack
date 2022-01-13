@@ -3,6 +3,9 @@ import { Database } from "../../../databases/database"
 import { EmpleadoFind, EmpleadosFind } from "../../../types/types";
 
 export const empleadoResolver = async (parent: any, args: EmpleadoFind, context: any, info: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
 
     const db = Database.Instance();
@@ -29,6 +32,9 @@ export const empleadoResolver = async (parent: any, args: EmpleadoFind, context:
 }
 
 export const empleadosResolver = async (parent: any, args: EmpleadosFind, context: any, info: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
     const db = Database.Instance();
 
     // Comprueba si find es null, undefined o vacío

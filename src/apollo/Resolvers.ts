@@ -1,3 +1,4 @@
+import { loginResolver } from "./schema/authentication/loginResolver";
 import { clienteResolver, clientesResolver } from "./schema/cliente/clienteResolver";
 import { empleadoResolver, empleadosResolver } from "./schema/empleado/empleadoResolver";
 import { productoResolver, productosResolver } from "./schema/producto/productoResolver";
@@ -13,6 +14,7 @@ const Resolvers = {
         clientes: clientesResolver,
         empleado: empleadoResolver,
         empleados: empleadosResolver,
+        login: loginResolver
     },
 };
 

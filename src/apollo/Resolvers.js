@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const loginResolver_1 = require("./schema/authentication/loginResolver");
 const clienteResolver_1 = require("./schema/cliente/clienteResolver");
 const empleadoResolver_1 = require("./schema/empleado/empleadoResolver");
 const productoResolver_1 = require("./schema/producto/productoResolver");
@@ -14,6 +15,7 @@ const Resolvers = {
         clientes: clienteResolver_1.clientesResolver,
         empleado: empleadoResolver_1.empleadoResolver,
         empleados: empleadoResolver_1.empleadosResolver,
+        login: loginResolver_1.loginResolver
     },
 };
 exports.default = Resolvers;
