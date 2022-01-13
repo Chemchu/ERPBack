@@ -3,6 +3,9 @@ import { Database } from "../../../databases/database"
 import { ProductoFind, ProductosFind } from "../../../types/types";
 
 export const productoResolver = async (parent: any, args: ProductoFind, context: any, info: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
     if (!args.find._id && !args.find.nombre && !args.find.ean) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
 
     const db = Database.Instance();
@@ -14,7 +17,7 @@ export const productoResolver = async (parent: any, args: ProductoFind, context:
     }
 
     if (args.find.nombre) {
-        const producto = await db.ProductDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+        const producto = await db.ProductDBController.CollectionModel.findOne({ nombre: { "$regex": args.find.nombre, "$options": "i" } }).exec();
 
         if (producto) return producto;
     }
@@ -29,6 +32,9 @@ export const productoResolver = async (parent: any, args: ProductoFind, context:
 }
 
 export const productosResolver = async (parent: any, args: ProductosFind, context: any, info: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
     const db = Database.Instance();
 
     // Comprueba si find es null, undefined o vacío
@@ -40,15 +46,15 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find._id) {
-        const productos = await db.ProductDBController.CollectionModel.find({ _id: args.find._id })
+    if (args.find?._ids) {
+        const productos = await db.ProductDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
 
         if (productos) return productos;
     }
 
-    if (args.find.nombre) {
+    if (args.find?.nombre) {
         const productos = await db.ProductDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
@@ -56,7 +62,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find.familia) {
+    if (args.find?.familia) {
         const productos = await db.ProductDBController.CollectionModel.find({ familia: { "$regex": args.find.familia, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
@@ -64,7 +70,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
         if (productos) return productos;
     }
 
-    if (args.find.proveedor) {
+    if (args.find?.proveedor) {
         const productos = await db.ProductDBController.CollectionModel.find({ proveedor: { "$regex": args.find.proveedor, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();

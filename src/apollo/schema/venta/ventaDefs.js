@@ -37,7 +37,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
     }
 
     input VentasFind {
-        _id: [ID!]
+        _ids: [ID!]
         clienteId: String
         tipo: String
         vendedorId: String

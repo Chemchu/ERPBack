@@ -29,7 +29,7 @@ const productoDefs = gql`
     }
 
     input ProductosFind {
-        _id: [ID!]
+        _ids: [ID!]
         nombre: String
         familia: String
         proveedor: String

@@ -22,16 +22,19 @@ let apiRouter = new router_1.Router();
 const PORT = process.env.PORT || 5151;
 const server = new apollo_server_express_1.ApolloServer({
     typeDefs: TypeDefs_1.default,
-    resolvers: Resolvers_1.default
+    resolvers: Resolvers_1.default,
+    context: ({ req }) => ({
+        user: req.user
+    })
 });
 function startApolloServer() {
     return __awaiter(this, void 0, void 0, function* () {
         yield server.start();
         server.applyMiddleware({ app: apiRouter.App });
+        yield apiRouter.SetRoutes();
     });
 }
 startApolloServer();
-apiRouter.SetRoutes();
 apiRouter.App.listen(PORT, () => {
     console.log(`Servidor en marcha: puerto ${PORT}.`);
 });

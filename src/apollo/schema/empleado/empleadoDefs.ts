@@ -16,16 +16,22 @@ const EmpleadoDefs = gql`
         diasLibresDisponibles: Int
     }
 
-    input EmpleadosFind {
+    input EmpleadoFind {
         _id: ID
         nombre: String
-        nif: String
+        dni: String
+    }
+
+    input EmpleadosFind {
+        _ids: [ID!]
+        nombre: String
+        rol: String
     }
 
     ##### Query #####
 
     type Query {        
-        empleado(_id: ID!): Empleado
+        empleado(find: EmpleadoFind!): Empleado
         empleados(find: EmpleadosFind, limit: Int): [Empleado]
     }
 `;

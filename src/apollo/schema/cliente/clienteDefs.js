@@ -12,16 +12,20 @@ const ClienteDefs = (0, apollo_server_express_1.gql) `
         cp: String
     }
 
-    input ClientesFind {
+    input ClienteFind {
         _id: ID
         nif: String
+    }
+
+    input ClientesFind {
+        _ids: [ID!]
         nombre: String
     }
 
     ##### Query #####
 
     type Query {
-        cliente(_id: ID!, ): Cliente
+        cliente(find: ClienteFind!): Cliente
         clientes(find: ClientesFind, limit: Int): [Cliente]
     }
 `;

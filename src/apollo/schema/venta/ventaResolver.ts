@@ -3,6 +3,9 @@ import { Database } from "../../../databases/database"
 import { VentaFind, VentasFind } from "../../../types/types";
 
 export const ventaResolver = async (parent: any, args: VentaFind, context: any, info: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
     if (args === null || !args || Object.keys(args).length === 0 && args.constructor === Object) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
 
     const db = Database.Instance();
@@ -17,6 +20,9 @@ export const ventaResolver = async (parent: any, args: VentaFind, context: any, 
 }
 
 export const ventasResolver = async (parent: any, args: VentasFind, context: any, info: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
     const db = Database.Instance();
 
     // Comprueba si find es null, undefined o vacío
@@ -26,8 +32,8 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find._id) {
-        const ventas = await db.VentasDBController.CollectionModel.find({ _id: args.find._id })
+    if (args.find?._ids) {
+        const ventas = await db.VentasDBController.CollectionModel.find({ _id: args.find._ids })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
@@ -36,7 +42,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.clienteId) {
+    if (args.find?.clienteId) {
         const ventas = await db.VentasDBController.CollectionModel.find({ cliente: args.find.clienteId })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -46,7 +52,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.tipo) {
+    if (args.find?.tipo) {
         const ventas = await db.VentasDBController.CollectionModel.find({ tipo: args.find.tipo })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -56,7 +62,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.vendedorId) {
+    if (args.find?.vendedorId) {
         const ventas = await db.VentasDBController.CollectionModel.find({ vendidoPor: args.find.vendedorId })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -66,7 +72,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
-    if (args.find.createdAt) {
+    if (args.find?.createdAt) {
         const ventas = await db.VentasDBController.CollectionModel.find({ createdAt: args.find.createdAt })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)

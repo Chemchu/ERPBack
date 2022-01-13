@@ -1,3 +1,4 @@
+import LoginDefs from "./schema/authentication/loginDefs";
 import ClienteDefs from "./schema/cliente/clienteDefs";
 import EmpleadoDefs from "./schema/empleado/empleadoDefs";
 import productoDefs from "./schema/producto/productoDefs";
@@ -7,7 +8,8 @@ const TypeDefs = [
     productoDefs,
     ClienteDefs,
     VentaDefs,
-    EmpleadoDefs
+    EmpleadoDefs,
+    LoginDefs,
 ];
 
 export default TypeDefs

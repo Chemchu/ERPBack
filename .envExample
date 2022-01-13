@@ -1,0 +1,6 @@
+# The file must be called ".env" without the cotation marks
+
+PORT=
+MONGO_URI=
+DATABASE_NAME=
+JWT_SECRET= 
