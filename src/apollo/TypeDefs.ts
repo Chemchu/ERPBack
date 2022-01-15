@@ -1,3 +1,4 @@
+import JwtValidatorDefs from "./schema/authentication/jwtValidatorDefs";
 import LoginDefs from "./schema/authentication/loginDefs";
 import ClienteDefs from "./schema/cliente/clienteDefs";
 import EmpleadoDefs from "./schema/empleado/empleadoDefs";
@@ -10,6 +11,7 @@ const TypeDefs = [
     VentaDefs,
     EmpleadoDefs,
     LoginDefs,
+    JwtValidatorDefs
 ];
 
 export default TypeDefs

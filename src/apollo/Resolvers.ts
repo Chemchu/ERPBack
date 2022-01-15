@@ -1,3 +1,4 @@
+import { jwtValidatorResolver } from "./schema/authentication/jwtValidatorResolver";
 import { loginResolver } from "./schema/authentication/loginResolver";
 import { clienteResolver, clientesResolver } from "./schema/cliente/clienteResolver";
 import { empleadoResolver, empleadosResolver } from "./schema/empleado/empleadoResolver";
@@ -14,7 +15,8 @@ const Resolvers = {
         clientes: clientesResolver,
         empleado: empleadoResolver,
         empleados: empleadosResolver,
-        login: loginResolver
+        login: loginResolver,
+        validateJwt: jwtValidatorResolver
     },
 };
 

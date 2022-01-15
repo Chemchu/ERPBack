@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const jwtValidatorResolver_1 = require("./schema/authentication/jwtValidatorResolver");
 const loginResolver_1 = require("./schema/authentication/loginResolver");
 const clienteResolver_1 = require("./schema/cliente/clienteResolver");
 const empleadoResolver_1 = require("./schema/empleado/empleadoResolver");
@@ -15,7 +16,8 @@ const Resolvers = {
         clientes: clienteResolver_1.clientesResolver,
         empleado: empleadoResolver_1.empleadoResolver,
         empleados: empleadoResolver_1.empleadosResolver,
-        login: loginResolver_1.loginResolver
+        login: loginResolver_1.loginResolver,
+        validateJwt: jwtValidatorResolver_1.jwtValidatorResolver
     },
 };
 exports.default = Resolvers;
