@@ -81,3 +81,28 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
     return [];
 }
 
+export const addProductoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+
+export const deleteProductoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+}
+
+export const updateProductoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+
+
+

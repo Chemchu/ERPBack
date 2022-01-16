@@ -19,5 +19,19 @@ const Resolvers = {
         login: loginResolver_1.loginResolver,
         validateJwt: jwtValidatorResolver_1.jwtValidatorResolver
     },
+    Mutation: {
+        addProducto: productoResolver_1.addProductoResolver,
+        deleteProducto: productoResolver_1.deleteProductoResolver,
+        updateProducto: productoResolver_1.updateProductoResolver,
+        addCliente: clienteResolver_1.addClienteResolver,
+        deleteCliente: clienteResolver_1.deleteClienteResolver,
+        updateCliente: clienteResolver_1.updateClienteResolver,
+        addVenta: ventaResolver_1.addVentaResolver,
+        deleteVenta: ventaResolver_1.deleteVentaResolver,
+        updateVenta: ventaResolver_1.updateVentaResolver,
+        addEmpleado: empleadoResolver_1.addEmpleadoResolver,
+        deleteEmpleado: empleadoResolver_1.deleteEmpleadoResolver,
+        updateEmpleado: empleadoResolver_1.updateEmpleadoResolver,
+    }
 };
 exports.default = Resolvers;

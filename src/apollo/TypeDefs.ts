@@ -11,7 +11,7 @@ const TypeDefs = [
     VentaDefs,
     EmpleadoDefs,
     LoginDefs,
-    JwtValidatorDefs
+    JwtValidatorDefs,
 ];
 
 export default TypeDefs

@@ -15,6 +15,6 @@ const TypeDefs = [
     ventaDefs_1.default,
     empleadoDefs_1.default,
     loginDefs_1.default,
-    jwtValidatorDefs_1.default
+    jwtValidatorDefs_1.default,
 ];
 exports.default = TypeDefs;

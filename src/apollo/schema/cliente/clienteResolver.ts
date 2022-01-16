@@ -63,3 +63,26 @@ export const clientesResolver = async (parent: any, args: ClientesFind, context:
     return [];
 }
 
+export const addClienteResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+
+export const deleteClienteResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+}
+
+export const updateClienteResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clientesResolver = exports.clienteResolver = void 0;
+exports.updateClienteResolver = exports.deleteClienteResolver = exports.addClienteResolver = exports.clientesResolver = exports.clienteResolver = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const clienteResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,3 +59,15 @@ const clientesResolver = (parent, args, context, info) => __awaiter(void 0, void
     return [];
 });
 exports.clientesResolver = clientesResolver;
+const addClienteResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.addClienteResolver = addClienteResolver;
+const deleteClienteResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.deleteClienteResolver = deleteClienteResolver;
+const updateClienteResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.updateClienteResolver = updateClienteResolver;

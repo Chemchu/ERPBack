@@ -12,6 +12,11 @@ const ClienteDefs = (0, apollo_server_express_1.gql) `
         cp: String
     }
 
+    type ClienteMutationResponse {
+        message: String!
+        successful: Boolean!
+    }
+
     input ClienteFind {
         _id: ID
         nif: String
@@ -27,6 +32,14 @@ const ClienteDefs = (0, apollo_server_express_1.gql) `
     type Query {
         cliente(find: ClienteFind!): Cliente
         clientes(find: ClientesFind, limit: Int): [Cliente]
+    }
+
+    ##### Mutation #####
+
+    type Mutation {
+        addCliente(nif: String!, nombre: String!, calle: String, cp: String): ClienteMutationResponse!,
+        deleteCliente(_id: ID!): ClienteMutationResponse!,
+        updateCliente(_id: ID!, nif: String, nombre: String, calle: String, cp: String): ClienteMutationResponse!,
     }
 `;
 exports.default = ClienteDefs;
