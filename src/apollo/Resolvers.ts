@@ -18,6 +18,26 @@ const Resolvers = {
         login: loginResolver,
         validateJwt: jwtValidatorResolver
     },
+
+    // Descomentar cuando haya hecho los resolvers
+
+    // Mutation: {
+    //     addProducto: addProductoResolver,
+    //     deleteProducto: deleteProductoResolver,
+    //     updateProducto: updateProductoResolver,
+
+    //     addCliente: addClienteResolver,
+    //     deleteCliente: deleteClienteResolver,
+    //     updateCliente: updateClienteResolver,
+
+    //     addVenta: addVentaResolver,
+    //     deleteVenta: deleteVentaResolver,
+    //     updateVenta: updateVentaResolver,
+
+    //     addEmpleado: addEmpleadoResolver,
+    //     deleteEmpleado: deleteEmpleadoResolver,
+    //     updateEmpleado: updateEmpleadoResolver,
+    // }
 };
 
 export default Resolvers
