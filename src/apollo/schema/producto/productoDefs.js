@@ -23,6 +23,11 @@ const productoDefs = (0, apollo_server_express_1.gql) `
         updatedAt: String
     }
 
+    type ProductoMutationResponse {
+        message: String!
+        successful: Boolean!
+    }
+
     input ProductoFind {
         _id: ID
         nombre: String
@@ -42,6 +47,18 @@ const productoDefs = (0, apollo_server_express_1.gql) `
     type Query {
         producto(find: ProductoFind!): Producto
         productos(find: ProductosFind, limit: Int): [Producto]
+    }
+
+    ##### Mutation #####
+    
+    type Mutation {
+        addProducto(nombre: String!, proveedor: String, familia: String, precioVenta: Float!, precioCompra: Float, iva: Float
+            margen: Float, promociones: [String], ean: String!, cantidad: Int, cantidadRestock: Int, alta: Boolean, img: String): ProductoMutationResponse!
+        
+        deleteProducto(_id: ID!): ProductoMutationResponse!
+        
+        updateProducto(_id: ID!, nombre: String, proveedor: String, familia: String, precioVenta: Float, precioCompra: Float, iva: Float
+            margen: Float, promociones: [String], ean: String, cantidad: Int, cantidadRestock: Int, alta: Boolean, img: String): ProductoMutationResponse!
     }
 `;
 exports.default = productoDefs;

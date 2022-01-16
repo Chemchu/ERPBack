@@ -14,8 +14,8 @@ export const loginResolver = async (parent: any, args: Credentials, context: any
         const empleado = await db.EmployeeDBController.CollectionModel.findOne({ email: args.loginValues.email }).exec();
         if (!empleado) { return { message: "Usuario y/o contraseña incorrectas", success: false, token: null } }
 
-        let doesPasswordsMatch = await bcrypt.compare(args.loginValues.password, empleado?.hashPassword);
-        if (!doesPasswordsMatch) { return { message: "Usuario y/o contraseña incorrectas", success: false, token: null } }
+        const passwordsMatch = await bcrypt.compare(args.loginValues.password, empleado?.hashPassword);
+        if (!passwordsMatch) { return { message: "Usuario y/o contraseña incorrectas", success: false, token: null } }
 
         // Secret Key
         const secret = process.env.JWT_SECRET;

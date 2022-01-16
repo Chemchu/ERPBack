@@ -12,7 +12,7 @@ const CreateProduct = (jsonData) => {
         margen: jsonData.MARGEN,
         promociones: jsonData.promociones,
         ean: jsonData.EAN,
-        alta: jsonData.ALTA || false,
+        alta: jsonData.ALTA || true,
         cantidad: jsonData.CANTIDAD,
         cantidadRestock: jsonData.CANTIDAD_RESTOCK,
     };

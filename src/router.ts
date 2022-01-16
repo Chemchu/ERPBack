@@ -32,9 +32,8 @@ export class Router {
 
         // Selecciona la estrategia
         passport.use(new Strategy(params, async (jwtPayload, done) => {
-            console.log("Searchup for the user");
-
             try {
+                console.log("Searchup for the user");
                 const user = await Database.Instance().EmployeeDBController.CollectionModel.findOne({ _id: jwtPayload.id }).exec();
 
                 if (user) { return done(null, user); }

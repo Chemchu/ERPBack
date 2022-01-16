@@ -71,3 +71,25 @@ export const empleadosResolver = async (parent: any, args: EmpleadosFind, contex
     return [];
 }
 
+export const addEmpleadoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+
+export const deleteEmpleadoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+}
+
+export const updateEmpleadoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.productosResolver = exports.productoResolver = void 0;
+exports.updateProductoResolver = exports.deleteProductoResolver = exports.addProductoResolver = exports.productosResolver = exports.productoResolver = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const productoResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
@@ -42,36 +42,48 @@ const productosResolver = (parent, args, context, info) => __awaiter(void 0, voi
             .limit(args.limit || 3000)
             .exec();
         if (productos)
-            return productos;
+            return productos.filter((p) => { p.databaseState === null; });
     }
     if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
         const productos = yield db.ProductDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
         if (productos)
-            return productos;
+            return productos.filter((p) => { p.databaseState === null; });
     }
     if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nombre) {
         const productos = yield db.ProductDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
         if (productos)
-            return productos;
+            return productos.filter((p) => { p.databaseState === null; });
     }
     if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.familia) {
         const productos = yield db.ProductDBController.CollectionModel.find({ familia: { "$regex": args.find.familia, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
         if (productos)
-            return productos;
+            return productos.filter((p) => { p.databaseState === null; });
     }
     if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.proveedor) {
         const productos = yield db.ProductDBController.CollectionModel.find({ proveedor: { "$regex": args.find.proveedor, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
         if (productos)
-            return productos;
+            return productos.filter((p) => { p.databaseState === null; });
     }
     return [];
 });
 exports.productosResolver = productosResolver;
+const addProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.addProductoResolver = addProductoResolver;
+const deleteProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.deleteProductoResolver = deleteProductoResolver;
+const updateProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.updateProductoResolver = updateProductoResolver;

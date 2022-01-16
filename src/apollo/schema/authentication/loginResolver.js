@@ -29,8 +29,8 @@ const loginResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
         if (!empleado) {
             return { message: "Usuario y/o contraseña incorrectas", success: false, token: null };
         }
-        let doesPasswordsMatch = yield bcrypt.compare(args.loginValues.password, empleado === null || empleado === void 0 ? void 0 : empleado.hashPassword);
-        if (!doesPasswordsMatch) {
+        const passwordsMatch = yield bcrypt.compare(args.loginValues.password, empleado === null || empleado === void 0 ? void 0 : empleado.hashPassword);
+        if (!passwordsMatch) {
             return { message: "Usuario y/o contraseña incorrectas", success: false, token: null };
         }
         const secret = process.env.JWT_SECRET;

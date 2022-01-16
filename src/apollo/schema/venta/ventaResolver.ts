@@ -85,3 +85,26 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
     return [];
 }
 
+export const addVentaResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+
+export const deleteVentaResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+}
+
+export const updateVentaResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+

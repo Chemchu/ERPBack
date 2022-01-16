@@ -1,8 +1,9 @@
+import { jwtValidatorResolver } from "./schema/authentication/jwtValidatorResolver";
 import { loginResolver } from "./schema/authentication/loginResolver";
-import { clienteResolver, clientesResolver } from "./schema/cliente/clienteResolver";
-import { empleadoResolver, empleadosResolver } from "./schema/empleado/empleadoResolver";
-import { productoResolver, productosResolver } from "./schema/producto/productoResolver";
-import { ventaResolver, ventasResolver } from "./schema/venta/ventaResolver";
+import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver } from "./schema/cliente/clienteResolver";
+import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
+import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver } from "./schema/producto/productoResolver";
+import { addVentaResolver, deleteVentaResolver, updateVentaResolver, ventaResolver, ventasResolver } from "./schema/venta/ventaResolver";
 
 const Resolvers = {
     Query: {
@@ -14,8 +15,26 @@ const Resolvers = {
         clientes: clientesResolver,
         empleado: empleadoResolver,
         empleados: empleadosResolver,
-        login: loginResolver
+        login: loginResolver,
+        validateJwt: jwtValidatorResolver
     },
+    Mutation: {
+        addProducto: addProductoResolver,
+        deleteProducto: deleteProductoResolver,
+        updateProducto: updateProductoResolver,
+
+        addCliente: addClienteResolver,
+        deleteCliente: deleteClienteResolver,
+        updateCliente: updateClienteResolver,
+
+        addVenta: addVentaResolver,
+        deleteVenta: deleteVentaResolver,
+        updateVenta: updateVentaResolver,
+
+        addEmpleado: addEmpleadoResolver,
+        deleteEmpleado: deleteEmpleadoResolver,
+        updateEmpleado: updateEmpleadoResolver,
+    }
 };
 
 export default Resolvers

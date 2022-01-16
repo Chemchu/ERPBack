@@ -39,8 +39,8 @@ class Router {
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
             };
             passport_1.default.use(new Strategy(params, (jwtPayload, done) => __awaiter(this, void 0, void 0, function* () {
-                console.log("Searchup for the user");
                 try {
+                    console.log("Searchup for the user");
                     const user = yield database_js_1.Database.Instance().EmployeeDBController.CollectionModel.findOne({ _id: jwtPayload.id }).exec();
                     if (user) {
                         return done(null, user);

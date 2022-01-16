@@ -43,7 +43,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos;
+        if (productos) return productos.filter((p) => { p.databaseState === null });
     }
 
     if (args.find?._ids) {
@@ -51,7 +51,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos;
+        if (productos) return productos.filter((p) => { p.databaseState === null });
     }
 
     if (args.find?.nombre) {
@@ -59,7 +59,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos;
+        if (productos) return productos.filter((p) => { p.databaseState === null });
     }
 
     if (args.find?.familia) {
@@ -67,7 +67,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos;
+        if (productos) return productos.filter((p) => { p.databaseState === null });
     }
 
     if (args.find?.proveedor) {
@@ -75,9 +75,34 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos;
+        if (productos) return productos.filter((p) => { p.databaseState === null });
     }
 
     return [];
 }
+
+export const addProductoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+
+export const deleteProductoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+}
+
+export const updateProductoResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const db = Database.Instance();
+
+}
+
+
 

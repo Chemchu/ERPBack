@@ -21,6 +21,11 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         updatedAt: String
     }
 
+    type VentaMutationResponse {
+        message: String!
+        successful: Boolean!
+    }
+
     type ProductoVendido {
         _id: ID!
         nombre: String
@@ -50,6 +55,20 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
     type Query {        
         venta(_id: ID!): Venta
         ventas(find: VentasFind, limit: Int, order: String, offset: Int): [Venta]
+    }
+
+    ##### Mutation #####
+    
+    type Mutation {
+        addVenta(productos: [ID]!, dineroEntregadoEfectivo: Float!, dineroEntregadoTarjeta: Float!, precioVentaTotal: Float!, cambio: Float,
+            clienteId: ID!, vendidoPor: ID!, modificadoPor: ID!, tipo: String!, descuentoEfectivo: Float!, 
+            descuentoTarjeta: Float!): VentaMutationResponse!
+        
+        deleteVenta(_id: ID!): VentaMutationResponse!
+        
+        updateVenta(_id: ID!, productos: [ID], dineroEntregadoEfectivo: Float, dineroEntregadoTarjeta: Float, precioVentaTotal: Float!, cambio: Float,
+            clienteId: ID, vendidoPor: ID, modificadoPor: ID, tipo: String, descuentoEfectivo: Float, 
+            descuentoTarjeta: Float): VentaMutationResponse!
     }
 `;
 exports.default = VentaDefs;

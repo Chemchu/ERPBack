@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ventasResolver = exports.ventaResolver = void 0;
+exports.updateVentaResolver = exports.deleteVentaResolver = exports.addVentaResolver = exports.ventasResolver = exports.ventaResolver = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const ventaResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
@@ -80,3 +80,15 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
     return [];
 });
 exports.ventasResolver = ventasResolver;
+const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.addVentaResolver = addVentaResolver;
+const deleteVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.deleteVentaResolver = deleteVentaResolver;
+const updateVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.updateVentaResolver = updateVentaResolver;
