@@ -1,6 +1,8 @@
+import mongoose from 'mongoose';
 import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database"
 import { VentaFind, VentasFind } from "../../../types/types";
+import { ISale } from "../../../types/Venta";
 
 export const ventaResolver = async (parent: any, args: VentaFind, context: any, info: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
@@ -85,12 +87,34 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
     return [];
 }
 
-export const addVentaResolver = async (root: any, args: any, context: any) => {
+export const addVentaResolver = async (root: any, args: ISale, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
     const db = Database.Instance();
 
+    const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel({
+        productos: args.productos,
+        dineroEntregadoEfectivo: args.dineroEntregadoEfectivo,
+        dineroEntregadoTarjeta: args.dineroEntregadoTarjeta,
+        precioVentaTotal: args.precioVentaTotal,
+        cambio: args.cambio,
+        cliente: args.cliente,
+        vendidoPor: args.vendidoPor,
+        modificadoPor: args.modificadoPor,
+        tipo: args.tipo,
+        descuentoEfectivo: args.descuentoEfectivo,
+        descuentoTarjeta: args.descuentoTarjeta,
+    });
+
+    const res = await saleToAdd.save();
+
+    if (res.errors) {
+        return { message: "No se ha podido añadir la venta a la base de datos", successful: false }
+    }
+
+
+    return { message: "Venta añadida con éxito", successful: true }
 }
 
 export const deleteVentaResolver = async (root: any, args: any, context: any) => {

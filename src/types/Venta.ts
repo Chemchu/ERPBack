@@ -14,4 +14,5 @@ export interface ISale extends Document {
     tipo: string,
     descuentoEfectivo: number,
     descuentoTarjeta: number,
+    tpv: string
 }

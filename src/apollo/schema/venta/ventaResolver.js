@@ -82,6 +82,24 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
 exports.ventasResolver = ventasResolver;
 const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
+    const saleToAdd = new db.VentasDBController.CollectionModel({
+        productos: args.productos,
+        dineroEntregadoEfectivo: args.dineroEntregadoEfectivo,
+        dineroEntregadoTarjeta: args.dineroEntregadoTarjeta,
+        precioVentaTotal: args.precioVentaTotal,
+        cambio: args.cambio,
+        cliente: args.cliente,
+        vendidoPor: args.vendidoPor,
+        modificadoPor: args.modificadoPor,
+        tipo: args.tipo,
+        descuentoEfectivo: args.descuentoEfectivo,
+        descuentoTarjeta: args.descuentoTarjeta,
+    });
+    const res = yield saleToAdd.save();
+    if (res.errors) {
+        return { message: "No se ha podido añadir la venta a la base de datos", successful: false };
+    }
+    return { message: "Venta añadida con éxito", successful: true };
 });
 exports.addVentaResolver = addVentaResolver;
 const deleteVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {

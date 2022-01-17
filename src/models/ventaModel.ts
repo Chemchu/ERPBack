@@ -21,6 +21,7 @@ export class Venta {
             tipo: { type: String, required: false },
             descuentoEfectivo: { type: Number, required: false },
             descuentoTarjeta: { type: Number, required: false },
+            tpv: { type: String, required: false },
             databaseState: { type: String, required: false }
         }, { strict: false, timestamps: true }) as Schema<ISale & IDBState>;
 

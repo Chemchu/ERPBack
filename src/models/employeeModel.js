@@ -14,7 +14,7 @@ class Empleado {
             hashPassword: { type: String, required: true },
             horasPorSemana: { type: Number, required: true },
             fechaAlta: { type: Date, required: true },
-            diasLibresDisponibles: { type: Number, required: true },
+            tpvEnUso: { type: String, required: false }
         }, { strict: true });
         this.modelo = (0, mongoose_1.model)('Empleados', EmpleadoSchema);
     }
