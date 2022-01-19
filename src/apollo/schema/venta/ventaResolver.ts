@@ -103,8 +103,8 @@ export const addVentaResolver = async (root: any, args: ISale, context: any) => 
         vendidoPor: args.vendidoPor,
         modificadoPor: args.modificadoPor,
         tipo: args.tipo,
-        descuentoEfectivo: args.descuentoEfectivo,
-        descuentoTarjeta: args.descuentoTarjeta,
+        descuentoEnEfectivo: args.descuentoEnEfectivo,
+        descuentoEnPorcentaje: args.descuentoEnPorcentaje,
     });
 
     const res = await saleToAdd.save();

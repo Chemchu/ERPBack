@@ -15,8 +15,8 @@ class Venta {
             vendidoPor: { type: mongoose_1.Types.ObjectId, ref: 'Empleados' },
             modificadoPor: { type: mongoose_1.Types.ObjectId, ref: 'Empleados' },
             tipo: { type: String, required: false },
-            descuentoEfectivo: { type: Number, required: false },
-            descuentoTarjeta: { type: Number, required: false },
+            descuentoEnEfectivo: { type: Number, required: false },
+            descuentoEnPorcentaje: { type: Number, required: false },
             tpv: { type: String, required: false },
             databaseState: { type: String, required: false }
         }, { strict: false, timestamps: true });

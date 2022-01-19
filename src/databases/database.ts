@@ -9,8 +9,6 @@ import { ClientDBController } from './ClientDBController';
 import { SaleDBController } from './SaleDBController';
 import { EmployeeDBController } from './EmployeeDBController';
 import { Empleado } from '../models/employeeModel';
-import { OldEmployeeDBController } from './OldEmployeeDBController';
-import { OldEmpleado } from '../models/oldEmployeeModel';
 
 mongoose.Promise = global.Promise;
 
@@ -29,7 +27,6 @@ export class Database {
 	public VentasDBController: SaleDBController;
 	public ClientDBController: ClientDBController;
 	public EmployeeDBController: EmployeeDBController;
-	public OldEmployeeDBController: OldEmployeeDBController
 
 	private constructor() {
 		this.db = dbInformation.mongo;
@@ -38,7 +35,6 @@ export class Database {
 		this.VentasDBController = new SaleDBController(new Venta().Model);
 		this.ClientDBController = new ClientDBController(new Cliente().Model);
 		this.EmployeeDBController = new EmployeeDBController(new Empleado().Model);
-		this.OldEmployeeDBController = new OldEmployeeDBController(new OldEmpleado().Model);
 
 		this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
 			console.log("¡Conexión realizada con la base de datos!");

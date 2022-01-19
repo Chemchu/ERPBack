@@ -12,7 +12,7 @@ export interface ISale extends Document {
     vendidoPor: IEmployee["_id"],
     modificadoPor: IEmployee["_id"],
     tipo: string,
-    descuentoEfectivo: number,
-    descuentoTarjeta: number,
+    descuentoEnEfectivo: number,
+    descuentoEnPorcentaje: number,
     tpv: string
 }

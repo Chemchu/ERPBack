@@ -31,8 +31,8 @@ export class SaleDBController implements IDBController {
 			vendidoPor: saleJSON.empleadoID,
 			modificadoPor: saleJSON.empleadoID,
 			tipo: saleJSON.tipo,
-			descuentoEfectivo: saleJSON.dtoEfectivo,
-			descuentoTarjeta: saleJSON.dtoTarjeta,
+			descuentoEnEfectivo: saleJSON.dtoEfectivo,
+			descuentoEnPorcentaje: saleJSON.dtoTarjeta,
 		});
 
 		try {

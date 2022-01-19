@@ -92,8 +92,8 @@ const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void
         vendidoPor: args.vendidoPor,
         modificadoPor: args.modificadoPor,
         tipo: args.tipo,
-        descuentoEfectivo: args.descuentoEfectivo,
-        descuentoTarjeta: args.descuentoTarjeta,
+        descuentoEnEfectivo: args.descuentoEnEfectivo,
+        descuentoEnPorcentaje: args.descuentoEnPorcentaje,
     });
     const res = yield saleToAdd.save();
     if (res.errors) {
