@@ -35,7 +35,7 @@ export class Venta {
             tipo: { type: String, required: true },
             descuentoEnEfectivo: { type: Number, required: true },
             descuentoEnPorcentaje: { type: Number, required: true },
-            tpv: { type: String, required: true },
+            tpv: { type: Types.ObjectId, ref: 'TPV', required: true },
             databaseState: { type: String, required: false }
         }, { strict: true, timestamps: true }) as Schema<ISale & IDBState>;
 

@@ -15,7 +15,8 @@ class CierreTPV {
             ventasTotales: { type: Number },
             dineroRetirado: { type: Number },
             fondoDeCaja: { type: Number },
-            beneficio: { type: Number }
+            beneficio: { type: Number },
+            nota: { type: String }
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('CierresTPV', CierreTPVSchema);
     }

@@ -1,6 +1,7 @@
 import { Document, SchemaDefinition } from 'mongoose';
 import { IClient } from './Cliente';
 import { IEmployee } from './Empleado';
+import { ITPV } from './TPV';
 
 export interface ISale extends Document {
     productos: SchemaDefinition[],
@@ -14,5 +15,5 @@ export interface ISale extends Document {
     tipo: string,
     descuentoEnEfectivo: number,
     descuentoEnPorcentaje: number,
-    tpv: string
+    tpv: ITPV['_id']
 }

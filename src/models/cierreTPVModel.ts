@@ -1,5 +1,5 @@
 import { Schema, model, Model, Types } from 'mongoose';
-import { ICierreTPV, ITPV } from '../types/TPV';
+import { ICierreTPV } from '../types/TPV';
 
 
 export class CierreTPV {
@@ -18,7 +18,8 @@ export class CierreTPV {
             ventasTotales: { type: Number },
             dineroRetirado: { type: Number },
             fondoDeCaja: { type: Number },
-            beneficio: { type: Number }
+            beneficio: { type: Number },
+            nota: { type: String }
 
         }, { strict: true, timestamps: true }) as Schema<ICierreTPV>;
 

@@ -29,7 +29,7 @@ class Venta {
             tipo: { type: String, required: true },
             descuentoEnEfectivo: { type: Number, required: true },
             descuentoEnPorcentaje: { type: Number, required: true },
-            tpv: { type: String, required: true },
+            tpv: { type: mongoose_1.Types.ObjectId, ref: 'TPV', required: true },
             databaseState: { type: String, required: false }
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('Venta', VentaSchema);
