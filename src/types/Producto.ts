@@ -1,5 +1,4 @@
 import { Document, SchemaDefinition } from 'mongoose';
-import { IProveedor } from './Proveedor';
 
 export interface IProduct extends Document {
     nombre: string
@@ -15,4 +14,18 @@ export interface IProduct extends Document {
     cantidadRestock: number
     alta: boolean
     img: string
+}
+
+export interface ISoldProduct extends Document {
+    nombre: string,
+    familia: string,
+    precioUnidad: number,
+    precioTotal: number,
+    cantidad: number,
+    dto: number,
+    iva: number,
+    margen: number,
+    beneficio: number,
+    proveedor: string
+    ean: string
 }

@@ -11,6 +11,10 @@ const ClientDBController_1 = require("./ClientDBController");
 const SaleDBController_1 = require("./SaleDBController");
 const EmployeeDBController_1 = require("./EmployeeDBController");
 const employeeModel_1 = require("../models/employeeModel");
+const CierreTPVDBController_1 = require("./CierreTPVDBController");
+const cierreTPVModel_1 = require("../models/cierreTPVModel");
+const tpvModel_1 = require("../models/tpvModel");
+const TPVDBController_1 = require("./TPVDBController");
 mongoose.Promise = global.Promise;
 dotenv.config();
 const dbInformation = {
@@ -25,6 +29,8 @@ class Database {
         this.VentasDBController = new SaleDBController_1.SaleDBController(new ventaModel_1.Venta().Model);
         this.ClientDBController = new ClientDBController_1.ClientDBController(new clienteModel_1.Cliente().Model);
         this.EmployeeDBController = new EmployeeDBController_1.EmployeeDBController(new employeeModel_1.Empleado().Model);
+        this.CierreTPVDBController = new CierreTPVDBController_1.CierreTPVDBController(new cierreTPVModel_1.CierreTPV().Model);
+        this.TPVDBController = new TPVDBController_1.TPVDBController(new tpvModel_1.TPV().Model);
         this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("¡Conexión realizada con la base de datos!");
         }).catch((err) => {

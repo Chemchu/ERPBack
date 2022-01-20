@@ -9,6 +9,10 @@ import { ClientDBController } from './ClientDBController';
 import { SaleDBController } from './SaleDBController';
 import { EmployeeDBController } from './EmployeeDBController';
 import { Empleado } from '../models/employeeModel';
+import { CierreTPVDBController } from './CierreTPVDBController';
+import { CierreTPV } from '../models/cierreTPVModel';
+import { TPV } from '../models/tpvModel';
+import { TPVDBController } from './TPVDBController';
 
 mongoose.Promise = global.Promise;
 
@@ -27,6 +31,8 @@ export class Database {
 	public VentasDBController: SaleDBController;
 	public ClientDBController: ClientDBController;
 	public EmployeeDBController: EmployeeDBController;
+	public TPVDBController: TPVDBController;
+	public CierreTPVDBController: CierreTPVDBController;
 
 	private constructor() {
 		this.db = dbInformation.mongo;
@@ -35,6 +41,8 @@ export class Database {
 		this.VentasDBController = new SaleDBController(new Venta().Model);
 		this.ClientDBController = new ClientDBController(new Cliente().Model);
 		this.EmployeeDBController = new EmployeeDBController(new Empleado().Model);
+		this.CierreTPVDBController = new CierreTPVDBController(new CierreTPV().Model);
+		this.TPVDBController = new TPVDBController(new TPV().Model);
 
 		this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
 			console.log("¡Conexión realizada con la base de datos!");

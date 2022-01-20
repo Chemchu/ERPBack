@@ -1,5 +1,5 @@
 import { truncate } from 'fs';
-import { Schema, model, Model, Types } from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 import { IDBState } from '../types/DBState';
 import { IProduct } from '../types/Producto';
 
