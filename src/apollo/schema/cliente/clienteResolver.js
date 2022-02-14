@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateClienteResolver = exports.deleteClienteResolver = exports.addClienteResolver = exports.clientesResolver = exports.clienteResolver = void 0;
+exports.uploadClienteFileResolver = exports.updateClienteResolver = exports.deleteClienteResolver = exports.addClienteResolver = exports.clientesResolver = exports.clienteResolver = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const clienteResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
@@ -71,3 +71,7 @@ const updateClienteResolver = (root, args, context) => __awaiter(void 0, void 0,
     const db = database_1.Database.Instance();
 });
 exports.updateClienteResolver = updateClienteResolver;
+const uploadClienteFileResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+});
+exports.uploadClienteFileResolver = uploadClienteFileResolver;

@@ -1,8 +1,8 @@
 import { jwtValidatorResolver } from "./schema/authentication/jwtValidatorResolver";
 import { loginResolver } from "./schema/authentication/loginResolver";
-import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver } from "./schema/cliente/clienteResolver";
+import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver, uploadClienteFileResolver } from "./schema/cliente/clienteResolver";
 import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
-import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver } from "./schema/producto/productoResolver";
+import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver, uploadProductoFileResolver } from "./schema/producto/productoResolver";
 import { addVentaResolver, deleteVentaResolver, updateVentaResolver, ventaResolver, ventasResolver } from "./schema/venta/ventaResolver";
 
 const Resolvers = {
@@ -34,6 +34,9 @@ const Resolvers = {
         addEmpleado: addEmpleadoResolver,
         deleteEmpleado: deleteEmpleadoResolver,
         updateEmpleado: updateEmpleadoResolver,
+
+        uploadProductos: uploadProductoFileResolver,
+        uploadClientes: uploadClienteFileResolver
     }
 };
 

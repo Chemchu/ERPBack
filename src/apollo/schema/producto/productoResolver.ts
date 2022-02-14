@@ -104,5 +104,11 @@ export const updateProductoResolver = async (root: any, args: any, context: any)
 
 }
 
+export const uploadProductoFileResolver = async (root: any, args: any, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
+    const db = Database.Instance();
+
+}
 
