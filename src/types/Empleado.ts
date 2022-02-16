@@ -10,7 +10,7 @@ export interface IEmployee extends Document {
     hashPassword: string,
     horasPorSemana: number,
     fechaAlta: Date,
-    diasLibresDisponibles: number,
+    tpvEnUso: string
 }
 
 export interface IOldEmployee extends Document {

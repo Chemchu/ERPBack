@@ -28,7 +28,6 @@ export class EmployeeDBController implements IDBController {
 			hashPassword: hashedPassword,
 			horasPorSemana: employeeJSON.horasPorSemana,
 			fechaAlta: employeeJSON.fechaAlta,
-			diasLibresDisponibles: employeeJSON.diasLibresDisponibles
 		});
 
 		try {

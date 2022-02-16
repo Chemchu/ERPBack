@@ -1,5 +1,5 @@
 import { truncate } from 'fs';
-import { Schema, model, Model, Types } from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 import { IDBState } from '../types/DBState';
 import { IProduct } from '../types/Producto';
 
@@ -10,7 +10,6 @@ export class Producto {
     const Promocion = new Schema({ cantidadNecesaria: Number, dto: Number, precioFijo: Number });
     const ProductSchema = new Schema({
       nombre: { type: String, required: false },
-      //proveedor: { type: Types.ObjectId, ref: 'Proveedores' },
       proveedor: { type: String, required: false },
       familia: { type: String, required: false },
       precioVenta: { type: Number, required: false },

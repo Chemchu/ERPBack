@@ -57,14 +57,16 @@ export class Router {
         });
 
         // Añade passport al endpoint de graphql
-        this.app.use('/graphql', (req, res, next) => {
-            passport.authenticate('jwt', { session: false }, (err, user, info) => {
-                if (user) {
-                    req.user = user
-                }
-                next();
-            })(req, res, next)
-        })
+        this.app.use('/graphql',
+            (req, res, next) => {
+                passport.authenticate('jwt', { session: false }, (err, user, info) => {
+                    if (user) {
+                        req.user = user
+                    }
+                    next();
+                })(req, res, next)
+            }
+        );
 
         this.app.use('/api/productos/', prodRouter);
         this.app.use('/api/clientes/', clientRouter);

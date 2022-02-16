@@ -29,7 +29,6 @@ class EmployeeDBController {
                 hashPassword: hashedPassword,
                 horasPorSemana: employeeJSON.horasPorSemana,
                 fechaAlta: employeeJSON.fechaAlta,
-                diasLibresDisponibles: employeeJSON.diasLibresDisponibles
             });
             try {
                 const empleadoExistente = yield this.CollectionModel.exists({ dni: employeeJSON.dni });

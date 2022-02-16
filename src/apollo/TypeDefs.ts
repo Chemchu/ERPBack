@@ -5,6 +5,7 @@ import EmpleadoDefs from "./schema/empleado/empleadoDefs";
 import productoDefs from "./schema/producto/productoDefs";
 import VentaDefs from "./schema/venta/ventaDefs";
 
+// Sin FileUpload, se hace mediante REST
 const TypeDefs = [
     productoDefs,
     ClienteDefs,

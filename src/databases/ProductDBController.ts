@@ -5,12 +5,7 @@ import { Request, Response } from 'express';
 import { IDBState } from '../types/DBState';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateProductList } from '../lib/productCreator';
-import { getLogger } from "log4js";
 import { ProcessCSV } from '../lib/processCSV';
-
-const logger = getLogger();
-logger.level = "debug";
-
 export class ProductoDBController implements IDBController {
 
 	public CollectionModel: mongoose.Model<IProduct & IDBState>;

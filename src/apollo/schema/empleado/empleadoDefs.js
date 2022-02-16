@@ -14,7 +14,6 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
         email: String
         horasPorSemana: Float
         fechaAlta: String
-        diasLibresDisponibles: Int
     }
 
     type EmpleadoMutationResponse {
@@ -46,7 +45,7 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
     type Mutation {
         addEmpleado(nombre: String!, apellidos: String!, dni: String!, rol: String!, genero: String, email: String!): EmpleadoMutationResponse!,
         deleteEmpleado(_id: ID!): EmpleadoMutationResponse!,
-        updateEmpleado(_id: ID!, nombre: String, apellidos: String, dni: String, rol: String, genero: String, email: String, horasPorSemana: Float, fechaAlta: String, diasLibresDisponibles: Int): EmpleadoMutationResponse!,
+        updateEmpleado(_id: ID!, nombre: String, apellidos: String, dni: String, rol: String, genero: String, email: String, horasPorSemana: Float, fechaAlta: String): EmpleadoMutationResponse!,
     }
 `;
 exports.default = EmpleadoDefs;

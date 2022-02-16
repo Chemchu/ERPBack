@@ -13,7 +13,6 @@ const EmpleadoDefs = gql`
         email: String
         horasPorSemana: Float
         fechaAlta: String
-        diasLibresDisponibles: Int
     }
 
     type EmpleadoMutationResponse {
@@ -45,7 +44,7 @@ const EmpleadoDefs = gql`
     type Mutation {
         addEmpleado(nombre: String!, apellidos: String!, dni: String!, rol: String!, genero: String, email: String!): EmpleadoMutationResponse!,
         deleteEmpleado(_id: ID!): EmpleadoMutationResponse!,
-        updateEmpleado(_id: ID!, nombre: String, apellidos: String, dni: String, rol: String, genero: String, email: String, horasPorSemana: Float, fechaAlta: String, diasLibresDisponibles: Int): EmpleadoMutationResponse!,
+        updateEmpleado(_id: ID!, nombre: String, apellidos: String, dni: String, rol: String, genero: String, email: String, horasPorSemana: Float, fechaAlta: String): EmpleadoMutationResponse!,
     }
 `;
 

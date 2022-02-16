@@ -9,11 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("../databases/database");
-const db = database_1.Database.Instance();
-const SessionController = {
-    authenticate: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        yield db.EmployeeDBController.Authenticate(req, res);
-    }),
-};
-module.exports = SessionController;
+exports.TPVDBController = void 0;
+class TPVDBController {
+    constructor(modelo) {
+        this.CollectionModel = modelo;
+    }
+    Add(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    GetAll(res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    Get(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    Remove(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    Update(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+}
+exports.TPVDBController = TPVDBController;
