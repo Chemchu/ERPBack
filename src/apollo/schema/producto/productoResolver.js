@@ -41,36 +41,31 @@ const productosResolver = (parent, args, context, info) => __awaiter(void 0, voi
         const productos = yield db.ProductDBController.CollectionModel.find({})
             .limit(args.limit || 3000)
             .exec();
-        if (productos)
-            return productos.filter((p) => { p.databaseState === null; });
+        return productos;
     }
     if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
         const productos = yield db.ProductDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
-        if (productos)
-            return productos.filter((p) => { p.databaseState === null; });
+        return productos;
     }
     if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nombre) {
         const productos = yield db.ProductDBController.CollectionModel.find({ nombre: { "$regex": args.find.nombre, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
-        if (productos)
-            return productos.filter((p) => { p.databaseState === null; });
+        return productos;
     }
     if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.familia) {
         const productos = yield db.ProductDBController.CollectionModel.find({ familia: { "$regex": args.find.familia, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
-        if (productos)
-            return productos.filter((p) => { p.databaseState === null; });
+        return productos;
     }
     if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.proveedor) {
         const productos = yield db.ProductDBController.CollectionModel.find({ proveedor: { "$regex": args.find.proveedor, "$options": "i" } })
             .limit(args.limit || 3000)
             .exec();
-        if (productos)
-            return productos.filter((p) => { p.databaseState === null; });
+        return productos;
     }
     return [];
 });

@@ -32,8 +32,6 @@ const Resolvers = {
         addEmpleado: empleadoResolver_1.addEmpleadoResolver,
         deleteEmpleado: empleadoResolver_1.deleteEmpleadoResolver,
         updateEmpleado: empleadoResolver_1.updateEmpleadoResolver,
-        uploadProductos: productoResolver_1.uploadProductoFileResolver,
-        uploadClientes: clienteResolver_1.uploadClienteFileResolver
     }
 };
 exports.default = Resolvers;

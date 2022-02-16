@@ -10,37 +10,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../databases/database");
-const log4js_1 = require("log4js");
-const logger = (0, log4js_1.getLogger)();
-logger.level = "debug";
 const db = database_1.Database.Instance();
 const ProductController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Se intenta crear un producto");
         yield db.ProductDBController.Add(req, res);
     }),
     createMany: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Se intenta crear varios producto");
         yield db.ProductDBController.AddMany(req, res);
     }),
     findAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Petición de todos los productos");
         yield db.ProductDBController.GetAll(res);
     }),
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Petición de un solo producto");
         yield db.ProductDBController.Get(req, res);
     }),
     getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Petición del estado de los productos");
         yield db.ProductDBController.GetDBState(req, res);
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Actualización de producto");
         yield db.ProductDBController.Update(req, res);
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("PRODUCT-REQUEST: Borrado de producto");
         yield db.ProductDBController.Remove(req, res);
     }),
 };

@@ -7,7 +7,6 @@ const jwtValidatorDefs_1 = __importDefault(require("./schema/authentication/jwtV
 const loginDefs_1 = __importDefault(require("./schema/authentication/loginDefs"));
 const clienteDefs_1 = __importDefault(require("./schema/cliente/clienteDefs"));
 const empleadoDefs_1 = __importDefault(require("./schema/empleado/empleadoDefs"));
-const fileDefs_1 = __importDefault(require("./schema/file/fileDefs"));
 const productoDefs_1 = __importDefault(require("./schema/producto/productoDefs"));
 const ventaDefs_1 = __importDefault(require("./schema/venta/ventaDefs"));
 const TypeDefs = [
@@ -17,6 +16,5 @@ const TypeDefs = [
     empleadoDefs_1.default,
     loginDefs_1.default,
     jwtValidatorDefs_1.default,
-    fileDefs_1.default,
 ];
 exports.default = TypeDefs;

@@ -43,7 +43,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos.filter((p) => { p.databaseState === null });
+        return productos;
     }
 
     if (args.find?._ids) {
@@ -51,7 +51,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos.filter((p) => { p.databaseState === null });
+        return productos;
     }
 
     if (args.find?.nombre) {
@@ -59,7 +59,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos.filter((p) => { p.databaseState === null });
+        return productos;
     }
 
     if (args.find?.familia) {
@@ -67,7 +67,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos.filter((p) => { p.databaseState === null });
+        return productos;
     }
 
     if (args.find?.proveedor) {
@@ -75,7 +75,7 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
             .limit(args.limit || 3000)
             .exec();
 
-        if (productos) return productos.filter((p) => { p.databaseState === null });
+        return productos;
     }
 
     return [];

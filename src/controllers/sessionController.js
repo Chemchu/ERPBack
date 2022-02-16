@@ -10,13 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../databases/database");
-const log4js_1 = require("log4js");
-const logger = (0, log4js_1.getLogger)();
-logger.level = "debug";
 const db = database_1.Database.Instance();
 const SessionController = {
     authenticate: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        logger.info("SESSION-REQUEST: Se intenta iniciar sesión (autenticar)");
         yield db.EmployeeDBController.Authenticate(req, res);
     }),
 };

@@ -12,10 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductoDBController = void 0;
 const uuid_1 = require("uuid");
 const productCreator_1 = require("../lib/productCreator");
-const log4js_1 = require("log4js");
 const processCSV_1 = require("../lib/processCSV");
-const logger = (0, log4js_1.getLogger)();
-logger.level = "debug";
 class ProductoDBController {
     constructor(modelo) {
         this.CollectionModel = modelo;

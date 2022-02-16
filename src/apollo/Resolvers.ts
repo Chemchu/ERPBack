@@ -34,9 +34,6 @@ const Resolvers = {
         addEmpleado: addEmpleadoResolver,
         deleteEmpleado: deleteEmpleadoResolver,
         updateEmpleado: updateEmpleadoResolver,
-
-        uploadProductos: uploadProductoFileResolver,
-        uploadClientes: uploadClienteFileResolver
     }
 };
 
