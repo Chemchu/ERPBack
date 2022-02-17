@@ -54,6 +54,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         cantidadComprada: Int
         createdAt: String
         updatedAt: String
+        dto: Float
     }
 
     input VentasFind {
@@ -75,7 +76,8 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         modificadoPor: ID!
         tipo: String!
         descuentoEfectivo: Float!
-        descuentoTarjeta: Float!
+        descuentoPorcentaje: Float!
+        tpv: ID!
     }
 
     ##### Query #####
@@ -94,7 +96,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         
         updateVenta(_id: ID!, productos: [ProductoVendidoInput], dineroEntregadoEfectivo: Float, dineroEntregadoTarjeta: Float, precioVentaTotal: Float!, cambio: Float,
             clienteId: ID, vendidoPor: ID, modificadoPor: ID, tipo: String, descuentoEfectivo: Float, 
-            descuentoTarjeta: Float): VentaMutationResponse!
+            descuentoPorcentaje: Float): VentaMutationResponse!
     }
 `;
 exports.default = VentaDefs;

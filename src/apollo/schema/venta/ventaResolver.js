@@ -83,17 +83,18 @@ exports.ventasResolver = ventasResolver;
 const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
     const saleToAdd = new db.VentasDBController.CollectionModel({
-        productos: args.productos,
-        dineroEntregadoEfectivo: args.dineroEntregadoEfectivo,
-        dineroEntregadoTarjeta: args.dineroEntregadoTarjeta,
-        precioVentaTotal: args.precioVentaTotal,
-        cambio: args.cambio,
-        cliente: args.cliente,
-        vendidoPor: args.vendidoPor,
-        modificadoPor: args.modificadoPor,
-        tipo: args.tipo,
-        descuentoEnEfectivo: args.descuentoEnEfectivo,
-        descuentoEnPorcentaje: args.descuentoEnPorcentaje,
+        productos: args.fields.productos,
+        dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
+        dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
+        precioVentaTotal: args.fields.precioVentaTotal,
+        cambio: args.fields.cambio,
+        cliente: args.fields.cliente,
+        vendidoPor: args.fields.vendidoPor,
+        modificadoPor: args.fields.modificadoPor,
+        tipo: args.fields.tipo,
+        descuentoEfectivo: args.fields.descuentoEfectivo,
+        descuentoPorcentaje: args.fields.descuentoPorcentaje,
+        tpv: args.fields.tpv
     });
     const res = yield saleToAdd.save();
     if (res.errors) {

@@ -87,24 +87,25 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
     return [];
 }
 
-export const addVentaResolver = async (root: any, args: ISale, context: any) => {
+export const addVentaResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
     const db = Database.Instance();
 
     const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel({
-        productos: args.productos,
-        dineroEntregadoEfectivo: args.dineroEntregadoEfectivo,
-        dineroEntregadoTarjeta: args.dineroEntregadoTarjeta,
-        precioVentaTotal: args.precioVentaTotal,
-        cambio: args.cambio,
-        cliente: args.cliente,
-        vendidoPor: args.vendidoPor,
-        modificadoPor: args.modificadoPor,
-        tipo: args.tipo,
-        descuentoEnEfectivo: args.descuentoEnEfectivo,
-        descuentoEnPorcentaje: args.descuentoEnPorcentaje,
+        productos: args.fields.productos,
+        dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
+        dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
+        precioVentaTotal: args.fields.precioVentaTotal,
+        cambio: args.fields.cambio,
+        cliente: args.fields.cliente,
+        vendidoPor: args.fields.vendidoPor,
+        modificadoPor: args.fields.modificadoPor,
+        tipo: args.fields.tipo,
+        descuentoEfectivo: args.fields.descuentoEfectivo,
+        descuentoPorcentaje: args.fields.descuentoPorcentaje,
+        tpv: args.fields.tpv
     });
 
     const res = await saleToAdd.save();

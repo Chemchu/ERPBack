@@ -1,26 +1,24 @@
 import { Schema, model, Model, Types } from 'mongoose';
-import { IDBState } from '../types/DBState';
 import { IEmployee } from '../types/Empleado';
 import { IProduct, ISoldProduct } from '../types/Producto';
 import { ISale } from '../types/Venta';
 
 
 export class Venta {
-    private modelo: Model<ISale & IDBState>;
+    private modelo: Model<ISale>;
 
     constructor() {
         const ProductoVendidoSchema = new Schema({
-            nombre: { type: String },
-            familia: { type: String },
-            precioUnidad: { type: Number },
-            precioTotal: { type: Number },
-            cantidad: { type: Number },
-            dto: { type: Number },
-            iva: { type: Number },
-            margen: { type: Number },
-            beneficio: { type: Number },
-            proveedor: { type: String },
-            ean: { type: String }
+            nombre: { type: String, requiered: true },
+            familia: { type: String, requiered: true },
+            proveedor: { type: String, requiered: true },
+            precioCompra: { type: Number, requiered: true },
+            precioVenta: { type: Number, requiered: true },
+            cantidadVendida: { type: Number, requiered: true },
+            dto: { type: Number, requiered: true },
+            iva: { type: Number, requiered: true },
+            margen: { type: Number, requiered: true },
+            ean: { type: String, requiered: true }
         }, { strict: true, timestamps: true }) as Schema<ISoldProduct>;
 
         const VentaSchema = new Schema({
@@ -33,16 +31,15 @@ export class Venta {
             vendidoPor: { type: Types.ObjectId, ref: 'Empleados' },
             modificadoPor: { type: Types.ObjectId, ref: 'Empleados' },
             tipo: { type: String, required: true },
-            descuentoEnEfectivo: { type: Number, required: true },
-            descuentoEnPorcentaje: { type: Number, required: true },
+            descuentoEfectivo: { type: Number, required: true },
+            descuentoPorcentaje: { type: Number, required: true },
             tpv: { type: Types.ObjectId, ref: 'TPV', required: true },
-            databaseState: { type: String, required: false }
-        }, { strict: true, timestamps: true }) as Schema<ISale & IDBState>;
+        }, { strict: true, timestamps: true }) as Schema<ISale>;
 
-        this.modelo = model<ISale & IDBState>('Venta', VentaSchema);
+        this.modelo = model<ISale>('Venta', VentaSchema);
     }
 
-    public get Model(): Model<ISale & IDBState> {
+    public get Model(): Model<ISale> {
         return this.modelo;
     }
 }

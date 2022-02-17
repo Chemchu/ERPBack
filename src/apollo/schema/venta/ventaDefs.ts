@@ -53,6 +53,7 @@ const VentaDefs = gql`
         cantidadComprada: Int
         createdAt: String
         updatedAt: String
+        dto: Float
     }
 
     input VentasFind {
@@ -74,7 +75,8 @@ const VentaDefs = gql`
         modificadoPor: ID!
         tipo: String!
         descuentoEfectivo: Float!
-        descuentoTarjeta: Float!
+        descuentoPorcentaje: Float!
+        tpv: ID!
     }
 
     ##### Query #####
@@ -93,7 +95,7 @@ const VentaDefs = gql`
         
         updateVenta(_id: ID!, productos: [ProductoVendidoInput], dineroEntregadoEfectivo: Float, dineroEntregadoTarjeta: Float, precioVentaTotal: Float!, cambio: Float,
             clienteId: ID, vendidoPor: ID, modificadoPor: ID, tipo: String, descuentoEfectivo: Float, 
-            descuentoTarjeta: Float): VentaMutationResponse!
+            descuentoPorcentaje: Float): VentaMutationResponse!
     }
 `;
 

@@ -19,13 +19,12 @@ export interface IProduct extends Document {
 export interface ISoldProduct extends Document {
     nombre: string,
     familia: string,
-    precioUnidad: number,
-    precioTotal: number,
-    cantidad: number,
+    precioVenta: number
+    precioCompra: number
+    cantidadVendida: number,
     dto: number,
     iva: number,
     margen: number,
-    beneficio: number,
     proveedor: string
     ean: string
 }
