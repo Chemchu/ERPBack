@@ -3,12 +3,11 @@ import { ISale } from '../types/Venta';
 import IDBController from './IDBController';
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { IDBState } from '../types/DBState';
 export class SaleDBController implements IDBController {
 
-	public CollectionModel: mongoose.Model<ISale & IDBState>;
+	public CollectionModel: mongoose.Model<ISale>;
 
-	constructor(modelo: mongoose.Model<ISale & IDBState>) {
+	constructor(modelo: mongoose.Model<ISale>) {
 		this.CollectionModel = modelo
 	}
 
@@ -66,31 +65,6 @@ export class SaleDBController implements IDBController {
 		catch (err) {
 			console.log(err);
 			res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
-		}
-	}
-
-	public async GetDBState(req: Request, res: Response): Promise<void> {
-		try {
-			const dbState = await this.CollectionModel.find({}).select({ 'databaseState': 1 }).lean();
-
-			for (var i = 0; i < dbState.length; i++) {
-				if (dbState[i].databaseState) {
-					res.status(200).json({ message: dbState[i], success: true });
-					return;
-				}
-			}
-
-			const stateUid = uuidv4();
-			const databaseStateToAdd = new this.CollectionModel({
-				databaseState: stateUid
-			});
-
-			await databaseStateToAdd.save();
-
-			res.status(300).json({ message: 'El databaseState no se encuentra en la base de datos. Uno nuevo ha sido creado', success: false });
-		}
-		catch (err) {
-			res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });
 		}
 	}
 

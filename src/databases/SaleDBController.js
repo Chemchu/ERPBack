@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaleDBController = void 0;
-const uuid_1 = require("uuid");
 class SaleDBController {
     constructor(modelo) {
         this.CollectionModel = modelo;
@@ -63,28 +62,6 @@ class SaleDBController {
             catch (err) {
                 console.log(err);
                 res.status(500).json({ message: `Error al buscar las ventas: ${err}`, success: false });
-            }
-        });
-    }
-    GetDBState(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const dbState = yield this.CollectionModel.find({}).select({ 'databaseState': 1 }).lean();
-                for (var i = 0; i < dbState.length; i++) {
-                    if (dbState[i].databaseState) {
-                        res.status(200).json({ message: dbState[i], success: true });
-                        return;
-                    }
-                }
-                const stateUid = (0, uuid_1.v4)();
-                const databaseStateToAdd = new this.CollectionModel({
-                    databaseState: stateUid
-                });
-                yield databaseStateToAdd.save();
-                res.status(300).json({ message: 'El databaseState no se encuentra en la base de datos. Uno nuevo ha sido creado', success: false });
-            }
-            catch (err) {
-                res.status(500).json({ message: `Error al buscar el databaseState: ${err}`, success: false });
             }
         });
     }

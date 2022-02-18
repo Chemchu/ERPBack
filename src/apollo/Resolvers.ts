@@ -3,6 +3,7 @@ import { loginResolver } from "./schema/authentication/loginResolver";
 import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver, uploadClienteFileResolver } from "./schema/cliente/clienteResolver";
 import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
 import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver, uploadProductoFileResolver } from "./schema/producto/productoResolver";
+import { tpvResolver, tpvsResolver } from "./schema/tpv/tpvResolver";
 import { addVentaResolver, deleteVentaResolver, updateVentaResolver, ventaResolver, ventasResolver } from "./schema/venta/ventaResolver";
 
 const Resolvers = {
@@ -16,6 +17,8 @@ const Resolvers = {
         empleado: empleadoResolver,
         empleados: empleadosResolver,
         login: loginResolver,
+        tpv: tpvResolver,
+        tpvs: tpvsResolver,
         validateJwt: jwtValidatorResolver
     },
     Mutation: {

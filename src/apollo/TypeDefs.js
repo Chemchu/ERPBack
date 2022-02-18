@@ -8,12 +8,14 @@ const loginDefs_1 = __importDefault(require("./schema/authentication/loginDefs")
 const clienteDefs_1 = __importDefault(require("./schema/cliente/clienteDefs"));
 const empleadoDefs_1 = __importDefault(require("./schema/empleado/empleadoDefs"));
 const productoDefs_1 = __importDefault(require("./schema/producto/productoDefs"));
+const tpvDefs_1 = __importDefault(require("./schema/tpv/tpvDefs"));
 const ventaDefs_1 = __importDefault(require("./schema/venta/ventaDefs"));
 const TypeDefs = [
     productoDefs_1.default,
     clienteDefs_1.default,
     ventaDefs_1.default,
     empleadoDefs_1.default,
+    tpvDefs_1.default,
     loginDefs_1.default,
     jwtValidatorDefs_1.default,
 ];

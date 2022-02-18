@@ -21,9 +21,6 @@ const SaleController = {
     find: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield db.VentasDBController.Get(req, res);
     }),
-    getState: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        yield db.VentasDBController.GetDBState(req, res);
-    }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield db.VentasDBController.Update(req, res);
     }),

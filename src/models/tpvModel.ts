@@ -7,9 +7,10 @@ export class TPV {
 
     constructor() {
         const TPVSchema = new Schema({
-            nombre: { type: String },
-            enUsoPor: { type: Types.ObjectId, ref: 'Empleados' },
-            abierta: { type: Boolean }
+            nombre: { type: String, requiered: true },
+            enUsoPor: { type: Types.ObjectId, ref: 'Empleados', requiered: true },
+            libre: { type: Boolean, requiered: true },
+            cajaInicial: { type: Number, requiered: true }
         }, { strict: true, timestamps: true }) as Schema<ITPV>;
 
         this.modelo = model<ITPV>('TPV', TPVSchema);
