@@ -93,6 +93,9 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
 
     const db = Database.Instance();
 
+    console.log("LOCOOOOOOOOOOOO");
+
+
     const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel({
         productos: args.fields.productos,
         dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,

@@ -82,6 +82,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
 exports.ventasResolver = ventasResolver;
 const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
+    console.log("LOCOOOOOOOOOOOO");
     const saleToAdd = new db.VentasDBController.CollectionModel({
         productos: args.fields.productos,
         dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,

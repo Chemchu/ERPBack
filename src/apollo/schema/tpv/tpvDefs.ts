@@ -16,6 +16,10 @@ const tpvDefs = gql`
         successful: Boolean!
     }
 
+    type TPVMutationJwtResponse {
+        token: String!
+    }
+
     input TPVFind {
         _id: ID
         nombre: String
@@ -41,6 +45,10 @@ const tpvDefs = gql`
         deleteTPV(_id: ID!): TPVMutationResponse!
         
         updateTPV(_id: ID!, nombre: String, enUsoPor: ID, libre: Boolean, cajaInicial: Int): TPVMutationResponse!
+
+        ocupyTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
+        
+        freeTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
     }
 `;
 

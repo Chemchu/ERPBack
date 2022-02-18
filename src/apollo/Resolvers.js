@@ -35,6 +35,11 @@ const Resolvers = {
         addEmpleado: empleadoResolver_1.addEmpleadoResolver,
         deleteEmpleado: empleadoResolver_1.deleteEmpleadoResolver,
         updateEmpleado: empleadoResolver_1.updateEmpleadoResolver,
+        addTPV: tpvResolver_1.addTpvResolver,
+        deleteTPV: tpvResolver_1.deleteTpvResolver,
+        updateTPV: tpvResolver_1.updateTpvResolver,
+        ocupyTPV: tpvResolver_1.ocupyTpvResolver,
+        freeTPV: tpvResolver_1.freeTpvResolver
     }
 };
 exports.default = Resolvers;

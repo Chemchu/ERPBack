@@ -3,7 +3,7 @@ import { loginResolver } from "./schema/authentication/loginResolver";
 import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver, uploadClienteFileResolver } from "./schema/cliente/clienteResolver";
 import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
 import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver, uploadProductoFileResolver } from "./schema/producto/productoResolver";
-import { tpvResolver, tpvsResolver } from "./schema/tpv/tpvResolver";
+import { addTpvResolver, deleteTpvResolver, freeTpvResolver, ocupyTpvResolver, tpvResolver, tpvsResolver, updateTpvResolver } from "./schema/tpv/tpvResolver";
 import { addVentaResolver, deleteVentaResolver, updateVentaResolver, ventaResolver, ventasResolver } from "./schema/venta/ventaResolver";
 
 const Resolvers = {
@@ -37,6 +37,12 @@ const Resolvers = {
         addEmpleado: addEmpleadoResolver,
         deleteEmpleado: deleteEmpleadoResolver,
         updateEmpleado: updateEmpleadoResolver,
+
+        addTPV: addTpvResolver,
+        deleteTPV: deleteTpvResolver,
+        updateTPV: updateTpvResolver,
+        ocupyTPV: ocupyTpvResolver,
+        freeTPV: freeTpvResolver
     }
 };
 

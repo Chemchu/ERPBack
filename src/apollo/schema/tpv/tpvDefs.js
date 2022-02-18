@@ -17,6 +17,10 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
         successful: Boolean!
     }
 
+    type TPVMutationJwtResponse {
+        token: String!
+    }
+
     input TPVFind {
         _id: ID
         nombre: String
@@ -42,6 +46,10 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
         deleteTPV(_id: ID!): TPVMutationResponse!
         
         updateTPV(_id: ID!, nombre: String, enUsoPor: ID, libre: Boolean, cajaInicial: Int): TPVMutationResponse!
+
+        ocupyTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
+        
+        freeTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
     }
 `;
 exports.default = tpvDefs;
