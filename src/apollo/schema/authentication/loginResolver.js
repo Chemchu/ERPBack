@@ -35,7 +35,7 @@ const loginResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
         }
         const secret = process.env.JWT_SECRET;
         if (secret) {
-            const tpv = yield db.TPVDBController.CollectionModel.findOne({ enUsoPor: empleado._id }).exec();
+            const tpv = yield db.TPVDBController.CollectionModel.findOne({ enUsoPor: empleado._id, libre: false }).exec();
             let payload;
             if (tpv) {
                 payload = { _id: empleado._id, nombre: empleado.nombre, email: empleado.email, rol: empleado.rol, TPV: tpv._id };

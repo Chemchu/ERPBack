@@ -36,7 +36,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         iva: Float
         margen: Float
         ean: String
-        cantidadComprada: Int
+        cantidadVendida: Int
         createdAt: String
         updatedAt: String
     }
@@ -51,7 +51,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         iva: Float
         margen: Float
         ean: String
-        cantidadComprada: Int
+        cantidadVendida: Int
         createdAt: String
         updatedAt: String
         dto: Float

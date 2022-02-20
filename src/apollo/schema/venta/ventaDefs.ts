@@ -35,7 +35,7 @@ const VentaDefs = gql`
         iva: Float
         margen: Float
         ean: String
-        cantidadComprada: Int
+        cantidadVendida: Int
         createdAt: String
         updatedAt: String
     }
@@ -50,7 +50,7 @@ const VentaDefs = gql`
         iva: Float
         margen: Float
         ean: String
-        cantidadComprada: Int
+        cantidadVendida: Int
         createdAt: String
         updatedAt: String
         dto: Float

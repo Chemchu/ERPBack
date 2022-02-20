@@ -92,10 +92,6 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
     const db = Database.Instance();
-
-    console.log("LOCOOOOOOOOOOOO");
-
-
     const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel({
         productos: args.fields.productos,
         dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,

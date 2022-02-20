@@ -1,6 +1,5 @@
 import { Schema, model, Model, Types } from 'mongoose';
-import { IEmployee } from '../types/Empleado';
-import { IProduct, ISoldProduct } from '../types/Producto';
+import { ISoldProduct } from '../types/Producto';
 import { ISale } from '../types/Venta';
 
 
