@@ -17,19 +17,25 @@ const empleadoResolver = (parent, args, context, info) => __awaiter(void 0, void
         throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
     const db = database_1.Database.Instance();
     if (args.find._id) {
-        const e = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
-        if (e)
+        let e = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+        if (e) {
+            e.hashPassword = "undefined";
             return e;
+        }
     }
     if (args.find.dni) {
-        const e = yield db.EmployeeDBController.CollectionModel.findOne({ dni: args.find.dni }).exec();
-        if (e)
+        let e = yield db.EmployeeDBController.CollectionModel.findOne({ dni: args.find.dni }).exec();
+        if (e) {
+            e.hashPassword = "undefined";
             return e;
+        }
     }
     if (args.find.nombre) {
-        const e = yield db.EmployeeDBController.CollectionModel.findOne({ nombre: { "$regex": args.find.nombre, "$options": "i" } }).exec();
-        if (e)
+        let e = yield db.EmployeeDBController.CollectionModel.findOne({ nombre: { "$regex": args.find.nombre, "$options": "i" } }).exec();
+        if (e) {
+            e.hashPassword = "undefined";
             return e;
+        }
     }
     return null;
 });
@@ -38,30 +44,46 @@ const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, voi
     var _a, _b, _c;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-        const empleados = yield db.EmployeeDBController.CollectionModel.find({}).limit(args.limit || 3000).exec();
-        if (empleados)
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({}).limit(args.limit || 3000).exec();
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            });
             return empleados;
+        }
     }
     if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
-        const empleados = yield db.EmployeeDBController.CollectionModel.find({ _id: args.find._ids })
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
-        if (empleados)
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            });
             return empleados;
+        }
     }
     if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nombre) {
-        const empleados = yield db.EmployeeDBController.CollectionModel.find({ nombre: args.find.nombre })
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({ nombre: args.find.nombre })
             .limit(args.limit || 3000)
             .exec();
-        if (empleados)
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            });
             return empleados;
+        }
     }
     if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.rol) {
-        const empleados = yield db.EmployeeDBController.CollectionModel.find({ rol: args.find.rol })
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({ rol: args.find.rol })
             .limit(args.limit || 3000)
             .exec();
-        if (empleados)
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            });
             return empleados;
+        }
     }
     return [];
 });

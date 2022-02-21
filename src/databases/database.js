@@ -39,7 +39,7 @@ class Database {
         }).then(() => {
             this.ClientDBController.CollectionModel.findOne({ nombre: "General" }).exec().then((clienteGeneral) => {
                 if (!clienteGeneral) {
-                    const cliente = { nombre: "General", calle: "", nif: "", cp: "" };
+                    const cliente = { nombre: "General", calle: "General", nif: "General", cp: "General" };
                     this.ClientDBController.CollectionModel.create(cliente);
                 }
             });

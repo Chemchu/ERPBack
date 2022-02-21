@@ -1,4 +1,6 @@
 import { Schema, model, Model, Types } from 'mongoose';
+import { IClient } from '../types/Cliente';
+import { IEmployee } from '../types/Empleado';
 import { ISoldProduct } from '../types/Producto';
 import { ISale } from '../types/Venta';
 
@@ -18,7 +20,26 @@ export class Venta {
             iva: { type: Number, requiered: true },
             margen: { type: Number, requiered: true },
             ean: { type: String, requiered: true }
-        }, { strict: true, timestamps: true }) as Schema<ISoldProduct>;
+        }, { strict: true, timestamps: false }) as Schema<ISoldProduct>;
+
+        const ClienteSchema = new Schema({
+            nombre: { type: String, requiered: true },
+            calle: { type: String, requiered: true },
+            cp: { type: String, requiered: true },
+            nif: { type: String, requiered: true },
+        }, { strict: true, timestamps: false }) as Schema<IClient>;
+
+        const EmpleadoSchema = new Schema({
+            nombre: { type: String, requiered: true },
+            apellidos: { type: String, requiered: true },
+            dni: { type: String, requiered: true },
+            email: { type: String, requiered: true },
+            fechaAlta: { type: Date, required: false },
+            genero: { type: String, requiered: false },
+            hashPassword: { type: String, requiered: false },
+            horasPorSemana: { type: Number, requiered: false },
+            rol: { type: String, requiered: true },
+        }, { strict: true, timestamps: false }) as Schema<IEmployee>;
 
         const VentaSchema = new Schema({
             productos: { type: [ProductoVendidoSchema], required: true },
@@ -26,9 +47,9 @@ export class Venta {
             dineroEntregadoTarjeta: { type: Number, required: true },
             precioVentaTotal: { type: Number, required: true },
             cambio: { type: Number, required: true },
-            cliente: { type: Types.ObjectId, ref: 'Cliente' },
-            vendidoPor: { type: Types.ObjectId, ref: 'Empleados' },
-            modificadoPor: { type: Types.ObjectId, ref: 'Empleados' },
+            cliente: { type: ClienteSchema, required: true },
+            vendidoPor: { type: EmpleadoSchema, required: true },
+            modificadoPor: { type: EmpleadoSchema, required: true },
             tipo: { type: String, required: true },
             descuentoEfectivo: { type: Number, required: true },
             descuentoPorcentaje: { type: Number, required: true },

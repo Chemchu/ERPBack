@@ -15,16 +15,33 @@ class Venta {
             iva: { type: Number, requiered: true },
             margen: { type: Number, requiered: true },
             ean: { type: String, requiered: true }
-        }, { strict: true, timestamps: true });
+        }, { strict: true, timestamps: false });
+        const ClienteSchema = new mongoose_1.Schema({
+            nombre: { type: String, requiered: true },
+            calle: { type: String, requiered: true },
+            cp: { type: String, requiered: true },
+            nif: { type: String, requiered: true },
+        }, { strict: true, timestamps: false });
+        const EmpleadoSchema = new mongoose_1.Schema({
+            nombre: { type: String, requiered: true },
+            apellidos: { type: String, requiered: true },
+            dni: { type: String, requiered: true },
+            email: { type: String, requiered: true },
+            fechaAlta: { type: Date, required: false },
+            genero: { type: String, requiered: false },
+            hashPassword: { type: String, requiered: false },
+            horasPorSemana: { type: Number, requiered: false },
+            rol: { type: String, requiered: true },
+        }, { strict: true, timestamps: false });
         const VentaSchema = new mongoose_1.Schema({
             productos: { type: [ProductoVendidoSchema], required: true },
             dineroEntregadoEfectivo: { type: Number, required: true },
             dineroEntregadoTarjeta: { type: Number, required: true },
             precioVentaTotal: { type: Number, required: true },
             cambio: { type: Number, required: true },
-            cliente: { type: mongoose_1.Types.ObjectId, ref: 'Cliente' },
-            vendidoPor: { type: mongoose_1.Types.ObjectId, ref: 'Empleados' },
-            modificadoPor: { type: mongoose_1.Types.ObjectId, ref: 'Empleados' },
+            cliente: { type: ClienteSchema, required: true },
+            vendidoPor: { type: EmpleadoSchema, required: true },
+            modificadoPor: { type: EmpleadoSchema, required: true },
             tipo: { type: String, required: true },
             descuentoEfectivo: { type: Number, required: true },
             descuentoPorcentaje: { type: Number, required: true },

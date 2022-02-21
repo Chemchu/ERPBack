@@ -15,7 +15,7 @@ const VentaDefs = gql`
         modificadoPor: Empleado
         tipo: String
         descuentoEfectivo: Float
-        descuentoTarjeta: Float
+        descuentoPorcentaje: Float
         createdAt: String
         updatedAt: String
     }
@@ -23,7 +23,7 @@ const VentaDefs = gql`
     type VentaMutationResponse {
         message: String!
         successful: Boolean!
-    }
+    } 
 
     type ProductoVendido {
         _id: ID!
@@ -64,15 +64,35 @@ const VentaDefs = gql`
         createdAt: String
     }
 
+    input ClienteInput {
+        _id: ID!
+        nif: String!
+        nombre: String!
+        calle: String!
+        cp: String!
+    }
+
+    input EmpleadoInput {
+        _id: ID!
+        nombre: String!
+        apellidos: String!
+        dni: String
+        rol: String!
+        genero: String
+        email: String!
+        horasPorSemana: Float
+        fechaAlta: String
+    }
+
     input VentaFields {
         productos: [ProductoVendidoInput]!
         dineroEntregadoEfectivo: Float!
         dineroEntregadoTarjeta: Float!
         precioVentaTotal: Float!
-        cambio: Float
-        cliente: ID!
-        vendidoPor: ID!
-        modificadoPor: ID!
+        cambio: Float!
+        cliente: ClienteInput!
+        vendidoPor: EmpleadoInput!
+        modificadoPor: EmpleadoInput!
         tipo: String!
         descuentoEfectivo: Float!
         descuentoPorcentaje: Float!
@@ -93,9 +113,8 @@ const VentaDefs = gql`
         
         deleteVenta(_id: ID!): VentaMutationResponse!
         
-        updateVenta(_id: ID!, productos: [ProductoVendidoInput], dineroEntregadoEfectivo: Float, dineroEntregadoTarjeta: Float, precioVentaTotal: Float!, cambio: Float,
-            clienteId: ID, vendidoPor: ID, modificadoPor: ID, tipo: String, descuentoEfectivo: Float, 
-            descuentoPorcentaje: Float): VentaMutationResponse!
+        updateVenta(_id: ID!, productos: [ProductoVendidoInput], dineroEntregadoEfectivo: Float, descuentoPorcentaje: Float, precioVentaTotal: Float!, cambio: Float,
+            clienteId: ClienteInput, vendidoPor: EmpleadoInput, modificadoPor: EmpleadoInput, tipo: String, descuentoEfectivo: Float): VentaMutationResponse!
     }
 `;
 

@@ -4,19 +4,30 @@ exports.CierreTPV = void 0;
 const mongoose_1 = require("mongoose");
 class CierreTPV {
     constructor() {
+        const EmpleadoSchema = new mongoose_1.Schema({
+            nombre: { type: String, requiered: true },
+            apellidos: { type: String, requiered: true },
+            dni: { type: String, requiered: true },
+            email: { type: String, requiered: true },
+            fechaAlta: { type: Date, required: true },
+            genero: { type: String, requiered: false },
+            hashPassword: { type: String, requiered: true },
+            horasPorSemana: { type: Number, requiered: false },
+            rol: { type: String, requiered: true },
+        }, { strict: true, timestamps: false });
         const CierreTPVSchema = new mongoose_1.Schema({
-            tpv: { type: mongoose_1.Types.ObjectId, ref: 'TPV' },
-            abiertoPor: { type: mongoose_1.Types.ObjectId, ref: 'Empleados' },
-            cerradoPor: { type: mongoose_1.Types.ObjectId, ref: 'Empleados' },
-            apertura: { type: Date },
-            cierre: { type: Date },
-            ventasEfectivo: { type: Number },
-            ventasTarjeta: { type: Number },
-            ventasTotales: { type: Number },
-            dineroRetirado: { type: Number },
-            fondoDeCaja: { type: Number },
-            beneficio: { type: Number },
-            nota: { type: String }
+            tpv: { type: mongoose_1.Types.ObjectId, ref: 'TPV', required: true },
+            abiertoPor: { type: EmpleadoSchema, required: true },
+            cerradoPor: { type: EmpleadoSchema, required: true },
+            apertura: { type: Date, required: true },
+            cierre: { type: Date, required: true },
+            ventasEfectivo: { type: Number, required: true },
+            ventasTarjeta: { type: Number, required: true },
+            ventasTotales: { type: Number, required: true },
+            dineroRetirado: { type: Number, required: true },
+            fondoDeCaja: { type: Number, required: true },
+            beneficio: { type: Number, required: true },
+            nota: { type: String, required: false }
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('CierresTPV', CierreTPVSchema);
     }

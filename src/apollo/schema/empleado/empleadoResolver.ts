@@ -11,21 +11,21 @@ export const empleadoResolver = async (parent: any, args: EmpleadoFind, context:
     const db = Database.Instance();
 
     if (args.find._id) {
-        const e = await db.EmployeeDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+        let e = await db.EmployeeDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
 
-        if (e) return e;
+        if (e) { e.hashPassword = "undefined"; return e; }
     }
 
     if (args.find.dni) {
-        const e = await db.EmployeeDBController.CollectionModel.findOne({ dni: args.find.dni }).exec();
+        let e = await db.EmployeeDBController.CollectionModel.findOne({ dni: args.find.dni }).exec();
 
-        if (e) return e;
+        if (e) { e.hashPassword = "undefined"; return e; }
     }
 
     if (args.find.nombre) {
-        const e = await db.EmployeeDBController.CollectionModel.findOne({ nombre: { "$regex": args.find.nombre, "$options": "i" } }).exec();
+        let e = await db.EmployeeDBController.CollectionModel.findOne({ nombre: { "$regex": args.find.nombre, "$options": "i" } }).exec();
 
-        if (e) return e;
+        if (e) { e.hashPassword = "undefined"; return e; }
     }
 
     return null;
@@ -39,33 +39,53 @@ export const empleadosResolver = async (parent: any, args: EmpleadosFind, contex
 
     // Comprueba si find es null, undefined o vacío
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-        const empleados = await db.EmployeeDBController.CollectionModel.find({}).limit(args.limit || 3000).exec();
+        let empleados = await db.EmployeeDBController.CollectionModel.find({}).limit(args.limit || 3000).exec();
 
-        if (empleados) return empleados;
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            })
+            return empleados;
+        }
     }
 
     if (args.find?._ids) {
-        const empleados = await db.EmployeeDBController.CollectionModel.find({ _id: args.find._ids })
+        let empleados = await db.EmployeeDBController.CollectionModel.find({ _id: args.find._ids })
             .limit(args.limit || 3000)
             .exec();
 
-        if (empleados) return empleados;
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            })
+            return empleados;
+        }
     }
 
     if (args.find?.nombre) {
-        const empleados = await db.EmployeeDBController.CollectionModel.find({ nombre: args.find.nombre })
+        let empleados = await db.EmployeeDBController.CollectionModel.find({ nombre: args.find.nombre })
             .limit(args.limit || 3000)
             .exec();
 
-        if (empleados) return empleados;
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            })
+            return empleados;
+        }
     }
 
     if (args.find?.rol) {
-        const empleados = await db.EmployeeDBController.CollectionModel.find({ rol: args.find.rol })
+        let empleados = await db.EmployeeDBController.CollectionModel.find({ rol: args.find.rol })
             .limit(args.limit || 3000)
             .exec();
 
-        if (empleados) return empleados;
+        if (empleados) {
+            empleados.forEach((e) => {
+                e.hashPassword = "undefined";
+            })
+            return empleados;
+        }
     }
 
     return [];
