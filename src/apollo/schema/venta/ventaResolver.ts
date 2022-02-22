@@ -45,7 +45,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
     }
 
     if (args.find?.clienteId) {
-        const ventas = await db.VentasDBController.CollectionModel.find({ cliente: args.find.clienteId })
+        const ventas = await db.VentasDBController.CollectionModel.find({ $cliente: { _id: args.find.clienteId } })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
@@ -65,7 +65,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
     }
 
     if (args.find?.vendedorId) {
-        const ventas = await db.VentasDBController.CollectionModel.find({ vendidoPor: args.find.vendedorId })
+        const ventas = await db.VentasDBController.CollectionModel.find({ $vendidoPor: { _id: args.find.vendedorId } })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
@@ -91,30 +91,34 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
-    const db = Database.Instance();
-    const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel({
-        productos: args.fields.productos,
-        dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
-        dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
-        precioVentaTotal: args.fields.precioVentaTotal,
-        cambio: args.fields.cambio,
-        cliente: args.fields.cliente,
-        vendidoPor: args.fields.vendidoPor,
-        modificadoPor: args.fields.modificadoPor,
-        tipo: args.fields.tipo,
-        descuentoEfectivo: args.fields.descuentoEfectivo,
-        descuentoPorcentaje: args.fields.descuentoPorcentaje,
-        tpv: args.fields.tpv
-    });
+    try {
+        const db = Database.Instance();
+        const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel({
+            productos: args.fields.productos,
+            dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
+            dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
+            precioVentaTotal: args.fields.precioVentaTotal,
+            cambio: args.fields.cambio,
+            cliente: args.fields.cliente,
+            vendidoPor: args.fields.vendidoPor,
+            modificadoPor: args.fields.modificadoPor,
+            tipo: args.fields.tipo,
+            descuentoEfectivo: args.fields.descuentoEfectivo,
+            descuentoPorcentaje: args.fields.descuentoPorcentaje,
+            tpv: args.fields.tpv
+        } as ISale);
 
-    const res = await saleToAdd.save();
+        const res = await saleToAdd.save();
 
-    if (res.errors) {
-        return { message: "No se ha podido añadir la venta a la base de datos", successful: false }
+        if (res.errors) {
+            return { message: "No se ha podido añadir la venta a la base de datos", successful: false }
+        }
+
+        return { message: "Venta añadida con éxito", successful: true }
     }
-
-
-    return { message: "Venta añadida con éxito", successful: true }
+    catch (err) {
+        return { message: err, successful: false }
+    }
 }
 
 export const deleteVentaResolver = async (root: any, args: any, context: any) => {
