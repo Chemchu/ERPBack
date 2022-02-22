@@ -62,6 +62,7 @@ const VentaDefs = gql`
         tipo: String
         vendedorId: String
         createdAt: String
+        tpv: ID
     }
 
     input ClienteInput {

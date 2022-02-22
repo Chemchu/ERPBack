@@ -63,6 +63,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         tipo: String
         vendedorId: String
         createdAt: String
+        tpv: ID
     }
 
     input ClienteInput {
