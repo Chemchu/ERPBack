@@ -10,6 +10,8 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
         enUsoPor: ID
         libre: Boolean
         cajaInicial: Int
+        createdAt: String
+        updatedAt: String
     }
 
     type TPVMutationResponse {

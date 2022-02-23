@@ -27,9 +27,6 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
 
     const db = Database.Instance();
 
-    console.log(args.find);
-
-
     // Comprueba si find es null, undefined o vacío
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const ventas = await db.VentasDBController.CollectionModel.find({}).sort({ createdAt: args.order || "desc" }).limit(args.limit || 3000).skip(args.offset || 0).exec();

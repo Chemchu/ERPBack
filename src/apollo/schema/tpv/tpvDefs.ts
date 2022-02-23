@@ -9,6 +9,8 @@ const tpvDefs = gql`
         enUsoPor: ID
         libre: Boolean
         cajaInicial: Int
+        createdAt: String
+        updatedAt: String
     }
 
     type TPVMutationResponse {
