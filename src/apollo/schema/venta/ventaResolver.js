@@ -25,8 +25,9 @@ const ventaResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
 });
 exports.ventaResolver = ventaResolver;
 const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
     const db = database_1.Database.Instance();
+    console.log(args.find);
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const ventas = yield db.VentasDBController.CollectionModel.find({}).sort({ createdAt: args.order || "desc" }).limit(args.limit || 3000).skip(args.offset || 0).exec();
         if (ventas)
@@ -70,6 +71,17 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
     }
     if ((_e = args.find) === null || _e === void 0 ? void 0 : _e.createdAt) {
         const ventas = yield db.VentasDBController.CollectionModel.find({ createdAt: args.find.createdAt })
+            .sort({ createdAt: args.order || "desc" })
+            .limit(args.limit || 3000)
+            .skip(args.offset || 0)
+            .exec();
+        if (ventas)
+            return ventas;
+    }
+    if ((_f = args.find) === null || _f === void 0 ? void 0 : _f.tpv) {
+        const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.find.tpv }).exec();
+        console.log(tpv);
+        const ventas = yield db.VentasDBController.CollectionModel.find({})
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
