@@ -5,10 +5,10 @@ const ClienteDefs = gql`
 
     type Cliente {
         _id: ID!
-        nif: String
-        nombre: String
-        calle: String
-        cp: String
+        nif: String!
+        nombre: String!
+        calle: String!
+        cp: String!
     }
 
     type ClienteMutationResponse {

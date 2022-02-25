@@ -25,7 +25,7 @@ const ventaResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
 });
 exports.ventaResolver = ventaResolver;
 const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const ventas = yield db.VentasDBController.CollectionModel.find({}).sort({ createdAt: args.order || "desc" }).limit(args.limit || 3000).skip(args.offset || 0).exec();
@@ -42,7 +42,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.clienteId) {
-        const ventas = yield db.VentasDBController.CollectionModel.find({ cliente: args.find.clienteId })
+        const ventas = yield db.VentasDBController.CollectionModel.find({ $cliente: { _id: args.find.clienteId } })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
@@ -60,7 +60,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.vendedorId) {
-        const ventas = yield db.VentasDBController.CollectionModel.find({ vendidoPor: args.find.vendedorId })
+        const ventas = yield db.VentasDBController.CollectionModel.find({ $vendidoPor: { _id: args.find.vendedorId } })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
@@ -77,29 +77,46 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (ventas)
             return ventas;
     }
+    if ((_f = args.find) === null || _f === void 0 ? void 0 : _f.tpv) {
+        const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.find.tpv }).exec();
+        console.log(tpv);
+        const ventas = yield db.VentasDBController.CollectionModel.find({})
+            .sort({ createdAt: args.order || "desc" })
+            .limit(args.limit || 3000)
+            .skip(args.offset || 0)
+            .exec();
+        if (ventas)
+            return ventas;
+    }
     return [];
 });
 exports.ventasResolver = ventasResolver;
 const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = database_1.Database.Instance();
-    const saleToAdd = new db.VentasDBController.CollectionModel({
-        productos: args.productos,
-        dineroEntregadoEfectivo: args.dineroEntregadoEfectivo,
-        dineroEntregadoTarjeta: args.dineroEntregadoTarjeta,
-        precioVentaTotal: args.precioVentaTotal,
-        cambio: args.cambio,
-        cliente: args.cliente,
-        vendidoPor: args.vendidoPor,
-        modificadoPor: args.modificadoPor,
-        tipo: args.tipo,
-        descuentoEnEfectivo: args.descuentoEnEfectivo,
-        descuentoEnPorcentaje: args.descuentoEnPorcentaje,
-    });
-    const res = yield saleToAdd.save();
-    if (res.errors) {
-        return { message: "No se ha podido añadir la venta a la base de datos", successful: false };
+    try {
+        const db = database_1.Database.Instance();
+        const saleToAdd = new db.VentasDBController.CollectionModel({
+            productos: args.fields.productos,
+            dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
+            dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
+            precioVentaTotal: args.fields.precioVentaTotal,
+            cambio: args.fields.cambio,
+            cliente: args.fields.cliente,
+            vendidoPor: args.fields.vendidoPor,
+            modificadoPor: args.fields.modificadoPor,
+            tipo: args.fields.tipo,
+            descuentoEfectivo: args.fields.descuentoEfectivo,
+            descuentoPorcentaje: args.fields.descuentoPorcentaje,
+            tpv: args.fields.tpv
+        });
+        const res = yield saleToAdd.save();
+        if (res.errors) {
+            return { message: "No se ha podido añadir la venta a la base de datos", successful: false };
+        }
+        return { message: "Venta añadida con éxito", successful: true };
     }
-    return { message: "Venta añadida con éxito", successful: true };
+    catch (err) {
+        return { message: err, successful: false };
+    }
 });
 exports.addVentaResolver = addVentaResolver;
 const deleteVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {

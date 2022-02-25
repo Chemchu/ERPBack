@@ -4,7 +4,8 @@ import { IEmployee } from './Empleado';
 export interface ITPV extends Document {
     nombre: string
     enUsoPor: IEmployee['_id']
-    abierta: boolean
+    libre: boolean
+    cajaInicial: number
 }
 
 export interface ICierreTPV extends Document {
@@ -13,6 +14,7 @@ export interface ICierreTPV extends Document {
     cerradoPor: IEmployee['_id']
     apertura: Date
     cierre: Date
+    cajaInicial: number
     ventasEfectivo: number,
     ventasTarjeta: number,
     ventasTotales: number,

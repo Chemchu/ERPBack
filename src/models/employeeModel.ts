@@ -15,7 +15,6 @@ export class Empleado {
       hashPassword: { type: String, required: true },
       horasPorSemana: { type: Number, required: true },
       fechaAlta: { type: Date, required: true },
-      tpvEnUso: { type: String, required: false }
     }, { strict: true });
 
     this.modelo = model<IEmployee>('Empleados', EmpleadoSchema);

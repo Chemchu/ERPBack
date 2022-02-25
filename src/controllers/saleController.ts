@@ -16,10 +16,6 @@ const SaleController = {
         await db.VentasDBController.Get(req, res);
     },
 
-    getState: async (req: Request, res: Response) => {
-        await db.VentasDBController.GetDBState(req, res);
-    },
-
     update: async (req: Request, res: Response) => {
         await db.VentasDBController.Update(req, res);
     },

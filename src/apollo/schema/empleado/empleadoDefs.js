@@ -6,12 +6,12 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
 
     type Empleado {
         _id: ID!
-        nombre: String
-        apellidos: String
+        nombre: String!
+        apellidos: String!
         dni: String
-        rol: String
+        rol: String!
         genero: String
-        email: String
+        email: String!
         horasPorSemana: Float
         fechaAlta: String
     }

@@ -19,7 +19,7 @@ mongoose.Promise = global.Promise;
 dotenv.config();
 const dbInformation = {
     mongo: mongoose,
-    url: process.env.MONGO_URI == "" ? "mongodb://localhost:27017/" : process.env.MONGO_URI,
+    url: process.env.MONGO_URI === "" ? "mongodb://localhost:27017/" : process.env.MONGO_URI,
     dbName: process.env.DATABASE_NAME == "" ? "erp_db" : process.env.DATABASE_NAME,
 };
 class Database {
@@ -36,6 +36,13 @@ class Database {
         }).catch((err) => {
             console.log("¡No se pudo realizar la conexión con la base de datos!", err);
             process.exit();
+        }).then(() => {
+            this.ClientDBController.CollectionModel.findOne({ nombre: "General" }).exec().then((clienteGeneral) => {
+                if (!clienteGeneral) {
+                    const cliente = { nombre: "General", calle: "General", nif: "General", cp: "General" };
+                    this.ClientDBController.CollectionModel.create(cliente);
+                }
+            });
         });
     }
     static Instance() {

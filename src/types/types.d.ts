@@ -27,6 +27,7 @@ export interface VentasFind {
         tipo?: string
         vendedorId?: string
         createdAt?: string
+        tpv?: string
     }
     limit?: number
     order?: string
@@ -68,7 +69,21 @@ export interface ClientesFind {
 
 export interface Credentials {
     loginValues: {
-        email: string,
+        email: string
         password: string
     }
 }
+
+export interface TPVFind {
+    find: {
+        _id?: ID!
+        nombre?: string
+    }
+}
+export interface TPVsFind {
+    find?: {
+        libre: boolean
+    }
+}
+
+
