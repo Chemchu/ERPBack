@@ -23,6 +23,7 @@ export class CierreTPV {
             cerradoPor: { type: EmpleadoSchema, required: true },
             apertura: { type: Date, required: true },
             cierre: { type: Date, required: true },
+            cajaInicial: { type: Number, required: true },
             ventasEfectivo: { type: Number, required: true },
             ventasTarjeta: { type: Number, required: true },
             ventasTotales: { type: Number, required: true },
@@ -31,7 +32,7 @@ export class CierreTPV {
             beneficio: { type: Number, required: true },
             nota: { type: String, required: false }
 
-        }, { strict: true, timestamps: true }) as Schema<ICierreTPV>;
+        }, { strict: true }) as Schema<ICierreTPV>;
 
         this.modelo = model<ICierreTPV>('CierresTPV', CierreTPVSchema);
     }
