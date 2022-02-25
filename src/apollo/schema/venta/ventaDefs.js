@@ -17,6 +17,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         tipo: String
         descuentoEfectivo: Float
         descuentoPorcentaje: Float
+        tpv: ID
         createdAt: String
         updatedAt: String
     }

@@ -16,6 +16,7 @@ const VentaDefs = gql`
         tipo: String
         descuentoEfectivo: Float
         descuentoPorcentaje: Float
+        tpv: ID
         createdAt: String
         updatedAt: String
     }
