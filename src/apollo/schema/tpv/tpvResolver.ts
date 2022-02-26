@@ -123,7 +123,7 @@ export const updateTpvResolver = async (root: any, args: any, context: any) => {
 
 }
 
-export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, idTPV: string }, context: any) => {
+export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, idTPV: string, cajaInicial: number }, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
@@ -151,7 +151,7 @@ export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, id
             horasPorSemana: 0
         } as IEmployee;
 
-        await tpv.updateOne({ libre: false, enUsoPor: empleadoClean });
+        await tpv.updateOne({ libre: false, enUsoPor: empleadoClean, cajaInicial: args.cajaInicial });
 
         //Login JWT payload
         const payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol, TPV: tpv._id };

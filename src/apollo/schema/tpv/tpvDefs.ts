@@ -61,7 +61,7 @@ const tpvDefs = gql`
         
         updateTPV(_id: ID!, nombre: String, enUsoPor: ID, libre: Boolean, cajaInicial: Int): TPVMutationResponse!
 
-        ocupyTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
+        ocupyTPV(idEmpleado: ID!, idTPV: ID!, cajaInicial: Float!): TPVMutationJwtResponse!
         
         freeTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
     }
