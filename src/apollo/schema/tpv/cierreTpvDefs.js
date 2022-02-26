@@ -22,19 +22,19 @@ const cierreTpvDefs = (0, apollo_server_express_1.gql) `
     }
 
     input CierreTPVInput {
-        _id: ID!,
+        _id: ID,
         tpv: ID!,
         cajaInicial: Float!,
         abiertoPor: EmpleadoInput!,
         cerradoPor: EmpleadoInput!,
         apertura: String!,
-        cierre: String!,
+        cierre: String,
         ventasEfectivo: Float!,
         ventasTarjeta: Float!,
         ventasTotales: Float!,
         dineroRetirado:Float!,
         fondoDeCaja: Float!,
-        beneficio: Float!,
+        beneficio: Float,
         nota: String,
     }
 

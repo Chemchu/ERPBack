@@ -3,15 +3,15 @@ import { IEmployee } from './Empleado';
 
 export interface ITPV extends Document {
     nombre: string
-    enUsoPor: IEmployee['_id']
+    enUsoPor: IEmployee
     libre: boolean
     cajaInicial: number
 }
 
 export interface ICierreTPV extends Document {
-    tpv: ITPV['_id'],
-    abiertoPor: IEmployee['_id']
-    cerradoPor: IEmployee['_id']
+    tpv: ITPV["_id"],
+    abiertoPor: IEmployee
+    cerradoPor: IEmployee
     apertura: Date
     cierre: Date
     cajaInicial: number

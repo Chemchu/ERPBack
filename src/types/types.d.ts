@@ -78,6 +78,7 @@ export interface TPVFind {
     find: {
         _id?: ID!
         nombre?: string
+        empleadoId: ID!
     }
 }
 export interface TPVsFind {

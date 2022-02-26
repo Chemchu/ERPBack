@@ -34,6 +34,16 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
+    if (args.find?.createdAt && args.find.tpv) {
+        const ventas = await db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv, "createdAt": { $gte: parseInt(args.find.createdAt), $lt: Date.now() } })
+            .sort({ createdAt: args.order || "desc" })
+            .limit(args.limit || 3000)
+            .skip(args.offset || 0)
+            .exec();
+
+        if (ventas) return ventas;
+    }
+
     if (args.find?._ids) {
         const ventas = await db.VentasDBController.CollectionModel.find({ _id: args.find._ids })
             .sort({ createdAt: args.order || "desc" })
@@ -85,11 +95,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
     }
 
     if (args.find?.tpv) {
-        const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.find.tpv }).exec();
-        console.log(tpv);
-
-
-        const ventas = await db.VentasDBController.CollectionModel.find({})
+        const ventas = await db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)

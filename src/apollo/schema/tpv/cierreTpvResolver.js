@@ -41,6 +41,8 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
 exports.cierreTpvsResolver = cierreTpvsResolver;
 const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
+    console.log("AddCierreTPVResolver: ");
+    console.log(args);
 });
 exports.addCierreTpvResolver = addCierreTpvResolver;
 const deleteCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {

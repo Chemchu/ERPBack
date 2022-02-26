@@ -49,6 +49,9 @@ export const addCierreTpvResolver = async (root: any, args: any, context: any) =
 
     const db = Database.Instance();
 
+    console.log("AddCierreTPVResolver: ");
+    console.log(args);
+
 }
 
 export const deleteCierreTpvResolver = async (root: any, args: any, context: any) => {

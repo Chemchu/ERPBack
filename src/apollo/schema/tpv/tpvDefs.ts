@@ -6,11 +6,23 @@ const tpvDefs = gql`
     type TPV {
         _id: ID!
         nombre: String
-        enUsoPor: ID
+        enUsoPor: Empleado
         libre: Boolean
         cajaInicial: Int
         createdAt: String
         updatedAt: String
+    }
+
+    type Empleado {
+        _id: ID!
+        nombre: String!
+        apellidos: String!
+        dni: String
+        rol: String!
+        genero: String
+        email: String!
+        horasPorSemana: Float
+        fechaAlta: String
     }
 
     type TPVMutationResponse {
@@ -25,6 +37,7 @@ const tpvDefs = gql`
     input TPVFind {
         _id: ID
         nombre: String
+        empleadoId: ID
     }
 
     input TPVsFind {
