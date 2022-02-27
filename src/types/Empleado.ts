@@ -5,11 +5,11 @@ export interface IEmployee extends Document {
     apellidos: string,
     dni: string,
     rol: string,
-    genero: string,
+    genero?: string,
     email: string,
     hashPassword: string,
-    horasPorSemana: number,
-    fechaAlta: Date,
+    horasPorSemana?: number,
+    fechaAlta?: Date,
 }
 
 export interface IOldEmployee extends Document {

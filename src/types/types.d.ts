@@ -87,4 +87,27 @@ export interface TPVsFind {
     }
 }
 
+export interface EmpleadoInput {
+    _id: ID!
+    nombre: string!
+    apellidos: string!
+    dni?: string
+    rol: string!
+    email: string!
+}
 
+export interface CierreTPVInput {
+    _id: ID,
+    tpv: ID!,
+    cajaInicial: number!,
+    abiertoPor: EmpleadoInput!,
+    cerradoPor: EmpleadoInput!,
+    apertura: string!,
+    cierre: string,
+    ventasEfectivo: number!,
+    ventasTarjeta: number!,
+    ventasTotales: number!,
+    dineroRetirado: number!,
+    fondoDeCaja: number!,
+    nota: string,
+}

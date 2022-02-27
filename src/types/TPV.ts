@@ -21,5 +21,5 @@ export interface ICierreTPV extends Document {
     dineroRetirado: number,
     fondoDeCaja: number,
     beneficio: number,
-    nota: string
+    nota?: string
 }

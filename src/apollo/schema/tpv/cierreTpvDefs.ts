@@ -33,7 +33,6 @@ const cierreTpvDefs = gql`
         ventasTotales: Float!,
         dineroRetirado:Float!,
         fondoDeCaja: Float!,
-        beneficio: Float,
         nota: String,
     }
 
@@ -52,6 +51,7 @@ const cierreTpvDefs = gql`
     type CierreTPVMutationResponse {
         message: String!
         successful: Boolean!
+        token: String
     }
 
     input CierreTPVFind {

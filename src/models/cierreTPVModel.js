@@ -7,11 +7,10 @@ class CierreTPV {
         const EmpleadoSchema = new mongoose_1.Schema({
             nombre: { type: String, requiered: true },
             apellidos: { type: String, requiered: true },
-            dni: { type: String, requiered: true },
+            dni: { type: String, requiered: false },
             email: { type: String, requiered: true },
-            fechaAlta: { type: Date, required: true },
+            fechaAlta: { type: Date, required: false },
             genero: { type: String, requiered: false },
-            hashPassword: { type: String, requiered: true },
             horasPorSemana: { type: Number, requiered: false },
             rol: { type: String, requiered: true },
         }, { strict: true, timestamps: false });
