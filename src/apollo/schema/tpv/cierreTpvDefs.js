@@ -29,9 +29,12 @@ const cierreTpvDefs = (0, apollo_server_express_1.gql) `
         cerradoPor: EmpleadoInput!,
         apertura: String!,
         cierre: String,
+        numVentas: Int!
         ventasEfectivo: Float!,
         ventasTarjeta: Float!,
         ventasTotales: Float!,
+        dineroEsperadoEnCaja: Float!,
+        dineroRealEnCaja: Float!,
         dineroRetirado:Float!,
         fondoDeCaja: Float!,
         nota: String,

@@ -15,9 +15,12 @@ export interface ICierreTPV extends Document {
     apertura: Date
     cierre: Date
     cajaInicial: number
+    numVentas: number,
     ventasEfectivo: number,
     ventasTarjeta: number,
     ventasTotales: number,
+    dineroEsperadoEnCaja: number,
+    dineroRealEnCaja: number,
     dineroRetirado: number,
     fondoDeCaja: number,
     beneficio: number,
