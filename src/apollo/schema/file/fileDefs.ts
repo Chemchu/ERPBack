@@ -1,15 +1,14 @@
 import { gql } from "apollo-server-express";
 
 const fileDefs = gql`
-    type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
+    type ResponseMutation {
+      message: String!
+      successful: Boolean!
   }
 
   type Mutation {
-    uploadProductos(file: Upload!): File!
-    uploadClientes(file: Upload!): File!
+    addProductosFile(csv: String!): ResponseMutation!
+    addClientesFile(csv: String!): ResponseMutation!
   }
 `;
 

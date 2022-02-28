@@ -26,7 +26,12 @@ async function startApolloServer() {
   await server.start();
 
   // Añadir serverRegistration a Apollo
-  server.applyMiddleware({ app: apiRouter.App });
+  server.applyMiddleware({
+    app: apiRouter.App,
+    bodyParserConfig: {
+      limit: '10mb',
+    }
+  });
 
   // Enruta los diferentes componentes del api
   await apiRouter.SetRoutes();

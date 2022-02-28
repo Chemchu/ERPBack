@@ -30,7 +30,12 @@ const server = new apollo_server_express_1.ApolloServer({
 function startApolloServer() {
     return __awaiter(this, void 0, void 0, function* () {
         yield server.start();
-        server.applyMiddleware({ app: apiRouter.App });
+        server.applyMiddleware({
+            app: apiRouter.App,
+            bodyParserConfig: {
+                limit: '10mb',
+            }
+        });
         yield apiRouter.SetRoutes();
     });
 }

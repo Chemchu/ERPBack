@@ -53,7 +53,7 @@ class Router {
             })));
             this.app.use(cors(corsOptions));
             this.app.use(express_1.default.json({ limit: '10mb' }));
-            this.app.use(express_1.default.urlencoded({ extended: true }));
+            this.app.use(express_1.default.urlencoded({ limit: '10mb', parameterLimit: 100000, extended: true }));
             this.app.get("/api", (req, res) => {
                 res.json({ message: "Bienvenido al API Restful de ERPSolution" });
             });

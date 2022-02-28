@@ -1,7 +1,6 @@
 import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database"
 import { ProductoFind, ProductosFind } from "../../../types/types";
-import { ISale } from "../../../types/Venta";
 
 export const productoResolver = async (parent: any, args: ProductoFind, context: any, info: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
@@ -115,14 +114,6 @@ export const deleteProductoResolver = async (root: any, args: any, context: any)
 }
 
 export const updateProductoResolver = async (root: any, args: any, context: any) => {
-    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
-    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
-
-    const db = Database.Instance();
-
-}
-
-export const uploadProductoFileResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
