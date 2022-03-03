@@ -22,7 +22,7 @@ export const loginResolver = async (parent: any, args: Credentials, context: any
 
         if (secret) {
             // Comprobar que el usuario está usando la TPV Y que la propiedad "libre" sea falsa (TPV ocupada actualmente)
-            const tpv = await db.TPVDBController.CollectionModel.findOne({ enUsoPor: empleado._id, libre: false }).exec();
+            const tpv = await db.TPVDBController.CollectionModel.findOne({ "enUsoPor._id": empleado._id, libre: false }).exec();
 
             //Login JWT payload
             let payload;
