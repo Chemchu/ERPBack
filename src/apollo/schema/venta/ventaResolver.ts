@@ -134,7 +134,7 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
             return { message: "No se ha podido añadir la venta a la base de datos", successful: false }
         }
 
-        return { message: "Venta añadida con éxito", successful: true }
+        return { message: "Venta añadida con éxito", successful: true, _id: res._id }
     }
     catch (err) {
         return { message: err, successful: false }

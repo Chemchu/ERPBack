@@ -22,6 +22,7 @@ const VentaDefs = gql`
     }
 
     type VentaMutationResponse {
+        _id: String
         message: String!
         successful: Boolean!
     } 

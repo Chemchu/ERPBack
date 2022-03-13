@@ -23,6 +23,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
     }
 
     type VentaMutationResponse {
+        _id: String
         message: String!
         successful: Boolean!
     } 
