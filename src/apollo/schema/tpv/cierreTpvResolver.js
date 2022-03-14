@@ -29,16 +29,17 @@ exports.cierreTpvResolver = cierreTpvResolver;
 const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-        const tpv = yield db.TPVDBController.CollectionModel.find({})
-            .limit(150)
+        const cierres = yield db.CierreTPVDBController.CollectionModel.find({})
+            .limit(args.limit)
             .exec();
-        return tpv;
+        return cierres;
     }
     if (args.find) {
-        const tpv = yield db.TPVDBController.CollectionModel.find({ abierta: args.find.libre })
-            .limit(150)
+        const fecha = new Date(args.find.fecha);
+        const cierres = yield db.CierreTPVDBController.CollectionModel.find({ apertura: fecha })
+            .limit(args.limit || 3000)
             .exec();
-        return tpv;
+        return cierres;
     }
     return [];
 });
