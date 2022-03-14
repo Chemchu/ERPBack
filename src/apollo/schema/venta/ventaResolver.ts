@@ -128,13 +128,13 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
             tpv: args.fields.tpv
         } as ISale);
 
-        const res = await saleToAdd.save();
+        const res: any = await saleToAdd.save(); // ---> Solución temporal
 
         if (res.errors) {
             return { message: "No se ha podido añadir la venta a la base de datos", successful: false }
         }
 
-        return { message: "Venta añadida con éxito", successful: true, _id: res._id }
+        return { message: "Venta añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt }
     }
     catch (err) {
         return { message: err, successful: false }

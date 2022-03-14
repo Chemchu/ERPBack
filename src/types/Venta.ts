@@ -16,5 +16,5 @@ export interface ISale extends Document {
     tipo: string,
     descuentoEfectivo: number,
     descuentoPorcentaje: number,
-    tpv: ITPV['_id']
+    tpv: ITPV['_id'],
 }

@@ -26,6 +26,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         _id: String
         message: String!
         successful: Boolean!
+        createdAt: String
     } 
 
     type ProductoVendido {

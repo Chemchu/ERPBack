@@ -25,6 +25,7 @@ const VentaDefs = gql`
         _id: String
         message: String!
         successful: Boolean!
+        createdAt: String
     } 
 
     type ProductoVendido {
