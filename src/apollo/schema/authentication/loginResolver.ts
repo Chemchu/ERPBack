@@ -22,12 +22,12 @@ export const loginResolver = async (parent: any, args: Credentials, context: any
 
         if (secret) {
             // Comprobar que el usuario está usando la TPV Y que la propiedad "libre" sea falsa (TPV ocupada actualmente)
-            const tpv = await db.TPVDBController.CollectionModel.findOne({ enUsoPor: empleado._id, libre: false }).exec();
+            const tpv = await db.TPVDBController.CollectionModel.findOne({ "enUsoPor._id": empleado._id, libre: false }).exec();
 
             //Login JWT payload
             let payload;
-            if (tpv) { payload = { _id: empleado._id, nombre: empleado.nombre, email: empleado.email, rol: empleado.rol, TPV: tpv._id }; }
-            else { payload = { _id: empleado._id, nombre: empleado.nombre, email: empleado.email, rol: empleado.rol }; }
+            if (tpv) { payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol, TPV: tpv._id }; }
+            else { payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol }; }
             const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
 
             // Create Token Expires in 1 hour

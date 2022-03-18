@@ -7,11 +7,23 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
     type TPV {
         _id: ID!
         nombre: String
-        enUsoPor: ID
+        enUsoPor: Empleado
         libre: Boolean
         cajaInicial: Int
         createdAt: String
         updatedAt: String
+    }
+
+    type Empleado {
+        _id: ID!
+        nombre: String!
+        apellidos: String!
+        dni: String
+        rol: String!
+        genero: String
+        email: String!
+        horasPorSemana: Float
+        fechaAlta: String
     }
 
     type TPVMutationResponse {
@@ -26,6 +38,7 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
     input TPVFind {
         _id: ID
         nombre: String
+        empleadoId: ID
     }
 
     input TPVsFind {
@@ -49,7 +62,7 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
         
         updateTPV(_id: ID!, nombre: String, enUsoPor: ID, libre: Boolean, cajaInicial: Int): TPVMutationResponse!
 
-        ocupyTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
+        ocupyTPV(idEmpleado: ID!, idTPV: ID!, cajaInicial: Float!): TPVMutationJwtResponse!
         
         freeTPV(idEmpleado: ID!, idTPV: ID!): TPVMutationJwtResponse!
     }

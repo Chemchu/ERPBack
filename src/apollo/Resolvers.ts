@@ -1,8 +1,9 @@
 import { jwtValidatorResolver } from "./schema/authentication/jwtValidatorResolver";
 import { loginResolver } from "./schema/authentication/loginResolver";
-import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver, uploadClienteFileResolver } from "./schema/cliente/clienteResolver";
+import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver } from "./schema/cliente/clienteResolver";
 import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
-import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver, uploadProductoFileResolver } from "./schema/producto/productoResolver";
+import { uploadProductoFileResolver } from "./schema/file/fileResolvers";
+import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver } from "./schema/producto/productoResolver";
 import { addCierreTpvResolver, cierreTpvResolver, cierreTpvsResolver, deleteCierreTpvResolver, updateCierreTpvResolver } from "./schema/tpv/cierreTpvResolver";
 import { addTpvResolver, deleteTpvResolver, freeTpvResolver, ocupyTpvResolver, tpvResolver, tpvsResolver, updateTpvResolver } from "./schema/tpv/tpvResolver";
 import { addVentaResolver, deleteVentaResolver, updateVentaResolver, ventaResolver, ventasResolver } from "./schema/venta/ventaResolver";
@@ -26,6 +27,7 @@ const Resolvers = {
     },
     Mutation: {
         addProducto: addProductoResolver,
+        addProductosFile: uploadProductoFileResolver,
         deleteProducto: deleteProductoResolver,
         updateProducto: updateProductoResolver,
 

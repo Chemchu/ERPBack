@@ -50,7 +50,7 @@ export class Router {
         this.app.use(express.json({ limit: '10mb' }));
 
         // parse requests of content-type - application/x-www-form-urlencoded
-        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(express.urlencoded({ limit: '10mb', parameterLimit: 100000, extended: true }));
 
         this.app.get("/api", (req: Request, res: Response) => {
             res.json({ message: "Bienvenido al API Restful de ERPSolution" });

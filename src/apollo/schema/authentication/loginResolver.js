@@ -35,13 +35,13 @@ const loginResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
         }
         const secret = process.env.JWT_SECRET;
         if (secret) {
-            const tpv = yield db.TPVDBController.CollectionModel.findOne({ enUsoPor: empleado._id, libre: false }).exec();
+            const tpv = yield db.TPVDBController.CollectionModel.findOne({ "enUsoPor._id": empleado._id, libre: false }).exec();
             let payload;
             if (tpv) {
-                payload = { _id: empleado._id, nombre: empleado.nombre, email: empleado.email, rol: empleado.rol, TPV: tpv._id };
+                payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol, TPV: tpv._id };
             }
             else {
-                payload = { _id: empleado._id, nombre: empleado.nombre, email: empleado.email, rol: empleado.rol };
+                payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol };
             }
             const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
             const token = yield jsonwebtoken_1.default.sign(payload, secret, {

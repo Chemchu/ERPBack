@@ -25,14 +25,23 @@ const ventaResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
 });
 exports.ventaResolver = ventaResolver;
 const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const ventas = yield db.VentasDBController.CollectionModel.find({}).sort({ createdAt: args.order || "desc" }).limit(args.limit || 3000).skip(args.offset || 0).exec();
         if (ventas)
             return ventas;
     }
-    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
+    if (((_a = args.find) === null || _a === void 0 ? void 0 : _a.createdAt) && args.find.tpv) {
+        const ventas = yield db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv, "createdAt": { $gte: parseInt(args.find.createdAt), $lt: Date.now() } })
+            .sort({ createdAt: args.order || "desc" })
+            .limit(args.limit || 3000)
+            .skip(args.offset || 0)
+            .exec();
+        if (ventas)
+            return ventas;
+    }
+    if ((_b = args.find) === null || _b === void 0 ? void 0 : _b._ids) {
         const ventas = yield db.VentasDBController.CollectionModel.find({ _id: args.find._ids })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -41,7 +50,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (ventas)
             return ventas;
     }
-    if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.clienteId) {
+    if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.clienteId) {
         const ventas = yield db.VentasDBController.CollectionModel.find({ $cliente: { _id: args.find.clienteId } })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -50,7 +59,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (ventas)
             return ventas;
     }
-    if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.tipo) {
+    if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.tipo) {
         const ventas = yield db.VentasDBController.CollectionModel.find({ tipo: args.find.tipo })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -59,7 +68,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (ventas)
             return ventas;
     }
-    if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.vendedorId) {
+    if ((_e = args.find) === null || _e === void 0 ? void 0 : _e.vendedorId) {
         const ventas = yield db.VentasDBController.CollectionModel.find({ $vendidoPor: { _id: args.find.vendedorId } })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -68,7 +77,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (ventas)
             return ventas;
     }
-    if ((_e = args.find) === null || _e === void 0 ? void 0 : _e.createdAt) {
+    if ((_f = args.find) === null || _f === void 0 ? void 0 : _f.createdAt) {
         const ventas = yield db.VentasDBController.CollectionModel.find({ createdAt: args.find.createdAt })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
@@ -77,10 +86,8 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (ventas)
             return ventas;
     }
-    if ((_f = args.find) === null || _f === void 0 ? void 0 : _f.tpv) {
-        const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.find.tpv }).exec();
-        console.log(tpv);
-        const ventas = yield db.VentasDBController.CollectionModel.find({})
+    if ((_g = args.find) === null || _g === void 0 ? void 0 : _g.tpv) {
+        const ventas = yield db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv })
             .sort({ createdAt: args.order || "desc" })
             .limit(args.limit || 3000)
             .skip(args.offset || 0)
@@ -112,7 +119,7 @@ const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void
         if (res.errors) {
             return { message: "No se ha podido añadir la venta a la base de datos", successful: false };
         }
-        return { message: "Venta añadida con éxito", successful: true };
+        return { message: "Venta añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt };
     }
     catch (err) {
         return { message: err, successful: false };

@@ -1,18 +1,74 @@
 import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database";
-import { TPVFind, TPVsFind } from "../../../types/types"; var bcrypt = require('bcryptjs');
+import { TPVFind, TPVsFind } from "../../../types/types";
 import jwt from "jsonwebtoken";
+import { IEmployee } from "../../../types/Empleado";
 
 export const tpvResolver = async (parent: any, args: TPVFind, context: any, info: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
-    if (!args.find.nombre && !args.find._id) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
-
+    if ((!args.find.nombre && !args.find._id)) throw new UserInputError('Argumentos inválidos: Find no puede estar vacío');
     const db = Database.Instance();
 
-    if (args.find.nombre) {
+    if (!args.find.empleadoId) {
+        if (args.find._id) { return await db.TPVDBController.CollectionModel.findOne({ _id: args.find._id }).exec(); }
+
         return await db.TPVDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+    }
+
+    const empleado = await db.EmployeeDBController.CollectionModel.findOne({ _id: args.find.empleadoId });
+
+    if (args.find.nombre) {
+        const tpv = await db.TPVDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+
+        if (tpv) {
+            if (empleado) {
+                const empleadoClean = {
+                    _id: empleado._id,
+                    nombre: empleado.nombre,
+                    apellidos: empleado.apellidos,
+                    rol: empleado.rol,
+                    email: empleado.email,
+                    dni: "",
+                    genero: "",
+                    hashPassword: "",
+                    horasPorSemana: 0
+                } as IEmployee
+
+                tpv.enUsoPor = empleadoClean;
+            }
+
+            return tpv;
+        }
+
+        return undefined;
+    }
+
+    if (args.find._id) {
+        const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+
+        if (tpv) {
+            if (empleado) {
+                const empleadoClean = {
+                    _id: empleado._id,
+                    nombre: empleado.nombre,
+                    apellidos: empleado.apellidos,
+                    rol: empleado.rol,
+                    email: empleado.email,
+                    dni: "",
+                    genero: "",
+                    hashPassword: "",
+                    horasPorSemana: 0
+                } as IEmployee
+
+                tpv.enUsoPor = empleadoClean;
+            }
+
+            return tpv;
+        }
+
+        return undefined;
     }
 
     return await db.TPVDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
@@ -67,7 +123,7 @@ export const updateTpvResolver = async (root: any, args: any, context: any) => {
 
 }
 
-export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, idTPV: string }, context: any) => {
+export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, idTPV: string, cajaInicial: number }, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
@@ -83,10 +139,22 @@ export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, id
         const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV }).exec();
         if (!tpv) throw new UserInputError('TPV no encontrada');
 
-        await tpv.update({ libre: false });
+        const empleadoClean = {
+            _id: empleado._id,
+            nombre: empleado.nombre,
+            apellidos: empleado.apellidos,
+            rol: empleado.rol,
+            email: empleado.email,
+            dni: "",
+            genero: "",
+            hashPassword: "",
+            horasPorSemana: 0
+        } as IEmployee;
+
+        await tpv.updateOne({ libre: false, enUsoPor: empleadoClean, cajaInicial: args.cajaInicial });
 
         //Login JWT payload
-        const payload = { _id: empleado._id, nombre: empleado.nombre, email: empleado.email, rol: empleado.rol, TPV: tpv._id };
+        const payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol, TPV: tpv._id };
         const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
 
         // Create Token Expires in 1 hour
@@ -111,19 +179,27 @@ export const freeTpvResolver = async (root: any, args: { idEmpleado: string, idT
     const secret = process.env.JWT_SECRET;
 
     if (secret) {
-        console.log("yepaaali");
-
-
         const empleado = await db.EmployeeDBController.CollectionModel.findOne({ _id: args.idEmpleado }).exec();
         if (!empleado) { throw new UserInputError('Empleado no encontrado'); }
 
         const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV }).exec();
         if (!tpv) throw new UserInputError('TPV no encontrada');
 
-        await tpv.update({ libre: true });
+        const empleadoClean = {
+            _id: empleado._id,
+            nombre: empleado.nombre,
+            apellidos: empleado.apellidos,
+            rol: empleado.rol,
+            email: empleado.email,
+            dni: "",
+            genero: "",
+            hashPassword: "",
+            horasPorSemana: 0
+        } as IEmployee;
+        await tpv.updateOne({ libre: true, enUsoPor: empleadoClean });
 
         //Login JWT payload
-        const payload = { _id: empleado._id, nombre: empleado.nombre, email: empleado.email, rol: empleado.rol };
+        const payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol };
         const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
 
         // Create Token Expires in 1 hour

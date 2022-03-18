@@ -4,6 +4,7 @@ const jwtValidatorResolver_1 = require("./schema/authentication/jwtValidatorReso
 const loginResolver_1 = require("./schema/authentication/loginResolver");
 const clienteResolver_1 = require("./schema/cliente/clienteResolver");
 const empleadoResolver_1 = require("./schema/empleado/empleadoResolver");
+const fileResolvers_1 = require("./schema/file/fileResolvers");
 const productoResolver_1 = require("./schema/producto/productoResolver");
 const cierreTpvResolver_1 = require("./schema/tpv/cierreTpvResolver");
 const tpvResolver_1 = require("./schema/tpv/tpvResolver");
@@ -27,6 +28,7 @@ const Resolvers = {
     },
     Mutation: {
         addProducto: productoResolver_1.addProductoResolver,
+        addProductosFile: fileResolvers_1.uploadProductoFileResolver,
         deleteProducto: productoResolver_1.deleteProductoResolver,
         updateProducto: productoResolver_1.updateProductoResolver,
         addCliente: clienteResolver_1.addClienteResolver,

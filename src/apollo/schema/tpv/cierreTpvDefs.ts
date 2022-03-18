@@ -21,19 +21,21 @@ const cierreTpvDefs = gql`
     }
 
     input CierreTPVInput {
-        _id: ID!,
+        _id: ID,
         tpv: ID!,
         cajaInicial: Float!,
         abiertoPor: EmpleadoInput!,
         cerradoPor: EmpleadoInput!,
         apertura: String!,
-        cierre: String!,
+        cierre: String,
+        numVentas: Int!
         ventasEfectivo: Float!,
         ventasTarjeta: Float!,
         ventasTotales: Float!,
+        dineroEsperadoEnCaja: Float!,
+        dineroRealEnCaja: Float!,
         dineroRetirado:Float!,
         fondoDeCaja: Float!,
-        beneficio: Float!,
         nota: String,
     }
 
@@ -52,6 +54,7 @@ const cierreTpvDefs = gql`
     type CierreTPVMutationResponse {
         message: String!
         successful: Boolean!
+        token: String
     }
 
     input CierreTPVFind {
