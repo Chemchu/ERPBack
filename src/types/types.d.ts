@@ -28,6 +28,8 @@ export interface VentasFind {
         vendedorId?: string
         createdAt?: string
         tpv?: string
+        fechaInicial?: string
+        fechaFinal?: string
     }
     limit?: number
     order?: string

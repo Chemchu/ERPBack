@@ -1,4 +1,4 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document } from 'mongoose';
 import { IEmployee } from './Empleado';
 
 export interface ITPV extends Document {

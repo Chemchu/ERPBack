@@ -65,6 +65,8 @@ const VentaDefs = gql`
         tipo: String
         vendedorId: String
         createdAt: String
+        fechaInicial: String
+        fechaFinal: String
         tpv: ID
     }
 

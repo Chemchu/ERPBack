@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 
 var bcrypt = require('bcryptjs');
 var salt = bcrypt.genSaltSync(10);
-export class EmployeeDBController implements IDBController {
+export class EmployeeDBController {
 
 	public CollectionModel: mongoose.Model<IEmployee>;
 

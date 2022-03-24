@@ -3,7 +3,7 @@ import IDBController from './IDBController';
 import { Request, Response } from 'express';
 import { ICierreTPV } from '../types/TPV';
 
-export class CierreTPVDBController implements IDBController {
+export class CierreTPVDBController {
 
     public CollectionModel: mongoose.Model<ICierreTPV>;
 

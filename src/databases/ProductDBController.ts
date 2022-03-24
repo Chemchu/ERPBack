@@ -6,7 +6,7 @@ import { IDBState } from '../types/DBState';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateProductList } from '../lib/productCreator';
 import { ProcessCSV } from '../lib/processCSV';
-export class ProductoDBController implements IDBController {
+export class ProductoDBController {
 
 	public CollectionModel: mongoose.Model<IProduct & IDBState>;
 

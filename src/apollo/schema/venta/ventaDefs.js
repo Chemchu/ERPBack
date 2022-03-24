@@ -66,6 +66,8 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         tipo: String
         vendedorId: String
         createdAt: String
+        fechaInicial: String
+        fechaFinal: String
         tpv: ID
     }
 
@@ -119,7 +121,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         deleteVenta(_id: ID!): VentaMutationResponse!
         
         updateVenta(_id: ID!, productos: [ProductoVendidoInput], dineroEntregadoEfectivo: Float, descuentoPorcentaje: Float, precioVentaTotal: Float!, cambio: Float,
-            clienteId: ClienteInput, vendidoPor: EmpleadoInput, modificadoPor: EmpleadoInput, tipo: String, descuentoEfectivo: Float): VentaMutationResponse!
+        clienteId: ClienteInput, vendidoPor: EmpleadoInput, modificadoPor: EmpleadoInput, tipo: String, descuentoEfectivo: Float): VentaMutationResponse!
     }
 `;
 exports.default = VentaDefs;

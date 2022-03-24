@@ -2,8 +2,7 @@ import mongoose from 'mongoose';
 import { ISale } from '../types/Venta';
 import IDBController from './IDBController';
 import { Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
-export class SaleDBController implements IDBController {
+export class SaleDBController {
 
 	public CollectionModel: mongoose.Model<ISale>;
 

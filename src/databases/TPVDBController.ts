@@ -3,7 +3,7 @@ import IDBController from './IDBController';
 import { Request, Response } from 'express';
 import { ITPV } from '../types/TPV';
 
-export class TPVDBController implements IDBController {
+export class TPVDBController {
 
     public CollectionModel: mongoose.Model<ITPV>;
 
