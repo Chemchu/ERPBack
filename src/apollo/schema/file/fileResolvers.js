@@ -20,6 +20,9 @@ const uploadProductoFileResolver = (root, args, context) => __awaiter(void 0, vo
         const auxProductList = (0, productCreator_1.CreateProductList)(pArray);
         let prodList = [];
         for (var i = 0; i < auxProductList.length; i++) {
+            if (!IsProductValid(auxProductList[i])) {
+                continue;
+            }
             const prodName = auxProductList[i].nombre;
             const prodEAN = auxProductList[i].ean;
             const prodRepetidoEnCSV = prodList.some(p => p.nombre === auxProductList[i].nombre || p.ean === auxProductList[i].ean);
@@ -42,3 +45,18 @@ const uploadProductoFileResolver = (root, args, context) => __awaiter(void 0, vo
     }
 });
 exports.uploadProductoFileResolver = uploadProductoFileResolver;
+const IsProductValid = (producto) => {
+    if (!producto.nombre || producto.nombre === null || producto.nombre === undefined) {
+        return false;
+    }
+    if (producto.precioCompra === undefined || producto.precioCompra < 0) {
+        return false;
+    }
+    if (producto.precioVenta === undefined || producto.precioVenta < 0) {
+        return false;
+    }
+    if (producto.ean === undefined || producto.ean === null || !producto.ean) {
+        return false;
+    }
+    return true;
+};

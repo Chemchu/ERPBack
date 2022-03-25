@@ -16,6 +16,8 @@ export const uploadProductoFileResolver = async (root: any, args: { csv: string 
         let prodList: IProduct[] = [];
 
         for (var i = 0; i < auxProductList.length; i++) {
+            if (!IsProductValid(auxProductList[i])) { continue; }
+
             const prodName = auxProductList[i].nombre;
             const prodEAN = auxProductList[i].ean;
             const prodRepetidoEnCSV = prodList.some(p => p.nombre === auxProductList[i].nombre || p.ean === auxProductList[i].ean);
@@ -39,4 +41,13 @@ export const uploadProductoFileResolver = async (root: any, args: { csv: string 
         return { message: `Error al añadir los productos en la base de datos`, successful: false };
     }
 
+}
+
+const IsProductValid = (producto: IProduct): boolean => {
+    if (!producto.nombre || producto.nombre === null || producto.nombre === undefined) { return false; }
+    if (producto.precioCompra === undefined || producto.precioCompra < 0) { return false; }
+    if (producto.precioVenta === undefined || producto.precioVenta < 0) { return false; }
+    if (producto.ean === undefined || producto.ean === null || !producto.ean) { return false; }
+
+    return true;
 }
