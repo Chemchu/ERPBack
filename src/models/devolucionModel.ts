@@ -1,12 +1,13 @@
 import { Schema, model, Model, Types } from 'mongoose';
 import { IClient } from '../types/Cliente';
+import { IDevolucion } from '../types/Devolucion';
 import { IEmployee } from '../types/Empleado';
 import { ISoldProduct } from '../types/Producto';
 import { ISale } from '../types/Venta';
 
 
 export class Devolucion {
-    private modelo: Model<ISale>;
+    private modelo: Model<IDevolucion>;
 
     constructor() {
         const ProductoVendidoSchema = new Schema({
@@ -41,7 +42,7 @@ export class Devolucion {
             rol: { type: String, requiered: true },
         }, { strict: true, timestamps: false }) as Schema<IEmployee>;
 
-        const DevolucionSchema = new Schema({
+        const VentaSchema = new Schema({
             productos: { type: [ProductoVendidoSchema], required: true },
             dineroEntregadoEfectivo: { type: Number, required: true },
             dineroEntregadoTarjeta: { type: Number, required: true },
@@ -57,10 +58,21 @@ export class Devolucion {
             tpv: { type: Types.ObjectId, ref: 'TPV', required: true },
         }, { strict: true, timestamps: true }) as Schema<ISale>;
 
-        this.modelo = model<ISale>('Devolucion', DevolucionSchema);
+        const DevolucionSchema = new Schema({
+            productosDevueltos: { type: [ProductoVendidoSchema], required: true },
+            dineroDevuelto: { type: Number, required: true },
+            ventaId: { type: Types.ObjectId, ref: 'Venta', required: true },
+            ventaOriginal: { type: VentaSchema, required: true },
+            tpv: { type: Types.ObjectId, ref: 'TPV', required: true },
+            cliente: { type: ClienteSchema, required: true },
+            trabajador: { type: EmpleadoSchema, required: true },
+            modificadoPor: { type: EmpleadoSchema, required: true },
+        }, { strict: true, timestamps: true }) as Schema<IDevolucion>;
+
+        this.modelo = model<IDevolucion>('Devolucion', DevolucionSchema);
     }
 
-    public get Model(): Model<ISale> {
+    public get Model(): Model<IDevolucion> {
         return this.modelo;
     }
 }

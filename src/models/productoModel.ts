@@ -1,10 +1,8 @@
-import { truncate } from 'fs';
 import { Schema, model, Model } from 'mongoose';
-import { IDBState } from '../types/DBState';
 import { IProduct } from '../types/Producto';
 
 export class Producto {
-  private modelo: Model<IProduct & IDBState>;
+  private modelo: Model<IProduct>;
 
   constructor() {
     const Promocion = new Schema({ cantidadNecesaria: Number, dto: Number, precioFijo: Number });
@@ -22,14 +20,12 @@ export class Producto {
       img: { type: String, required: false },
       cantidad: { type: Number, required: false },
       cantidadRestock: { type: Number, required: false },
-      databaseState: { type: String, required: false }
+    }, { strict: true, timestamps: true }) as Schema<IProduct>;
 
-    }, { strict: true, timestamps: true }) as Schema<IProduct & IDBState>;
-
-    this.modelo = model<IProduct & IDBState>('Producto', ProductSchema);
+    this.modelo = model<IProduct>('Producto', ProductSchema);
   }
 
-  public get Model(): Model<IProduct & IDBState> {
+  public get Model(): Model<IProduct> {
     return this.modelo;
   }
 }

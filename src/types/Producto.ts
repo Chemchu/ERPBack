@@ -28,3 +28,15 @@ export interface ISoldProduct extends Document {
     proveedor: string
     ean: string
 }
+
+export interface ILostProduct extends Document {
+    nombre: string
+    proveedor: string
+    familia: string
+    precioVenta: number
+    precioCompra: number
+    iva: number
+    margen: number
+    ean: string
+    cantidadMerma: number
+}

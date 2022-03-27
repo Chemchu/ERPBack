@@ -19,7 +19,6 @@ class Producto {
             img: { type: String, required: false },
             cantidad: { type: Number, required: false },
             cantidadRestock: { type: Number, required: false },
-            databaseState: { type: String, required: false }
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('Producto', ProductSchema);
     }

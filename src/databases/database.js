@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = void 0;
 const mongoose = require("mongoose");
@@ -15,6 +18,10 @@ const CierreTPVDBController_1 = require("./CierreTPVDBController");
 const cierreTPVModel_1 = require("../models/cierreTPVModel");
 const tpvModel_1 = require("../models/tpvModel");
 const TPVDBController_1 = require("./TPVDBController");
+const DevolucionDBController_1 = require("./DevolucionDBController");
+const devolucionModel_1 = __importDefault(require("../models/devolucionModel"));
+const MermaDBController_1 = require("./MermaDBController");
+const mermaModel_1 = require("../models/mermaModel");
 mongoose.Promise = global.Promise;
 dotenv.config();
 const dbInformation = {
@@ -31,6 +38,8 @@ class Database {
         this.EmployeeDBController = new EmployeeDBController_1.EmployeeDBController(new employeeModel_1.Empleado().Model);
         this.CierreTPVDBController = new CierreTPVDBController_1.CierreTPVDBController(new cierreTPVModel_1.CierreTPV().Model);
         this.TPVDBController = new TPVDBController_1.TPVDBController(new tpvModel_1.TPV().Model);
+        this.DevolucionDBController = new DevolucionDBController_1.DevolucionDBController(new devolucionModel_1.default().Model);
+        this.MermaDBController = new MermaDBController_1.MermaDBController(new mermaModel_1.Merma().Model);
         this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("¡Conexión realizada con la base de datos!");
         }).catch((err) => {

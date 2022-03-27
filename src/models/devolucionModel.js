@@ -33,7 +33,7 @@ class Devolucion {
             horasPorSemana: { type: Number, requiered: false },
             rol: { type: String, requiered: true },
         }, { strict: true, timestamps: false });
-        const DevolucionSchema = new mongoose_1.Schema({
+        const VentaSchema = new mongoose_1.Schema({
             productos: { type: [ProductoVendidoSchema], required: true },
             dineroEntregadoEfectivo: { type: Number, required: true },
             dineroEntregadoTarjeta: { type: Number, required: true },
@@ -47,6 +47,16 @@ class Devolucion {
             descuentoEfectivo: { type: Number, required: true },
             descuentoPorcentaje: { type: Number, required: true },
             tpv: { type: mongoose_1.Types.ObjectId, ref: 'TPV', required: true },
+        }, { strict: true, timestamps: true });
+        const DevolucionSchema = new mongoose_1.Schema({
+            productosDevueltos: { type: [ProductoVendidoSchema], required: true },
+            dineroDevuelto: { type: Number, required: true },
+            ventaId: { type: mongoose_1.Types.ObjectId, ref: 'Venta', required: true },
+            ventaOriginal: { type: VentaSchema, required: true },
+            tpv: { type: mongoose_1.Types.ObjectId, ref: 'TPV', required: true },
+            cliente: { type: ClienteSchema, required: true },
+            trabajador: { type: EmpleadoSchema, required: true },
+            modificadoPor: { type: EmpleadoSchema, required: true },
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('Devolucion', DevolucionSchema);
     }

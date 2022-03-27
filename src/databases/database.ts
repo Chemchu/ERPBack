@@ -14,6 +14,10 @@ import { CierreTPV } from '../models/cierreTPVModel';
 import { TPV } from '../models/tpvModel';
 import { TPVDBController } from './TPVDBController';
 import { IClient } from '../types/Cliente';
+import { DevolucionDBController } from './DevolucionDBController';
+import Devolucion from '../models/devolucionModel';
+import { MermaDBController } from './MermaDBController';
+import { Merma } from '../models/mermaModel';
 
 mongoose.Promise = global.Promise;
 
@@ -34,6 +38,8 @@ export class Database {
 	public EmployeeDBController: EmployeeDBController;
 	public TPVDBController: TPVDBController;
 	public CierreTPVDBController: CierreTPVDBController;
+	public DevolucionDBController: DevolucionDBController;
+	public MermaDBController: MermaDBController;
 
 	private constructor() {
 		this.db = dbInformation.mongo;
@@ -44,6 +50,8 @@ export class Database {
 		this.EmployeeDBController = new EmployeeDBController(new Empleado().Model);
 		this.CierreTPVDBController = new CierreTPVDBController(new CierreTPV().Model);
 		this.TPVDBController = new TPVDBController(new TPV().Model);
+		this.DevolucionDBController = new DevolucionDBController(new Devolucion().Model);
+		this.MermaDBController = new MermaDBController(new Merma().Model);
 
 		this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
 			console.log("¡Conexión realizada con la base de datos!");
