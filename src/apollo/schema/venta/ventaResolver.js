@@ -119,6 +119,7 @@ const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void
             productos: args.fields.productos,
             dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
             dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
+            precioVentaTotalSinDto: args.fields.precioVentaTotalSinDto,
             precioVentaTotal: args.fields.precioVentaTotal,
             cambio: args.fields.cambio,
             cliente: args.fields.cliente,

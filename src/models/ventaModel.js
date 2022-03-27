@@ -37,6 +37,7 @@ class Venta {
             productos: { type: [ProductoVendidoSchema], required: true },
             dineroEntregadoEfectivo: { type: Number, required: true },
             dineroEntregadoTarjeta: { type: Number, required: true },
+            precioVentaTotalSinDto: { type: Number, required: true },
             precioVentaTotal: { type: Number, required: true },
             cambio: { type: Number, required: true },
             cliente: { type: ClienteSchema, required: true },

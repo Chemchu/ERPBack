@@ -134,6 +134,7 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
             productos: args.fields.productos,
             dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
             dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
+            precioVentaTotalSinDto: args.fields.precioVentaTotalSinDto,
             precioVentaTotal: args.fields.precioVentaTotal,
             cambio: args.fields.cambio,
             cliente: args.fields.cliente,

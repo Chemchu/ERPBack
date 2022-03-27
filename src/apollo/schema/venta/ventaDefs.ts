@@ -8,6 +8,7 @@ const VentaDefs = gql`
         productos: [ProductoVendido]
         dineroEntregadoEfectivo: Float
         dineroEntregadoTarjeta: Float
+        precioVentaTotalSinDto: Float
         precioVentaTotal: Float
         cambio: Float
         cliente: Cliente
@@ -94,6 +95,7 @@ const VentaDefs = gql`
         productos: [ProductoVendidoInput]!
         dineroEntregadoEfectivo: Float!
         dineroEntregadoTarjeta: Float!
+        precioVentaTotalSinDto: Float!
         precioVentaTotal: Float!
         cambio: Float!
         cliente: ClienteInput!

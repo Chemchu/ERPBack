@@ -9,6 +9,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         productos: [ProductoVendido]
         dineroEntregadoEfectivo: Float
         dineroEntregadoTarjeta: Float
+        precioVentaTotalSinDto: Float
         precioVentaTotal: Float
         cambio: Float
         cliente: Cliente
@@ -95,6 +96,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         productos: [ProductoVendidoInput]!
         dineroEntregadoEfectivo: Float!
         dineroEntregadoTarjeta: Float!
+        precioVentaTotalSinDto: Float!
         precioVentaTotal: Float!
         cambio: Float!
         cliente: ClienteInput!

@@ -8,6 +8,7 @@ export interface ISale extends Document {
     productos: ISoldProduct[],
     dineroEntregadoEfectivo: number,
     dineroEntregadoTarjeta: number,
+    precioVentaTotalSinDto: number,
     precioVentaTotal: number,
     cambio: number,
     cliente: IClient,
