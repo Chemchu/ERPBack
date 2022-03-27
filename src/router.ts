@@ -1,8 +1,3 @@
-import prodRouter from './routes/productRoutes.js';
-import clientRouter from './routes/clientRoutes.js';
-import employeeRouter from './routes/employeeRoutes.js';
-import sessionRouter from './routes/sessionRoutes.js';
-import saleRouter from './routes/saleRoutes.js';
 import { Database } from './databases/database.js';
 import express, { Request, Response } from 'express';
 import passport from 'passport';
@@ -67,12 +62,6 @@ export class Router {
                 })(req, res, next)
             }
         );
-
-        this.app.use('/api/productos/', prodRouter);
-        this.app.use('/api/clientes/', clientRouter);
-        this.app.use('/api/ventas/', saleRouter);
-        this.app.use('/api/empleados/', employeeRouter);
-        this.app.use('/api/session/', sessionRouter);
 
         passport.initialize();
     }
