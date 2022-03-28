@@ -31,6 +31,7 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const cierres = yield db.CierreTPVDBController.CollectionModel.find({})
             .limit(args.limit)
+            .sort({ 'updatedAt': "-1" })
             .exec();
         return cierres;
     }
@@ -38,6 +39,7 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
         const fecha = new Date(args.find.fecha);
         const cierres = yield db.CierreTPVDBController.CollectionModel.find({ apertura: fecha })
             .limit(args.limit || 3000)
+            .sort({ 'updatedAt': "-1" })
             .exec();
         return cierres;
     }
