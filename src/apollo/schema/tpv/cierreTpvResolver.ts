@@ -28,10 +28,9 @@ export const cierreTpvsResolver = async (parent: any, args: any, context: any, i
     const db = Database.Instance();
 
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-
         const cierres = await db.CierreTPVDBController.CollectionModel.find({})
-            .limit(args.limit)
-            .sort({ 'updatedAt': "-1" })
+            .sort({ apertura: -1 })
+            .limit(args.limit || 3000)
             .exec();
 
         return cierres;
@@ -40,8 +39,8 @@ export const cierreTpvsResolver = async (parent: any, args: any, context: any, i
     if (args.find) {
         const fecha = new Date(args.find.fecha);
         const cierres = await db.CierreTPVDBController.CollectionModel.find({ apertura: fecha })
+            .sort({ apertura: -1 })
             .limit(args.limit || 3000)
-            .sort({ 'updatedAt': "-1" })
             .exec();
 
         return cierres;
