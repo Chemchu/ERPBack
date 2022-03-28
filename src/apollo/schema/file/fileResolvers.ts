@@ -20,9 +20,10 @@ export const uploadProductoFileResolver = async (root: any, args: { csv: string 
 
             const prodName = auxProductList[i].nombre;
             const prodEAN = auxProductList[i].ean;
-            const prodRepetidoEnCSV = prodList.some(p => p.nombre === auxProductList[i].nombre || p.ean === auxProductList[i].ean);
 
+            const prodRepetidoEnCSV = prodList.some(p => p.nombre === auxProductList[i].nombre || p.ean === auxProductList[i].ean);
             const yaExisteProducto = await db.ProductDBController.CollectionModel.exists({ nombre: prodName });
+
             if (yaExisteProducto || prodRepetidoEnCSV) { continue; }
 
             const yaExisteEAN = await db.ProductDBController.CollectionModel.exists({ ean: prodEAN });
