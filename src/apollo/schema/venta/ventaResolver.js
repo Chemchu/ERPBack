@@ -131,8 +131,18 @@ const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void
             tpv: args.fields.tpv
         });
         const res = yield saleToAdd.save();
+        let isUpdatingCorrectly = true;
+        args.fields.productos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
+            const err = yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": -p.cantidadVendida } });
+            if ((err === null || err === void 0 ? void 0 : err.errors) && isUpdatingCorrectly) {
+                isUpdatingCorrectly = false;
+            }
+        }));
         if (res.errors) {
             return { message: "No se ha podido añadir la venta a la base de datos", successful: false };
+        }
+        if (!isUpdatingCorrectly) {
+            return { message: "Venta añadida pero las cantidades no han sido actualizadas correctamente", successful: true };
         }
         return { message: "Venta añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt };
     }

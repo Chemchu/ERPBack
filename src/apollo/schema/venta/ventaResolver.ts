@@ -3,6 +3,7 @@ import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database"
 import { VentaFind, VentasFind } from "../../../types/types";
 import { ISale } from "../../../types/Venta";
+import { ISoldProduct } from '../../../types/Producto';
 
 export const ventaResolver = async (parent: any, args: VentaFind, context: any, info: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
@@ -146,10 +147,26 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
             tpv: args.fields.tpv
         } as ISale);
 
-        const res: any = await saleToAdd.save(); // ---> Solución temporal
+        // Añadir nueva venta
+        const res: any = await saleToAdd.save(); // ---> Uso de any como solución temporal
 
+        let isUpdatingCorrectly = true;
+        // Actualizar la cantidad de productos
+        args.fields.productos.forEach(async (p: ISoldProduct) => {
+            const err = await db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": -p.cantidadVendida } });
+            if (err?.errors && isUpdatingCorrectly) {
+                isUpdatingCorrectly = false;
+            }
+        });
+
+        // Comprueba si se ha añadido correctamente la venta a la base de datos
         if (res.errors) {
             return { message: "No se ha podido añadir la venta a la base de datos", successful: false }
+        }
+
+        // Comprueba si se han actualizado correctamente las cantidades de los productos
+        if (!isUpdatingCorrectly) {
+            return { message: "Venta añadida pero las cantidades no han sido actualizadas correctamente", successful: true }
         }
 
         return { message: "Venta añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt }
