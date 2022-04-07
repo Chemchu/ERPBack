@@ -39,6 +39,40 @@ const productoDefs = (0, apollo_server_express_1.gql) `
         nombre: String
         familia: String
         proveedor: String
+        query: String
+    }
+
+    input ProductoAddInput {
+        nombre: String!
+        proveedor: String
+        familia: String
+        precioVenta: Float!
+        precioCompra: Float!
+        iva: Float!
+        margen: Float!
+        promociones: [String]
+        ean: String!
+        cantidad: Int
+        cantidadRestock: Int
+        alta: Boolean!
+        img: String
+    }
+
+    input ProductoUpdateInput {
+        _id: ID!
+        nombre: String
+        proveedor: String
+        familia: String
+        precioVenta: Float
+        precioCompra: Float
+        iva: Float
+        margen: Float
+        promociones: [String]
+        ean: String
+        cantidad: Int
+        cantidadRestock: Int
+        alta: Boolean
+        img: String
     }
 
 
@@ -52,13 +86,11 @@ const productoDefs = (0, apollo_server_express_1.gql) `
     ##### Mutation #####
     
     type Mutation {
-        addProducto(nombre: String!, proveedor: String, familia: String, precioVenta: Float!, precioCompra: Float, iva: Float
-            margen: Float, promociones: [String], ean: String!, cantidad: Int, cantidadRestock: Int, alta: Boolean, img: String): ProductoMutationResponse!
+        addProducto(producto: ProductoAddInput!): ProductoMutationResponse!
         
         deleteProducto(_id: ID!): ProductoMutationResponse!
         
-        updateProducto(_id: ID!, nombre: String, proveedor: String, familia: String, precioVenta: Float, precioCompra: Float, iva: Float
-            margen: Float, promociones: [String], ean: String, cantidad: Int, cantidadRestock: Int, alta: Boolean, img: String): ProductoMutationResponse!
+        updateProducto(producto: ProductoUpdateInput!): ProductoMutationResponse!
     }
 `;
 exports.default = productoDefs;

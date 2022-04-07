@@ -12,6 +12,7 @@ export interface ProductosFind {
         nombre?: string
         familia?: string
         proveedor?: string
+        query?: string
     }
     limit?: number
 }
@@ -115,4 +116,37 @@ export interface CierreTPVInput {
     dineroRetirado: number!,
     fondoDeCaja: number!,
     nota: string,
+}
+
+export interface ProductoAddInput {
+    nombre: string!
+    proveedor: string
+    familia: string
+    precioVenta: number!
+    precioCompra: number!
+    iva: number!
+    margen: number!
+    promociones: [string]
+    ean: string!
+    cantidad: number
+    cantidadRestock: number
+    alta: Boolean!
+    img: string
+}
+
+export interface ProductoUpdateInput {
+    _id: ID!
+    nombre: string
+    proveedor: string
+    familia: string
+    precioVenta: number
+    precioCompra: number
+    iva: number
+    margen: number
+    promociones: [string]
+    ean: string
+    cantidad: number
+    cantidadRestock: number
+    alta: boolean
+    img: string
 }
