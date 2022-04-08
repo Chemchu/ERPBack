@@ -56,7 +56,7 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
     const secret = process.env.JWT_SECRET;
     if (!secret) {
         return {
-            message: "Clave privada JWT no encontrada",
+            message: "Error en servidor: clave privada JWT no encontrada",
             successful: false,
             token: ""
         }
@@ -64,12 +64,18 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
 
     const db = Database.Instance();
 
+    const payload = { _id: args.cierre.abiertoPor._id, nombre: args.cierre.abiertoPor.nombre, apellidos: args.cierre.abiertoPor.apellidos, email: args.cierre.abiertoPor.email, rol: args.cierre.abiertoPor.rol };
+    const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
+    const token = jwt.sign(payload, secret, {
+        expiresIn: 3600 * Number(jwtHoursDuration)
+    });
+
     const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.cierre.tpv, libre: false }).exec();
     if (!tpv) {
         return {
             message: "Este empleado no está usando esta TPV en este momento",
             successful: false,
-            token: ""
+            token: `Bearer ${token}`
         }
     }
 
@@ -106,29 +112,17 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
         return {
             message: "No se ha podido añadir el cierre de caja",
             successful: false,
-            token: ""
+            token: token
         }
     }
 
-    //Login JWT payload
-    let payload;
-    payload = { _id: args.cierre.abiertoPor._id, nombre: args.cierre.abiertoPor.nombre, apellidos: args.cierre.abiertoPor.apellidos, email: args.cierre.abiertoPor.email, rol: args.cierre.abiertoPor.rol };
-    const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
+    const tpvUpdated = await db.TPVDBController.CollectionModel.updateOne({ _id: tpv._id }, { libre: true });
 
-    // Create Token Expires in 1 hour
-    const token = await jwt.sign(payload, secret, {
-        expiresIn: 3600 * Number(jwtHoursDuration)
-    });
-
-    const tpvUpdated = await db.TPVDBController.CollectionModel.updateOne({ _id: tpv._id }, {
-        libre: true
-    })
-
-    if (!tpvUpdated.acknowledged) {
+    if (tpvUpdated.modifiedCount <= 0) {
         return {
             message: "No se ha podido liberar la TPV",
             successful: false,
-            token: ""
+            token: `Bearer ${token}`
         }
     }
 

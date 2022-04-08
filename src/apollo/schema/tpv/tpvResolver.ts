@@ -121,6 +121,8 @@ export const updateTpvResolver = async (root: any, args: any, context: any) => {
 
     const db = Database.Instance();
 
+    // No se puede actualizar si la tpv está ocupada
+
 }
 
 export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, idTPV: string, cajaInicial: number }, context: any) => {
@@ -138,6 +140,7 @@ export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, id
 
         const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV }).exec();
         if (!tpv) throw new UserInputError('TPV no encontrada');
+        if (!tpv.libre) throw new UserInputError('TPV actualmente ocupada por otro empleado');
 
         const empleadoClean = {
             _id: empleado._id,
@@ -164,8 +167,14 @@ export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, id
 
         // Finally return user token
         return {
-            token: `Bearer ${token}`
+            token: `Bearer ${token}`,
+            successful: true
         };
+    }
+
+    return {
+        token: `Bearer`,
+        successful: false
     }
 }
 
@@ -184,6 +193,7 @@ export const freeTpvResolver = async (root: any, args: { idEmpleado: string, idT
 
         const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV }).exec();
         if (!tpv) throw new UserInputError('TPV no encontrada');
+        if (tpv.libre) throw new UserInputError('TPV actualmente ocupada por otro empleado');
 
         const empleadoClean = {
             _id: empleado._id,
@@ -209,8 +219,14 @@ export const freeTpvResolver = async (root: any, args: { idEmpleado: string, idT
 
         // Finally return user token
         return {
-            token: `Bearer ${token}`
+            token: `Bearer ${token} `,
+            successful: true
         };
     }
+
+    return {
+        token: `Bearer`,
+        successful: false
+    };
 }
 

@@ -32,6 +32,7 @@ const tpvDefs = gql`
 
     type TPVMutationJwtResponse {
         token: String!
+        successful: Boolean
     }
 
     input TPVFind {

@@ -50,18 +50,23 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
     const secret = process.env.JWT_SECRET;
     if (!secret) {
         return {
-            message: "Clave privada JWT no encontrada",
+            message: "Error en servidor: clave privada JWT no encontrada",
             successful: false,
             token: ""
         };
     }
     const db = database_1.Database.Instance();
+    const payload = { _id: args.cierre.abiertoPor._id, nombre: args.cierre.abiertoPor.nombre, apellidos: args.cierre.abiertoPor.apellidos, email: args.cierre.abiertoPor.email, rol: args.cierre.abiertoPor.rol };
+    const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
+    const token = jsonwebtoken_1.default.sign(payload, secret, {
+        expiresIn: 3600 * Number(jwtHoursDuration)
+    });
     const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.cierre.tpv, libre: false }).exec();
     if (!tpv) {
         return {
             message: "Este empleado no está usando esta TPV en este momento",
             successful: false,
-            token: ""
+            token: `Bearer ${token}`
         };
     }
     const fechaApertura = new Date().setTime(Number(args.cierre.apertura));
@@ -93,23 +98,15 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
         return {
             message: "No se ha podido añadir el cierre de caja",
             successful: false,
-            token: ""
+            token: token
         };
     }
-    let payload;
-    payload = { _id: args.cierre.abiertoPor._id, nombre: args.cierre.abiertoPor.nombre, apellidos: args.cierre.abiertoPor.apellidos, email: args.cierre.abiertoPor.email, rol: args.cierre.abiertoPor.rol };
-    const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
-    const token = yield jsonwebtoken_1.default.sign(payload, secret, {
-        expiresIn: 3600 * Number(jwtHoursDuration)
-    });
-    const tpvUpdated = yield db.TPVDBController.CollectionModel.updateOne({ _id: tpv._id }, {
-        libre: true
-    });
-    if (!tpvUpdated.acknowledged) {
+    const tpvUpdated = yield db.TPVDBController.CollectionModel.updateOne({ _id: tpv._id }, { libre: true });
+    if (tpvUpdated.modifiedCount <= 0) {
         return {
             message: "No se ha podido liberar la TPV",
             successful: false,
-            token: ""
+            token: `Bearer ${token}`
         };
     }
     return {
