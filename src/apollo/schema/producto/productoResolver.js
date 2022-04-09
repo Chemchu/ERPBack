@@ -99,6 +99,33 @@ const productosResolver = (parent, args, context, info) => __awaiter(void 0, voi
 exports.productosResolver = productosResolver;
 const addProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
+    const existeEan = yield db.ProductDBController.CollectionModel.find({ ean: args.producto.ean });
+    if (existeEan.length > 0) {
+        return { message: "EAN en uso", successful: false };
+    }
+    const existeNombre = yield db.ProductDBController.CollectionModel.find({ nombre: args.producto.nombre });
+    if (existeNombre.length > 0) {
+        return { message: "Nombre en uso", successful: false };
+    }
+    const updatedProduct = new db.ProductDBController.CollectionModel({
+        nombre: args.producto.nombre,
+        proveedor: args.producto.proveedor,
+        familia: args.producto.familia,
+        precioVenta: args.producto.precioVenta,
+        precioCompra: args.producto.precioCompra,
+        iva: args.producto.iva,
+        margen: args.producto.margen,
+        promociones: args.producto.promociones,
+        ean: args.producto.ean,
+        cantidad: args.producto.cantidad,
+        cantidadRestock: args.producto.cantidadRestock,
+        alta: args.producto.alta,
+    });
+    const resultado = yield updatedProduct.save();
+    if (resultado.id) {
+        return { message: "Producto añadido correctamente", successful: true };
+    }
+    return { message: "No se ha podido añadir el producto", successful: false };
 });
 exports.addProductoResolver = addProductoResolver;
 const deleteProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {

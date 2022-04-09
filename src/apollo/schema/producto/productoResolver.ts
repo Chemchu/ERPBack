@@ -110,12 +110,45 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
     return [];
 }
 
-export const addProductoResolver = async (root: any, args: ProductoAddInput, context: any) => {
+// TODO
+export const addProductoResolver = async (root: any, args: { producto: ProductoAddInput }, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
     const db = Database.Instance();
 
+    const existeEan = await db.ProductDBController.CollectionModel.find({ ean: args.producto.ean });
+    if (existeEan.length > 0) {
+        return { message: "EAN en uso", successful: false }
+    }
+
+    const existeNombre = await db.ProductDBController.CollectionModel.find({ nombre: args.producto.nombre });
+    if (existeNombre.length > 0) {
+        return { message: "Nombre en uso", successful: false }
+    }
+
+    const updatedProduct: mongoose.Document<IProduct> = new db.ProductDBController.CollectionModel({
+        nombre: args.producto.nombre,
+        proveedor: args.producto.proveedor,
+        familia: args.producto.familia,
+        precioVenta: args.producto.precioVenta,
+        precioCompra: args.producto.precioCompra,
+        iva: args.producto.iva,
+        margen: args.producto.margen,
+        promociones: args.producto.promociones,
+        ean: args.producto.ean,
+        cantidad: args.producto.cantidad,
+        cantidadRestock: args.producto.cantidadRestock,
+        alta: args.producto.alta,
+    } as unknown as IProduct);
+
+    const resultado = await updatedProduct.save();
+
+    if (resultado.id) {
+        return { message: "Producto añadido correctamente", successful: true }
+    }
+
+    return { message: "No se ha podido añadir el producto", successful: false }
 }
 
 export const deleteProductoResolver = async (root: any, args: any, context: any) => {
