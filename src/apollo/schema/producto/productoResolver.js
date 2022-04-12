@@ -130,9 +130,22 @@ const addProductoResolver = (root, args, context) => __awaiter(void 0, void 0, v
 exports.addProductoResolver = addProductoResolver;
 const deleteProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
+    const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args._id);
+    if (!isQueryValidId) {
+        return { message: "ID de producto inválido", successful: false };
+    }
+    const deletedProd = yield db.ProductDBController.CollectionModel.deleteOne({ _id: args._id });
+    if (deletedProd.deletedCount > 0) {
+        return { message: "Producto eliminado correctamente", successful: true };
+    }
+    return { message: "No se ha podido eliminar el producto", successful: false };
 });
 exports.deleteProductoResolver = deleteProductoResolver;
 const updateProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args.producto._id);
+    if (!isQueryValidId) {
+        return { message: "ID de producto inválido", successful: false };
+    }
     const db = database_1.Database.Instance();
     const updatedProduct = {
         nombre: args.producto.nombre,

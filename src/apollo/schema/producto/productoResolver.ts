@@ -151,16 +151,34 @@ export const addProductoResolver = async (root: any, args: { producto: ProductoA
     return { message: "No se ha podido añadir el producto", successful: false }
 }
 
-export const deleteProductoResolver = async (root: any, args: any, context: any) => {
+export const deleteProductoResolver = async (root: any, args: { _id: string }, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
     const db = Database.Instance();
+
+    const isQueryValidId = mongoose.Types.ObjectId.isValid(args._id);
+    if (!isQueryValidId) {
+        return { message: "ID de producto inválido", successful: false }
+    }
+
+    const deletedProd = await db.ProductDBController.CollectionModel.deleteOne({ _id: args._id });
+
+    if (deletedProd.deletedCount > 0) {
+        return { message: "Producto eliminado correctamente", successful: true }
+    }
+
+    return { message: "No se ha podido eliminar el producto", successful: false }
 }
 
 export const updateProductoResolver = async (root: any, args: { producto: ProductoUpdateInput }, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    const isQueryValidId = mongoose.Types.ObjectId.isValid(args.producto._id);
+    if (!isQueryValidId) {
+        return { message: "ID de producto inválido", successful: false }
+    }
 
     const db = Database.Instance();
     const updatedProduct = {
