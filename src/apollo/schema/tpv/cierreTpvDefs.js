@@ -59,6 +59,7 @@ const cierreTpvDefs = (0, apollo_server_express_1.gql) `
         message: String!
         successful: Boolean!
         token: String
+        cierre: CierreTPV
     }
 
     input CierreTPVFind {

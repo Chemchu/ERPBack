@@ -58,6 +58,7 @@ const cierreTpvDefs = gql`
         message: String!
         successful: Boolean!
         token: String
+        cierre: CierreTPV
     }
 
     input CierreTPVFind {

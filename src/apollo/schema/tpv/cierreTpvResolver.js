@@ -98,7 +98,8 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
         return {
             message: "No se ha podido añadir el cierre de caja",
             successful: false,
-            token: token
+            token: token,
+            cierre: null
         };
     }
     const tpvUpdated = yield db.TPVDBController.CollectionModel.updateOne({ _id: tpv._id }, { libre: true });
@@ -106,13 +107,15 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
         return {
             message: "No se ha podido liberar la TPV",
             successful: false,
-            token: `Bearer ${token}`
+            token: `Bearer ${token}`,
+            cierre: res
         };
     }
     return {
         message: "Cierre añadido correctamenete",
         successful: true,
-        token: `Bearer ${token}`
+        token: `Bearer ${token}`,
+        cierre: res
     };
 });
 exports.addCierreTpvResolver = addCierreTpvResolver;
