@@ -1,4 +1,4 @@
-export const ProcessCSV = (str: string, delim = ',') => {
+export const ProcessCSV = (str: string, delim = ','): any[] => {
     let headers = str.slice(0, str.indexOf('\n')).split(delim);
     headers[headers.length - 1] = headers[headers.length - 1].replace(/(\r\n|\n|\r)/gm, "");
 
