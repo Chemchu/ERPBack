@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadProductoFileResolver = void 0;
+exports.uploadVentasFileResolver = exports.uploadClientesFileResolver = exports.uploadProductoFileResolver = void 0;
 const database_1 = require("../../../databases/database");
 const processCSV_1 = require("../../../lib/processCSV");
 const productCreator_1 = require("../../../lib/productCreator");
@@ -45,6 +45,30 @@ const uploadProductoFileResolver = (root, args, context) => __awaiter(void 0, vo
     }
 });
 exports.uploadProductoFileResolver = uploadProductoFileResolver;
+const uploadClientesFileResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const db = database_1.Database.Instance();
+        const pArray = (0, processCSV_1.ProcessCSV)(JSON.parse(args.csv));
+        return { message: `Los clientes han sido añadidos en la base de datos`, successful: true };
+    }
+    catch (err) {
+        console.log(err);
+        return { message: `Error al añadir los clientes en la base de datos`, successful: false };
+    }
+});
+exports.uploadClientesFileResolver = uploadClientesFileResolver;
+const uploadVentasFileResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const db = database_1.Database.Instance();
+        const pArray = (0, processCSV_1.ProcessCSV)(JSON.parse(args.csv));
+        return { message: `Las ventas han sido añadidas en la base de datos`, successful: true };
+    }
+    catch (err) {
+        console.log(err);
+        return { message: `Error al añadir las ventas en la base de datos`, successful: false };
+    }
+});
+exports.uploadVentasFileResolver = uploadVentasFileResolver;
 const IsProductValid = (producto) => {
     if (!producto.nombre || producto.nombre === null || producto.nombre === undefined) {
         return false;
