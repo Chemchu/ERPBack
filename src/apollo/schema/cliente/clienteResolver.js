@@ -88,6 +88,21 @@ const clientesResolver = (parent, args, context, info) => __awaiter(void 0, void
 exports.clientesResolver = clientesResolver;
 const addClienteResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
+    const CifEnUso = yield db.ClientDBController.CollectionModel.find({ nif: args.nif });
+    if (CifEnUso.length > 0) {
+        return { message: "El CIF ya está en uso", successful: false };
+    }
+    const newClient = new db.ClientDBController.CollectionModel({
+        nombre: args.nombre,
+        calle: args.calle,
+        cp: args.cp,
+        nif: args.nif
+    });
+    const resultado = yield newClient.save();
+    if (resultado.id) {
+        return { message: "Cliente creado correctamente", successful: true };
+    }
+    return { message: "No se ha podido crear el cliente", successful: false };
 });
 exports.addClienteResolver = addClienteResolver;
 const deleteClienteResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {

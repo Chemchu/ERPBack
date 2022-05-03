@@ -1,6 +1,7 @@
 import { UserInputError } from "apollo-server-express";
 import mongoose from "mongoose";
 import { Database } from "../../../databases/database"
+import { IClient } from "../../../types/Cliente";
 import { ClienteFind, ClientesFind } from "../../../types/types";
 
 export const clienteResolver = async (parent: any, args: ClienteFind, context: any, info: any) => {
@@ -95,6 +96,26 @@ export const addClienteResolver = async (root: any, args: any, context: any) => 
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
     const db = Database.Instance();
+
+    const CifEnUso = await db.ClientDBController.CollectionModel.find({ nif: args.nif });
+    if (CifEnUso.length > 0) {
+        return { message: "El CIF ya está en uso", successful: false }
+    }
+
+    const newClient: mongoose.Document<IClient> = new db.ClientDBController.CollectionModel({
+        nombre: args.nombre,
+        calle: args.calle,
+        cp: args.cp,
+        nif: args.nif
+    } as IClient);
+
+    const resultado = await newClient.save();
+
+    if (resultado.id) {
+        return { message: "Cliente creado correctamente", successful: true }
+    }
+
+    return { message: "No se ha podido crear el cliente", successful: false }
 
 }
 
