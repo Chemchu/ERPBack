@@ -1,4 +1,5 @@
 import { UserInputError } from "apollo-server-express";
+import mongoose from "mongoose";
 import { Database } from "../../../databases/database"
 import { ClienteFind, ClientesFind } from "../../../types/types";
 
@@ -58,6 +59,32 @@ export const clientesResolver = async (parent: any, args: ClientesFind, context:
             .exec();
 
         if (clientes) return clientes;
+    }
+
+    if (args.find?.query) {
+        const query = args.find.query;
+        const isQueryValidId = mongoose.Types.ObjectId.isValid(query);
+
+        let clientes = {};
+        if (isQueryValidId) {
+            clientes = await db.ClientDBController.CollectionModel.find({ _id: query })
+                .limit(args.limit || 150)
+                .exec();
+        }
+        else {
+            clientes = await db.ClientDBController.CollectionModel.find({
+                $or: [
+                    { nombre: { "$regex": query, "$options": "i" } },
+                    { calle: { "$regex": query, "$options": "i" } },
+                    { cp: { "$regex": query, "$options": "i" } },
+                    { nif: { "$regex": query, "$options": "i" } }
+                ]
+            })
+                .limit(args.limit || 150)
+                .exec();
+        }
+
+        return clientes;
     }
 
     return [];

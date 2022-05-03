@@ -24,6 +24,7 @@ const ClienteDefs = gql`
     input ClientesFind {
         _ids: [ID!]
         nombre: String
+        query: String
     }
 
     ##### Query #####

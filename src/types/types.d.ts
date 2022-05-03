@@ -66,6 +66,7 @@ export interface ClientesFind {
     find?: {
         _ids?: string[]
         nombre?: string
+        query?: string
     }
     limit?: number
 }
