@@ -9,7 +9,7 @@ const fileDefs = gql`
   type Mutation {
     addProductosFile(csv: String!): ResponseMutation!
     addClientesFile(csv: String!): ResponseMutation!
-    addVentasFile(csv: String!): ResponseMutation!
+    addVentasFile(ventasJson: String!): ResponseMutation!
   }
 `;
 

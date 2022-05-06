@@ -1,8 +1,11 @@
 import { Database } from "../../../databases/database";
 import { ProcessCSV } from "../../../lib/processCSV";
 import { CreateProductList } from "../../../lib/productCreator";
+import { CreateSaleList } from "../../../lib/salesCreator";
 import { IClient } from "../../../types/Cliente";
+import { IEmployee } from "../../../types/Empleado";
 import { IProduct } from "../../../types/Producto";
+import { ITPV } from "../../../types/TPV";
 import { ISale } from "../../../types/Venta";
 
 export const uploadProductoFileResolver = async (root: any, args: { csv: string }, context: any) => {
@@ -87,37 +90,42 @@ export const uploadClientesFileResolver = async (root: any, args: { csv: string 
 
 }
 
-export const uploadVentasFileResolver = async (root: any, args: { csv: string }, context: any) => {
+export const uploadVentasFileResolver = async (root: any, args: { ventasJson: string }, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
     try {
         const db = Database.Instance();
-        // El producto en JSON de la peticións
-        const pArray = ProcessCSV(JSON.parse(args.csv));
+        const ventasJson = JSON.parse(JSON.parse(args.ventasJson));
+        let tpv = await db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": ventasJson[0].tpv, "$options": "i" } })
 
-        // const auxSaleList: ISale[] = CreateProductList(pArray);
-        // let prodList: ISale[] = [];
+        if (!tpv) {
+            tpv = new db.TPVDBController.CollectionModel({
+                nombre: `TPV${ventasJson[0].tpv}`,
+                libre: true,
+                cajaInicial: 0,
+                enUsoPor: {
+                    nombre: "",
+                    apellidos: "",
+                    dni: "",
+                    rol: "",
+                    email: "",
+                } as IEmployee
+            } as ITPV);
 
-        // for (var i = 0; i < auxSaleList.length; i++) {
-        //     if (!IsProductValid(auxSaleList[i])) { continue; }
+            if (!tpv) { return { message: `Error al añadir las ventas. Ninguna TPV asociada a dichas ventas`, successful: false } }
+        }
 
-        //     const prodName = auxSaleList[i].nombre;
-        //     const prodEAN = auxSaleList[i].ean;
+        let ventas: ISale[] = []
 
-        //     const prodRepetidoEnCSV = prodList.some(p => p.nombre === auxSaleList[i].nombre || p.ean === auxSaleList[i].ean);
-        //     const yaExisteProducto = await db.ProductDBController.CollectionModel.exists({ nombre: prodName });
+        for (let i = 0; i < ventasJson.length; i++) {
+            let v = ventasJson[i];
+            v.tpv = tpv._id;
 
-        //     if (yaExisteProducto || prodRepetidoEnCSV) { continue; }
+            ventas.push(v);
+        }
 
-        //     const yaExisteEAN = await db.ProductDBController.CollectionModel.exists({ ean: prodEAN });
-        //     if (yaExisteEAN) { continue; }
-
-        //     prodList.push(auxSaleList[i]);
-        // }
-
-        // // Solo se añaden productos no existentes
-        // await db.ProductDBController.CollectionModel.insertMany(prodList);
+        await db.VentasDBController.CollectionModel.insertMany(ventas);
 
         return { message: `Las ventas han sido añadidas en la base de datos`, successful: true };
     }

@@ -29,7 +29,7 @@ async function startApolloServer() {
   server.applyMiddleware({
     app: apiRouter.App,
     bodyParserConfig: {
-      limit: '10mb',
+      limit: '100mb'
     }
   });
 

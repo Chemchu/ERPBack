@@ -10,7 +10,7 @@ const fileDefs = (0, apollo_server_express_1.gql) `
   type Mutation {
     addProductosFile(csv: String!): ResponseMutation!
     addClientesFile(csv: String!): ResponseMutation!
-    addVentasFile(csv: String!): ResponseMutation!
+    addVentasFile(ventasJson: String!): ResponseMutation!
   }
 `;
 exports.default = fileDefs;

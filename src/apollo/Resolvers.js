@@ -35,6 +35,7 @@ const Resolvers = {
         deleteCliente: clienteResolver_1.deleteClienteResolver,
         updateCliente: clienteResolver_1.updateClienteResolver,
         addVenta: ventaResolver_1.addVentaResolver,
+        addVentasFile: fileResolvers_1.uploadVentasFileResolver,
         deleteVenta: ventaResolver_1.deleteVentaResolver,
         updateVenta: ventaResolver_1.updateVentaResolver,
         addEmpleado: empleadoResolver_1.addEmpleadoResolver,

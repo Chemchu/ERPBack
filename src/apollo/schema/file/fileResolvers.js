@@ -60,7 +60,32 @@ exports.uploadClientesFileResolver = uploadClientesFileResolver;
 const uploadVentasFileResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = database_1.Database.Instance();
-        const pArray = (0, processCSV_1.ProcessCSV)(JSON.parse(args.csv));
+        const ventasJson = JSON.parse(JSON.parse(args.ventasJson));
+        let tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": ventasJson[0].tpv, "$options": "i" } });
+        if (!tpv) {
+            tpv = new db.TPVDBController.CollectionModel({
+                nombre: `TPV${ventasJson[0].tpv}`,
+                libre: true,
+                cajaInicial: 0,
+                enUsoPor: {
+                    nombre: "",
+                    apellidos: "",
+                    dni: "",
+                    rol: "",
+                    email: "",
+                }
+            });
+            if (!tpv) {
+                return { message: `Error al añadir las ventas. Ninguna TPV asociada a dichas ventas`, successful: false };
+            }
+        }
+        let ventas = [];
+        for (let i = 0; i < ventasJson.length; i++) {
+            let v = ventasJson[i];
+            v.tpv = tpv._id;
+            ventas.push(v);
+        }
+        yield db.VentasDBController.CollectionModel.insertMany(ventas);
         return { message: `Las ventas han sido añadidas en la base de datos`, successful: true };
     }
     catch (err) {
