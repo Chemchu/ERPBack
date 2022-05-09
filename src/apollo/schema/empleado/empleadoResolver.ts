@@ -1,4 +1,5 @@
 import { UserInputError } from "apollo-server-express";
+import mongoose from "mongoose";
 import { Database } from "../../../databases/database"
 import { EmpleadoFind, EmpleadosFind } from "../../../types/types";
 
@@ -86,6 +87,32 @@ export const empleadosResolver = async (parent: any, args: EmpleadosFind, contex
             })
             return empleados;
         }
+    }
+
+    if (args.find?.query) {
+        const query = args.find.query;
+        const isQueryValidId = mongoose.Types.ObjectId.isValid(query);
+
+        let empleados = {};
+        if (isQueryValidId) {
+            empleados = await db.EmployeeDBController.CollectionModel.find({ _id: query })
+                .limit(args.limit || 150)
+                .exec();
+        }
+        else {
+            empleados = await db.EmployeeDBController.CollectionModel.find({
+                $or: [
+                    { nombre: { "$regex": query, "$options": "i" } },
+                    { apellidos: { "$regex": query, "$options": "i" } },
+                    { rol: { "$regex": query, "$options": "i" } },
+                    { email: { "$regex": query, "$options": "i" } }
+                ]
+            })
+                .limit(args.limit || 150)
+                .exec();
+        }
+
+        return empleados;
     }
 
     return [];

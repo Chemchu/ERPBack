@@ -50,6 +50,7 @@ export interface EmpleadosFind {
         _ids?: string[]
         nombre?: string
         rol?: string
+        query?: string
     }
     limit?: number
 }

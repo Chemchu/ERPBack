@@ -31,6 +31,7 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
         _ids: [ID!]
         nombre: String
         rol: String
+        query: String
     }
 
     ##### Query #####

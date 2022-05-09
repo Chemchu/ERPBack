@@ -123,7 +123,7 @@ const addProductoResolver = (root, args, context) => __awaiter(void 0, void 0, v
     });
     const resultado = yield updatedProduct.save();
     if (resultado.id) {
-        return { message: "Producto añadido correctamente", successful: true };
+        return { message: "Producto añadido correctamente", successful: true, };
     }
     return { message: "No se ha podido añadir el producto", successful: false };
 });

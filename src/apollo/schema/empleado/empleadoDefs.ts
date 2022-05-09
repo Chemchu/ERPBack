@@ -30,6 +30,7 @@ const EmpleadoDefs = gql`
         _ids: [ID!]
         nombre: String
         rol: String
+        query: String
     }
 
     ##### Query #####

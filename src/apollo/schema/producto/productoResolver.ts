@@ -145,7 +145,7 @@ export const addProductoResolver = async (root: any, args: { producto: ProductoA
     const resultado = await updatedProduct.save();
 
     if (resultado.id) {
-        return { message: "Producto añadido correctamente", successful: true }
+        return { message: "Producto añadido correctamente", successful: true, }
     }
 
     return { message: "No se ha podido añadir el producto", successful: false }

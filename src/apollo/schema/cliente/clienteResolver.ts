@@ -116,14 +116,25 @@ export const addClienteResolver = async (root: any, args: any, context: any) => 
     }
 
     return { message: "No se ha podido crear el cliente", successful: false }
-
 }
 
 export const deleteClienteResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
-
     const db = Database.Instance();
+
+    const isQueryValidId = mongoose.Types.ObjectId.isValid(args._id);
+    if (!isQueryValidId) {
+        return { message: "ID del cliente inválido", successful: false }
+    }
+
+    const deletedProd = await db.ClientDBController.CollectionModel.deleteOne({ _id: args._id });
+
+    if (deletedProd.deletedCount > 0) {
+        return { message: "Cliente eliminado correctamente", successful: true }
+    }
+
+    return { message: "No se ha podido eliminar el cliente", successful: false }
 }
 
 export const updateClienteResolver = async (root: any, args: any, context: any) => {
