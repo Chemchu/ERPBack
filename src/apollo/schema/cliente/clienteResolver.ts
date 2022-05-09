@@ -130,7 +130,32 @@ export const updateClienteResolver = async (root: any, args: any, context: any) 
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
+    const isQueryValidId = mongoose.Types.ObjectId.isValid(args._id);
+    if (!isQueryValidId) {
+        return { message: "ID del cliente inválido", successful: false }
+    }
+
+    if (!args.nif) {
+        return { message: "El CIF del cliente no puede estar vacío", successful: false }
+    }
+
     const db = Database.Instance();
+
+    const updatedClient = {
+        _id: args._id,
+        nombre: args.nombre,
+        calle: args.calle,
+        cp: args.cp,
+        nif: args.nif
+    } as IClient;
+
+    const resultadoUpdate = await db.ClientDBController.CollectionModel.updateOne({ _id: args._id }, { $set: updatedClient });
+
+    if (resultadoUpdate.modifiedCount > 0) {
+        return { message: "Cliente actualizado correctamente", successful: true }
+    }
+
+    return { message: "No se ha podido actualizar el cliente", successful: false }
 
 }
 
