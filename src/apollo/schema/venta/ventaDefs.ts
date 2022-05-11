@@ -69,6 +69,7 @@ const VentaDefs = gql`
         fechaInicial: String
         fechaFinal: String
         tpv: ID
+        query: String
     }
 
     input ClienteInput {

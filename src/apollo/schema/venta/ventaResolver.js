@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateVentaResolver = exports.deleteVentaResolver = exports.addVentaResolver = exports.ventasResolver = exports.ventaResolver = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const ventaResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
@@ -25,7 +29,7 @@ const ventaResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
 });
 exports.ventaResolver = ventaResolver;
 const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const ventas = yield db.VentasDBController.CollectionModel.find({}).sort({ createdAt: args.order || "desc" }).limit(args.limit || 500).skip(args.offset || 0).exec();
@@ -108,6 +112,47 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             .exec();
         if (ventas)
             return ventas;
+    }
+    if ((_k = args.find) === null || _k === void 0 ? void 0 : _k.query) {
+        const query = args.find.query;
+        const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(query);
+        let ventas = [];
+        if (isQueryValidId) {
+            ventas = yield db.VentasDBController.CollectionModel.find({ _id: query })
+                .limit(args.limit || 150)
+                .exec();
+        }
+        else {
+            const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: query });
+            if (tpv) {
+                const r = yield db.VentasDBController.CollectionModel.find({ tpv: tpv._id })
+                    .limit(args.limit || 150)
+                    .exec();
+                return [...r];
+            }
+            ventas = yield db.VentasDBController.CollectionModel.find({
+                $or: [
+                    { "productos.nombre": { "$regex": query, "$options": "i" } },
+                    { "productos.ean": { "$regex": query, "$options": "i" } },
+                    { "productos.proveedor": { "$regex": query, "$options": "i" } },
+                    { "productos.familia": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.nombre": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.email": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.dni": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.rol": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.nombre": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.email": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.dni": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.rol": { "$regex": query, "$options": "i" } },
+                    { "tipo": { "$regex": query, "$options": "i" } },
+                    { "cliente.nombre": { "$regex": query, "$options": "i" } },
+                    { "cliente.nif": { "$regex": query, "$options": "i" } }
+                ]
+            })
+                .limit(args.limit || 150)
+                .exec();
+        }
+        return ventas;
     }
     return [];
 });

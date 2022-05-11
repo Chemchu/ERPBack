@@ -122,6 +122,53 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
         if (ventas) return ventas;
     }
 
+    if (args.find?.query) {
+        const query = args.find.query;
+        const isQueryValidId = mongoose.Types.ObjectId.isValid(query);
+
+        let ventas = [];
+        if (isQueryValidId) {
+            ventas = await db.VentasDBController.CollectionModel.find({ _id: query })
+                .limit(args.limit || 150)
+                .exec();
+        }
+        else {
+            const tpv = await db.TPVDBController.CollectionModel.findOne({ nombre: query });
+
+            if (tpv) {
+                const r = await db.VentasDBController.CollectionModel.find({ tpv: tpv._id })
+                    .limit(args.limit || 150)
+                    .exec();
+
+                return [...r]
+            }
+
+            ventas = await db.VentasDBController.CollectionModel.find({
+                $or: [
+                    { "productos.nombre": { "$regex": query, "$options": "i" } },
+                    { "productos.ean": { "$regex": query, "$options": "i" } },
+                    { "productos.proveedor": { "$regex": query, "$options": "i" } },
+                    { "productos.familia": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.nombre": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.email": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.dni": { "$regex": query, "$options": "i" } },
+                    { "vendidoPor.rol": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.nombre": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.email": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.dni": { "$regex": query, "$options": "i" } },
+                    { "modificadoPor.rol": { "$regex": query, "$options": "i" } },
+                    { "tipo": { "$regex": query, "$options": "i" } },
+                    { "cliente.nombre": { "$regex": query, "$options": "i" } },
+                    { "cliente.nif": { "$regex": query, "$options": "i" } }
+                ]
+            })
+                .limit(args.limit || 150)
+                .exec();
+        }
+
+        return ventas;
+    }
+
     return [];
 }
 

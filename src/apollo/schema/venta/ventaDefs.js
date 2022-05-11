@@ -70,6 +70,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         fechaInicial: String
         fechaFinal: String
         tpv: ID
+        query: String
     }
 
     input ClienteInput {

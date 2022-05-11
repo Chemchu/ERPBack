@@ -31,6 +31,7 @@ export interface VentasFind {
         tpv?: string
         fechaInicial?: string
         fechaFinal?: string
+        query?: string
     }
     limit?: number
     order?: string
