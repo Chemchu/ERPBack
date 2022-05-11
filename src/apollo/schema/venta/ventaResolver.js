@@ -123,7 +123,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
                 .exec();
         }
         else {
-            const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: query });
+            const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": query, "$options": "i" } });
             if (tpv) {
                 const r = yield db.VentasDBController.CollectionModel.find({ tpv: tpv._id })
                     .limit(args.limit || 150)

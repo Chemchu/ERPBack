@@ -133,7 +133,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
                 .exec();
         }
         else {
-            const tpv = await db.TPVDBController.CollectionModel.findOne({ nombre: query });
+            const tpv = await db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": query, "$options": "i" } });
 
             if (tpv) {
                 const r = await db.VentasDBController.CollectionModel.find({ tpv: tpv._id })
