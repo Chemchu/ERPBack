@@ -99,7 +99,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (ventas)
             return ventas;
     }
-    if (((_h = args.find) === null || _h === void 0 ? void 0 : _h.fechaInicial) && ((_j = args.find) === null || _j === void 0 ? void 0 : _j.fechaFinal)) {
+    if (((_h = args.find) === null || _h === void 0 ? void 0 : _h.fechaInicial) && ((_j = args.find) === null || _j === void 0 ? void 0 : _j.fechaFinal) && !args.find.query) {
         const ventas = yield db.VentasDBController.CollectionModel.find({
             "createdAt": {
                 $gte: new Date(Number(args.find.fechaInicial)),
@@ -121,37 +121,55 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             ventas = yield db.VentasDBController.CollectionModel.find({ _id: query })
                 .limit(args.limit || 150)
                 .exec();
+            return ventas;
         }
-        else {
-            const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": query, "$options": "i" } });
-            if (tpv) {
-                const r = yield db.VentasDBController.CollectionModel.find({ tpv: tpv._id })
-                    .limit(args.limit || 150)
-                    .exec();
-                return [...r];
-            }
-            ventas = yield db.VentasDBController.CollectionModel.find({
-                $or: [
-                    { "productos.nombre": { "$regex": query, "$options": "i" } },
-                    { "productos.ean": { "$regex": query, "$options": "i" } },
-                    { "productos.proveedor": { "$regex": query, "$options": "i" } },
-                    { "productos.familia": { "$regex": query, "$options": "i" } },
-                    { "vendidoPor.nombre": { "$regex": query, "$options": "i" } },
-                    { "vendidoPor.email": { "$regex": query, "$options": "i" } },
-                    { "vendidoPor.dni": { "$regex": query, "$options": "i" } },
-                    { "vendidoPor.rol": { "$regex": query, "$options": "i" } },
-                    { "modificadoPor.nombre": { "$regex": query, "$options": "i" } },
-                    { "modificadoPor.email": { "$regex": query, "$options": "i" } },
-                    { "modificadoPor.dni": { "$regex": query, "$options": "i" } },
-                    { "modificadoPor.rol": { "$regex": query, "$options": "i" } },
-                    { "tipo": { "$regex": query, "$options": "i" } },
-                    { "cliente.nombre": { "$regex": query, "$options": "i" } },
-                    { "cliente.nif": { "$regex": query, "$options": "i" } }
-                ]
+        let queryConFecha = [{}];
+        let limite = args.limit || 150;
+        if (args.find.fechaInicial && args.find.fechaFinal) {
+            queryConFecha = [{
+                    "createdAt": {
+                        $gte: new Date(Number(args.find.fechaInicial)),
+                        $lt: new Date(Number(args.find.fechaFinal))
+                    }
+                }];
+            limite = 1000;
+        }
+        const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": query, "$options": "i" } });
+        if (tpv) {
+            const r = yield db.VentasDBController.CollectionModel.find({
+                tpv: tpv._id,
+                "createdAt": {
+                    $gte: new Date(Number(args.find.fechaInicial)),
+                    $lt: new Date(Number(args.find.fechaFinal))
+                }
             })
                 .limit(args.limit || 150)
                 .exec();
+            return [...r];
         }
+        ventas = yield db.VentasDBController.CollectionModel.find({
+            $or: [
+                { "productos.nombre": { "$regex": query, "$options": "i" } },
+                { "productos.ean": { "$regex": query, "$options": "i" } },
+                { "productos.proveedor": { "$regex": query, "$options": "i" } },
+                { "productos.familia": { "$regex": query, "$options": "i" } },
+                { "vendidoPor.nombre": { "$regex": query, "$options": "i" } },
+                { "vendidoPor.email": { "$regex": query, "$options": "i" } },
+                { "vendidoPor.dni": { "$regex": query, "$options": "i" } },
+                { "vendidoPor.rol": { "$regex": query, "$options": "i" } },
+                { "modificadoPor.nombre": { "$regex": query, "$options": "i" } },
+                { "modificadoPor.email": { "$regex": query, "$options": "i" } },
+                { "modificadoPor.dni": { "$regex": query, "$options": "i" } },
+                { "modificadoPor.rol": { "$regex": query, "$options": "i" } },
+                { "tipo": { "$regex": query, "$options": "i" } },
+                { "cliente.nombre": { "$regex": query, "$options": "i" } },
+                { "cliente.nif": { "$regex": query, "$options": "i" } }
+            ],
+            $and: queryConFecha,
+        })
+            .limit(limite)
+            .sort({ "createdAt": -1 })
+            .exec();
         return ventas;
     }
     return [];
