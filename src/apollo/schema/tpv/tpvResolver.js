@@ -81,7 +81,7 @@ const tpvsResolver = (parent, args, context, info) => __awaiter(void 0, void 0, 
         return tpv;
     }
     if (args.find) {
-        const tpv = yield db.TPVDBController.CollectionModel.find({ abierta: args.find.libre })
+        const tpv = yield db.TPVDBController.CollectionModel.find({ libre: args.find.libre })
             .limit(150)
             .exec();
         return tpv;

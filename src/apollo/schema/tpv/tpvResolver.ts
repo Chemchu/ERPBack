@@ -81,7 +81,6 @@ export const tpvsResolver = async (parent: any, args: TPVsFind, context: any, in
     const db = Database.Instance();
 
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-
         const tpv = await db.TPVDBController.CollectionModel.find({})
             .limit(150)
             .exec();
@@ -90,10 +89,9 @@ export const tpvsResolver = async (parent: any, args: TPVsFind, context: any, in
     }
 
     if (args.find) {
-        const tpv = await db.TPVDBController.CollectionModel.find({ abierta: args.find.libre })
+        const tpv = await db.TPVDBController.CollectionModel.find({ libre: args.find.libre })
             .limit(150)
             .exec();
-
         return tpv;
     }
 
