@@ -42,6 +42,7 @@ const VentaDefs = gql`
         cantidadVendida: Int
         createdAt: String
         updatedAt: String
+        dto: Float
     }
 
     input ProductoVendidoInput {
