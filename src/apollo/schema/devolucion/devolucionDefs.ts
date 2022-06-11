@@ -45,9 +45,7 @@ const DevolucionDefs = gql`
         iva: Float
         margen: Float
         ean: String
-        cantidadVendida: Int
-        createdAt: String
-        updatedAt: String
+        cantidadDevuelta: Int
         dto: Float
     }
 

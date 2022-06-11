@@ -166,11 +166,12 @@ const devolucionesResolver = (parent, args, context, info) => __awaiter(void 0, 
 });
 exports.devolucionesResolver = devolucionesResolver;
 const addDevolucionResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    var _k;
     try {
         const db = database_1.Database.Instance();
         const cliente = yield db.ClientDBController.CollectionModel.findOne({ "_id": args.fields.cliente });
         const trabajador = yield db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajador });
-        let ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
+        const ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
         const devolucionToAdd = new db.DevolucionDBController.CollectionModel({
             productosDevueltos: args.fields.productosDevueltos,
             dineroDevuelto: args.fields.dineroDevuelto,
@@ -182,20 +183,32 @@ const addDevolucionResolver = (root, args, context) => __awaiter(void 0, void 0,
             ventaOriginal: ventaOriginal
         });
         const res = yield devolucionToAdd.save();
+        const prodMap = new Map();
         let isUpdatingCorrectly = true;
         args.fields.productosDevueltos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
+            prodMap.set(p._id, p.cantidadDevuelta);
             const err1 = yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": +p.cantidadDevuelta } });
             if ((err1 === null || err1 === void 0 ? void 0 : err1.errors) && isUpdatingCorrectly) {
                 isUpdatingCorrectly = false;
             }
         }));
+        const updatedProductList = [];
+        (_k = ventaOriginal === null || ventaOriginal === void 0 ? void 0 : ventaOriginal.productos) === null || _k === void 0 ? void 0 : _k.forEach((prod) => {
+            let p = prod;
+            const cantidadDevuelta = prodMap.get(prod._id);
+            if (cantidadDevuelta) {
+                p.cantidadVendida -= cantidadDevuelta;
+                updatedProductList.push(p);
+            }
+        });
+        yield db.VentasDBController.CollectionModel.updateOne({ "_id": args.fields.ventaId }, { "productos": updatedProductList });
         if (res.errors) {
-            return { message: "No se ha podido añadir la venta a la base de datos", successful: false };
+            return { message: "No se ha podido añadir la devolución a la base de datos", successful: false };
         }
         if (!isUpdatingCorrectly) {
-            return { message: "Venta añadida pero las cantidades no han sido actualizadas correctamente", successful: true };
+            return { message: "Devolución añadida pero las cantidades no han sido actualizadas correctamente", successful: true };
         }
-        return { message: "Venta añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt };
+        return { message: "Devolución añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt };
     }
     catch (err) {
         return { message: err, successful: false };

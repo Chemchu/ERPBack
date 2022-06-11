@@ -4,7 +4,7 @@ import { Database } from "../../../databases/database"
 import { DevolucionFind, VentaFind } from "../../../types/types";
 import { ISale } from "../../../types/Venta";
 import { IDevolucion } from '../../../types/Devolucion';
-import { IReturnProduct } from '../../../types/Producto';
+import { IReturnProduct, ISoldProduct } from '../../../types/Producto';
 
 export const devolucionResolver = async (parent: any, args: VentaFind, context: any, info: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
@@ -194,9 +194,9 @@ export const addDevolucionResolver = async (root: any, args: any, context: any) 
         const db = Database.Instance();
         const cliente = await db.ClientDBController.CollectionModel.findOne({ "_id": args.fields.cliente });
         const trabajador = await db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajador });
-        let ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
+        const ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
 
-        const devolucionToAdd: mongoose.Document<ISale> = new db.DevolucionDBController.CollectionModel({
+        const devolucionToAdd = new db.DevolucionDBController.CollectionModel({
             productosDevueltos: args.fields.productosDevueltos,
             dineroDevuelto: args.fields.dineroDevuelto,
             cliente: cliente,
@@ -208,11 +208,14 @@ export const addDevolucionResolver = async (root: any, args: any, context: any) 
         } as IDevolucion);
 
         // Añadir nueva devolucion
-        const res: any = await devolucionToAdd.save(); // ---> Uso de any como solución temporal
+        const res: any = await devolucionToAdd.save();
 
+        const prodMap: Map<string, number> = new Map();
         let isUpdatingCorrectly = true;
+
         // Actualizar la cantidad de productos de la venta original
         args.fields.productosDevueltos.forEach(async (p: IReturnProduct) => {
+            prodMap.set(p._id, p.cantidadDevuelta)
             const err1 = await db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": +p.cantidadDevuelta } });
 
             if (err1?.errors && isUpdatingCorrectly) {
@@ -220,19 +223,31 @@ export const addDevolucionResolver = async (root: any, args: any, context: any) 
             }
         });
 
-        //ventaOriginal.
+        const updatedProductList: ISoldProduct[] = []
+
+        ventaOriginal?.productos?.forEach((prod) => {
+            let p = prod;
+            const cantidadDevuelta = prodMap.get(prod._id)
+
+            if (cantidadDevuelta) {
+                p.cantidadVendida -= cantidadDevuelta
+                updatedProductList.push(p)
+            }
+        })
+
+        await db.VentasDBController.CollectionModel.updateOne({ "_id": args.fields.ventaId }, { "productos": updatedProductList })
 
         // Comprueba si se ha añadido correctamente la venta a la base de datos
         if (res.errors) {
-            return { message: "No se ha podido añadir la venta a la base de datos", successful: false }
+            return { message: "No se ha podido añadir la devolución a la base de datos", successful: false }
         }
 
         // Comprueba si se han actualizado correctamente las cantidades de los productos
         if (!isUpdatingCorrectly) {
-            return { message: "Venta añadida pero las cantidades no han sido actualizadas correctamente", successful: true }
+            return { message: "Devolución añadida pero las cantidades no han sido actualizadas correctamente", successful: true }
         }
 
-        return { message: "Venta añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt }
+        return { message: "Devolución añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt }
     }
     catch (err) {
         return { message: err, successful: false }

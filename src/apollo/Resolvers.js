@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jwtValidatorResolver_1 = require("./schema/authentication/jwtValidatorResolver");
 const loginResolver_1 = require("./schema/authentication/loginResolver");
 const clienteResolver_1 = require("./schema/cliente/clienteResolver");
+const devolucionResolver_1 = require("./schema/devolucion/devolucionResolver");
 const empleadoResolver_1 = require("./schema/empleado/empleadoResolver");
 const fileResolvers_1 = require("./schema/file/fileResolvers");
 const productoResolver_1 = require("./schema/producto/productoResolver");
@@ -24,7 +25,9 @@ const Resolvers = {
         tpvs: tpvResolver_1.tpvsResolver,
         cierreTPV: cierreTpvResolver_1.cierreTpvResolver,
         cierresTPVs: cierreTpvResolver_1.cierreTpvsResolver,
-        validateJwt: jwtValidatorResolver_1.jwtValidatorResolver
+        validateJwt: jwtValidatorResolver_1.jwtValidatorResolver,
+        devolucion: devolucionResolver_1.devolucionResolver,
+        devoluciones: devolucionResolver_1.devolucionesResolver
     },
     Mutation: {
         addProducto: productoResolver_1.addProductoResolver,
@@ -48,7 +51,10 @@ const Resolvers = {
         freeTPV: tpvResolver_1.freeTpvResolver,
         addCierreTPV: cierreTpvResolver_1.addCierreTpvResolver,
         deleteCierreTPV: cierreTpvResolver_1.deleteCierreTpvResolver,
-        updateCierreTPV: cierreTpvResolver_1.updateCierreTpvResolver
+        updateCierreTPV: cierreTpvResolver_1.updateCierreTpvResolver,
+        addDevolucion: devolucionResolver_1.addDevolucionResolver,
+        deleteDevolucion: devolucionResolver_1.deleteDevolucionResolver,
+        updateDevolucion: devolucionResolver_1.updateDevolucionResolver
     }
 };
 exports.default = Resolvers;

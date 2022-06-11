@@ -1,6 +1,7 @@
 import { jwtValidatorResolver } from "./schema/authentication/jwtValidatorResolver";
 import { loginResolver } from "./schema/authentication/loginResolver";
 import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver } from "./schema/cliente/clienteResolver";
+import { addDevolucionResolver, deleteDevolucionResolver, devolucionesResolver, devolucionResolver, updateDevolucionResolver } from "./schema/devolucion/devolucionResolver";
 import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
 import { uploadProductoFileResolver, uploadVentasFileResolver } from "./schema/file/fileResolvers";
 import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver } from "./schema/producto/productoResolver";
@@ -23,7 +24,9 @@ const Resolvers = {
         tpvs: tpvsResolver,
         cierreTPV: cierreTpvResolver,
         cierresTPVs: cierreTpvsResolver,
-        validateJwt: jwtValidatorResolver
+        validateJwt: jwtValidatorResolver,
+        devolucion: devolucionResolver,
+        devoluciones: devolucionesResolver
     },
     Mutation: {
         addProducto: addProductoResolver,
@@ -52,7 +55,11 @@ const Resolvers = {
 
         addCierreTPV: addCierreTpvResolver,
         deleteCierreTPV: deleteCierreTpvResolver,
-        updateCierreTPV: updateCierreTpvResolver
+        updateCierreTPV: updateCierreTpvResolver,
+
+        addDevolucion: addDevolucionResolver,
+        deleteDevolucion: deleteDevolucionResolver,
+        updateDevolucion: updateDevolucionResolver
     }
 };
 
