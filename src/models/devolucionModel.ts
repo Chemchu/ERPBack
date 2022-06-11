@@ -2,7 +2,7 @@ import { Schema, model, Model, Types } from 'mongoose';
 import { IClient } from '../types/Cliente';
 import { IDevolucion } from '../types/Devolucion';
 import { IEmployee } from '../types/Empleado';
-import { ISoldProduct } from '../types/Producto';
+import { IReturnProduct, ISoldProduct } from '../types/Producto';
 import { ISale } from '../types/Venta';
 
 
@@ -16,12 +16,13 @@ export class Devolucion {
             proveedor: { type: String, requiered: true },
             precioCompra: { type: Number, requiered: true },
             precioVenta: { type: Number, requiered: true },
-            cantidadVendida: { type: Number, requiered: true },
+            precioFinal: { type: Number, requiered: true },
+            cantidadDevuelta: { type: Number, requiered: true },
             dto: { type: Number, requiered: true },
             iva: { type: Number, requiered: true },
             margen: { type: Number, requiered: true },
             ean: { type: String, requiered: true }
-        }, { strict: true, timestamps: false }) as Schema<ISoldProduct>;
+        }, { strict: true, timestamps: false }) as Schema<IReturnProduct>;
 
         const ClienteSchema = new Schema({
             nombre: { type: String, requiered: true },

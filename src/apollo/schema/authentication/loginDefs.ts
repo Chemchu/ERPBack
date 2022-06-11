@@ -5,7 +5,7 @@ const LoginDefs = gql`
 
     type LoginResult {
         message: String!
-        success: Boolean!
+        successful: Boolean!
         token: String
     }
 

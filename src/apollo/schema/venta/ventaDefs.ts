@@ -36,6 +36,7 @@ const VentaDefs = gql`
         familia: String
         precioVenta: Float
         precioCompra: Float
+        precioFinal: Float
         iva: Float
         margen: Float
         ean: String
@@ -52,6 +53,7 @@ const VentaDefs = gql`
         familia: String
         precioVenta: Float
         precioCompra: Float
+        precioFinal: Float
         iva: Float
         margen: Float
         ean: String

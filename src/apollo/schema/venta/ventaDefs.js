@@ -37,6 +37,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         familia: String
         precioVenta: Float
         precioCompra: Float
+        precioFinal: Float
         iva: Float
         margen: Float
         ean: String
@@ -53,6 +54,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         familia: String
         precioVenta: Float
         precioCompra: Float
+        precioFinal: Float
         iva: Float
         margen: Float
         ean: String

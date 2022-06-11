@@ -38,6 +38,22 @@ export interface VentasFind {
     offset?: number
 }
 
+export interface DevolucionFind {
+    find?: {
+        _ids?: string[]
+        clienteId?: string
+        vendedorId?: string
+        createdAt?: string
+        tpv?: string
+        fechaInicial?: string
+        fechaFinal?: string
+        query?: string
+    }
+    limit?: number
+    order?: string
+    offset?: number
+}
+
 export interface EmpleadoFind {
     find: {
         _id?: string

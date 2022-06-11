@@ -10,6 +10,7 @@ class Venta {
             proveedor: { type: String, requiered: true },
             precioCompra: { type: Number, requiered: true },
             precioVenta: { type: Number, requiered: true },
+            precioFinal: { type: Number, requiered: true },
             cantidadVendida: { type: Number, requiered: true },
             dto: { type: Number, requiered: true },
             iva: { type: Number, requiered: true },

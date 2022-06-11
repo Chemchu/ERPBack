@@ -49,14 +49,14 @@ const loginResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
             });
             return {
                 message: "Autenticación realizada con éxito",
-                success: true,
+                successful: true,
                 token: `Bearer ${token}`
             };
         }
-        return { message: "Usuario y/o contraseña incorrectas", success: false, token: null };
+        return { message: "Usuario y/o contraseña incorrectas", successful: false, token: null };
     }
     catch (err) {
-        return { message: "Usuario y/o contraseña incorrectas", success: false, token: null };
+        return { message: "Usuario y/o contraseña incorrectas", successful: false, token: null };
     }
 });
 exports.loginResolver = loginResolver;

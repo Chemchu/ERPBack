@@ -1,6 +1,7 @@
 import JwtValidatorDefs from "./schema/authentication/jwtValidatorDefs";
 import LoginDefs from "./schema/authentication/loginDefs";
 import ClienteDefs from "./schema/cliente/clienteDefs";
+import DevolucionDefs from "./schema/devolucion/devolucionDefs";
 import EmpleadoDefs from "./schema/empleado/empleadoDefs";
 import fileDefs from "./schema/file/fileDefs";
 import productoDefs from "./schema/producto/productoDefs";
@@ -18,7 +19,8 @@ const TypeDefs = [
     CierreTpvDefs,
     LoginDefs,
     JwtValidatorDefs,
-    fileDefs
+    fileDefs,
+    DevolucionDefs
 ];
 
 export default TypeDefs
