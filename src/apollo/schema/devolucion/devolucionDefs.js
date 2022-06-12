@@ -30,8 +30,6 @@ const DevolucionDefs = (0, apollo_server_express_1.gql) `
         margen: Float
         ean: String
         cantidadDevuelta: Int
-        createdAt: String
-        updatedAt: String
         dto: Float
     }
 
@@ -88,9 +86,7 @@ const DevolucionDefs = (0, apollo_server_express_1.gql) `
         tpv: ID!
         clienteId: ID!
         trabajadorId: ID!
-        modificadoPor: ID!
-        createdAt: String!
-        updatedAt: String!
+        modificadoPorId: ID!
     }
 
     type DevolucionMutationResponse {

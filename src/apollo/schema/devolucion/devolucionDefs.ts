@@ -29,8 +29,6 @@ const DevolucionDefs = gql`
         margen: Float
         ean: String
         cantidadDevuelta: Int
-        createdAt: String
-        updatedAt: String
         dto: Float
     }
 
@@ -87,9 +85,7 @@ const DevolucionDefs = gql`
         tpv: ID!
         clienteId: ID!
         trabajadorId: ID!
-        modificadoPor: ID!
-        createdAt: String!
-        updatedAt: String!
+        modificadoPorId: ID!
     }
 
     type DevolucionMutationResponse {
