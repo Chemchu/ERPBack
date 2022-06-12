@@ -32,13 +32,17 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     const db = database_1.Database.Instance();
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-        const ventas = yield db.VentasDBController.CollectionModel.find({}).sort({ createdAt: args.order || "desc" }).limit(args.limit || 500).skip(args.offset || 0).exec();
+        const ventas = yield db.VentasDBController.CollectionModel.find({}).sort({ createdAt: "desc" }).limit(args.limit || 500).skip(args.offset || 0).exec();
         if (ventas)
             return ventas;
     }
     if (((_a = args.find) === null || _a === void 0 ? void 0 : _a.createdAt) && args.find.tpv) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv, "createdAt": { $gte: parseInt(args.find.createdAt), $lt: Date.now() } })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -46,8 +50,12 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_b = args.find) === null || _b === void 0 ? void 0 : _b._ids) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({ _id: args.find._ids })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order || "desc" })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -55,8 +63,12 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.clienteId) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({ $cliente: { _id: args.find.clienteId } })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -64,8 +76,12 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_d = args.find) === null || _d === void 0 ? void 0 : _d.tipo) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({ tipo: args.find.tipo })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -73,8 +89,12 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_e = args.find) === null || _e === void 0 ? void 0 : _e.vendedorId) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({ $vendidoPor: { _id: args.find.vendedorId } })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -82,8 +102,12 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_f = args.find) === null || _f === void 0 ? void 0 : _f.createdAt) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({ createdAt: args.find.createdAt })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -91,8 +115,12 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if ((_g = args.find) === null || _g === void 0 ? void 0 : _g.tpv) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -100,13 +128,17 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             return ventas;
     }
     if (((_h = args.find) === null || _h === void 0 ? void 0 : _h.fechaInicial) && ((_j = args.find) === null || _j === void 0 ? void 0 : _j.fechaFinal) && !args.find.query) {
+        let order = "desc";
+        if (args.order) {
+            order = args.order;
+        }
         const ventas = yield db.VentasDBController.CollectionModel.find({
             "createdAt": {
                 $gte: new Date(Number(args.find.fechaInicial)),
                 $lt: new Date(Number(args.find.fechaFinal))
             }
         })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();

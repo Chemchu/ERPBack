@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { SortOrder } from 'mongoose';
 import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database"
 import { DevolucionFind, VentaFind } from "../../../types/types";
@@ -31,14 +31,18 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
 
     // Comprueba si find es null, undefined o vacío
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-        const devoluciones = await db.DevolucionDBController.CollectionModel.find({}).sort({ createdAt: args.order || "desc" }).limit(args.limit || 500).skip(args.offset || 0).exec();
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
+        const devoluciones = await db.DevolucionDBController.CollectionModel.find({}).sort({ createdAt: order }).limit(args.limit || 500).skip(args.offset || 0).exec();
 
         if (devoluciones) return devoluciones;
     }
 
     if (args.find?.createdAt && args.find.tpv) {
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find({ tpv: args.find.tpv, "createdAt": { $gte: parseInt(args.find.createdAt), $lt: Date.now() } })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -47,8 +51,10 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
     }
 
     if (args.find?._ids) {
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find({ _id: args.find._ids })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -57,8 +63,10 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
     }
 
     if (args.find?.clienteId) {
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find({ $cliente: { _id: args.find.clienteId } })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -67,8 +75,10 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
     }
 
     if (args.find?.vendedorId) {
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find({ $trabajador: { _id: args.find.vendedorId } })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -77,8 +87,10 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
     }
 
     if (args.find?.createdAt) {
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find({ createdAt: args.find.createdAt })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -87,8 +99,10 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
     }
 
     if (args.find?.tpv) {
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find({ tpv: args.find.tpv })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
@@ -97,6 +111,8 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
     }
 
     if (args.find?.fechaInicial && args.find?.fechaFinal && !args.find.query) {
+        let order: SortOrder = "desc";
+        if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find(
             {
                 "createdAt":
@@ -105,7 +121,7 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
                     $lt: new Date(Number(args.find.fechaFinal))
                 }
             })
-            .sort({ createdAt: args.order || "desc" })
+            .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
             .exec();
