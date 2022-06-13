@@ -200,7 +200,7 @@ exports.devolucionesResolver = devolucionesResolver;
 const addDevolucionResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = database_1.Database.Instance();
-        const ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
+        const ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId }).exec();
         if (!ventaOriginal) {
             return { message: "La venta original no está en la BBDD", successful: false };
         }
@@ -243,37 +243,51 @@ const ActualizarStock = (db, fields) => __awaiter(void 0, void 0, void 0, functi
 const ActualizarVenta = (db, fields, ventaOriginal) => __awaiter(void 0, void 0, void 0, function* () {
     const prodMap = new Map();
     const updatedProductList = [];
+    let numProdEnVenta = 0;
+    let numProdDevuelto = 0;
     fields.productosDevueltos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
         prodMap.set(p._id, p.cantidadDevuelta);
+        numProdDevuelto += p.cantidadDevuelta;
     }));
     ventaOriginal.productos.forEach((prod) => {
         let p = prod;
-        const cantidadDevuelta = prodMap.get(prod._id);
-        if (cantidadDevuelta) {
+        const cantidadDevuelta = prodMap.get(String(p._id));
+        numProdEnVenta += prod.cantidadVendida;
+        if (cantidadDevuelta && cantidadDevuelta > 0) {
             p.cantidadVendida -= cantidadDevuelta;
+            if (p.cantidadVendida > 0) {
+                updatedProductList.push(p);
+            }
+        }
+        else {
             updatedProductList.push(p);
         }
     });
-    if (updatedProductList.length <= 0) {
+    if (numProdEnVenta === numProdDevuelto) {
         yield db.VentasDBController.CollectionModel.deleteOne({ "_id": fields.ventaId });
     }
     else {
         let precioVentaTotalSinDto = 0;
         let precioVentaTotal = 0;
         updatedProductList.forEach((p) => {
-            if (p.precioFinal) {
+            precioVentaTotalSinDto += p.precioVenta * p.cantidadVendida;
+            if (p.precioFinal !== undefined) {
                 precioVentaTotal += p.precioFinal * p.cantidadVendida;
             }
-            precioVentaTotal += (p.precioVenta * p.cantidadVendida * ((100 - p.dto) / 100));
-            precioVentaTotalSinDto += p.precioVenta * p.cantidadVendida;
+            else {
+                precioVentaTotal += (p.precioVenta * p.cantidadVendida * ((100 - p.dto) / 100));
+            }
         });
         let cambio = ventaOriginal.cambio || 0;
         let updatedVenta = {
             productos: updatedProductList,
-            precioVentaTotalSinDto: precioVentaTotalSinDto,
-            precioVentaTotal: precioVentaTotal,
+            dineroEntregadoEfectivo: ventaOriginal.dineroEntregadoEfectivo,
+            dineroEntregadoTarjeta: ventaOriginal.dineroEntregadoTarjeta,
+            precioVentaTotalSinDto: Number(precioVentaTotalSinDto.toFixed(2)),
+            precioVentaTotal: Number(precioVentaTotal.toFixed(2)),
             cambio: cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)
         };
-        yield db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta);
+        const vUpdated = yield db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta);
+        console.log(vUpdated);
     }
 });

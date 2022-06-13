@@ -208,7 +208,7 @@ export const addDevolucionResolver = async (root: any, args: any, context: any) 
     try {
         const db = Database.Instance();
 
-        const ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
+        const ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId }).exec();
         if (!ventaOriginal) { return { message: "La venta original no está en la BBDD", successful: false } }
 
         const trabajador = await db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajadorId });
@@ -264,23 +264,33 @@ const ActualizarStock = async (db: Database, fields: any) => {
 const ActualizarVenta = async (db: Database, fields: any, ventaOriginal: ISale) => {
     const prodMap: Map<string, number> = new Map();
     const updatedProductList: ISoldProduct[] = []
+    let numProdEnVenta = 0;
+    let numProdDevuelto = 0;
 
     // Actualizar la cantidad de productos de la venta original
     fields.productosDevueltos.forEach(async (p: IReturnProduct) => {
         prodMap.set(p._id, p.cantidadDevuelta)
+        numProdDevuelto += p.cantidadDevuelta
     });
 
     ventaOriginal.productos.forEach((prod) => {
         let p = prod;
-        const cantidadDevuelta = prodMap.get(prod._id)
+        const cantidadDevuelta = prodMap.get(String(p._id))
 
-        if (cantidadDevuelta) {
+        numProdEnVenta += prod.cantidadVendida
+
+        if (cantidadDevuelta && cantidadDevuelta > 0) {
             p.cantidadVendida -= cantidadDevuelta
+            if (p.cantidadVendida > 0) {
+                updatedProductList.push(p)
+            }
+        }
+        else {
             updatedProductList.push(p)
         }
     })
 
-    if (updatedProductList.length <= 0) {
+    if (numProdEnVenta === numProdDevuelto) {
         await db.VentasDBController.CollectionModel.deleteOne({ "_id": fields.ventaId })
     }
     else {
@@ -288,21 +298,27 @@ const ActualizarVenta = async (db: Database, fields: any, ventaOriginal: ISale) 
         let precioVentaTotal = 0;
 
         updatedProductList.forEach((p) => {
-            if (p.precioFinal) {
+            precioVentaTotalSinDto += p.precioVenta * p.cantidadVendida
+
+            if (p.precioFinal !== undefined) {
                 precioVentaTotal += p.precioFinal * p.cantidadVendida
             }
-            precioVentaTotal += (p.precioVenta * p.cantidadVendida * ((100 - p.dto) / 100))
-            precioVentaTotalSinDto += p.precioVenta * p.cantidadVendida
+            else {
+                precioVentaTotal += (p.precioVenta * p.cantidadVendida * ((100 - p.dto) / 100))
+            }
         })
 
         let cambio = ventaOriginal.cambio || 0;
         let updatedVenta = {
             productos: updatedProductList,
-            precioVentaTotalSinDto: precioVentaTotalSinDto,
-            precioVentaTotal: precioVentaTotal,
+            dineroEntregadoEfectivo: ventaOriginal.dineroEntregadoEfectivo,
+            dineroEntregadoTarjeta: ventaOriginal.dineroEntregadoTarjeta,
+            precioVentaTotalSinDto: Number(precioVentaTotalSinDto.toFixed(2)),
+            precioVentaTotal: Number(precioVentaTotal.toFixed(2)),
             cambio: cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)
         }
 
-        await db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta)
+        const vUpdated = await db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta)
+        console.log(vUpdated);
     }
 }
