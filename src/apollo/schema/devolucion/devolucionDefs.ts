@@ -79,7 +79,6 @@ const DevolucionDefs = gql`
 
     input DevolucionFields {
         productosDevueltos: [ProductoDevueltoInput]!
-        dineroDevuelto: Float!
         ventaId: ID!
         tpv: ID!
         clienteId: ID!

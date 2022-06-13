@@ -80,7 +80,6 @@ const DevolucionDefs = (0, apollo_server_express_1.gql) `
 
     input DevolucionFields {
         productosDevueltos: [ProductoDevueltoInput]!
-        dineroDevuelto: Float!
         ventaId: ID!
         tpv: ID!
         clienteId: ID!

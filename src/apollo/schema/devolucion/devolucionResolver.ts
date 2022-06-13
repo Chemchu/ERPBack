@@ -211,10 +211,16 @@ export const addDevolucionResolver = async (root: any, args: any, context: any) 
         const ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId }).exec();
         if (!ventaOriginal) { return { message: "La venta original no está en la BBDD", successful: false } }
 
+        const productosDevueltos: IReturnProduct[] = args.fields.productosDevueltos;
+        const dineroDevuelto = productosDevueltos.reduce((prev, prod) => {
+            let precio = prod.precioFinal ? prod.precioFinal : prod.precioVenta * ((100 - prod.dto) / 100)
+            return prev + (precio * prod.cantidadDevuelta)
+        }, 0)
+
         const trabajador = await db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajadorId });
         const devolucionToAdd = new db.DevolucionDBController.CollectionModel({
             productosDevueltos: args.fields.productosDevueltos,
-            dineroDevuelto: args.fields.dineroDevuelto,
+            dineroDevuelto: dineroDevuelto,
             cliente: ventaOriginal.cliente,
             trabajador: trabajador,
             modificadoPor: trabajador,
@@ -315,10 +321,9 @@ const ActualizarVenta = async (db: Database, fields: any, ventaOriginal: ISale) 
             dineroEntregadoTarjeta: ventaOriginal.dineroEntregadoTarjeta,
             precioVentaTotalSinDto: Number(precioVentaTotalSinDto.toFixed(2)),
             precioVentaTotal: Number(precioVentaTotal.toFixed(2)),
-            cambio: cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)
+            cambio: Number((cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)).toFixed(2))
         }
 
         const vUpdated = await db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta)
-        console.log(vUpdated);
     }
 }

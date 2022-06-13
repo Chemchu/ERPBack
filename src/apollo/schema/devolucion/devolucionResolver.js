@@ -204,10 +204,15 @@ const addDevolucionResolver = (root, args, context) => __awaiter(void 0, void 0,
         if (!ventaOriginal) {
             return { message: "La venta original no está en la BBDD", successful: false };
         }
+        const productosDevueltos = args.fields.productosDevueltos;
+        const dineroDevuelto = productosDevueltos.reduce((prev, prod) => {
+            let precio = prod.precioFinal ? prod.precioFinal : prod.precioVenta * ((100 - prod.dto) / 100);
+            return prev + (precio * prod.cantidadDevuelta);
+        }, 0);
         const trabajador = yield db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajadorId });
         const devolucionToAdd = new db.DevolucionDBController.CollectionModel({
             productosDevueltos: args.fields.productosDevueltos,
-            dineroDevuelto: args.fields.dineroDevuelto,
+            dineroDevuelto: dineroDevuelto,
             cliente: ventaOriginal.cliente,
             trabajador: trabajador,
             modificadoPor: trabajador,
@@ -285,9 +290,8 @@ const ActualizarVenta = (db, fields, ventaOriginal) => __awaiter(void 0, void 0,
             dineroEntregadoTarjeta: ventaOriginal.dineroEntregadoTarjeta,
             precioVentaTotalSinDto: Number(precioVentaTotalSinDto.toFixed(2)),
             precioVentaTotal: Number(precioVentaTotal.toFixed(2)),
-            cambio: cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)
+            cambio: Number((cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)).toFixed(2))
         };
         const vUpdated = yield db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta);
-        console.log(vUpdated);
     }
 });
