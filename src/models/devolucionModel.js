@@ -52,7 +52,6 @@ class Devolucion {
         const DevolucionSchema = new mongoose_1.Schema({
             productosDevueltos: { type: [ProductoVendidoSchema], required: true },
             dineroDevuelto: { type: Number, required: true },
-            ventaId: { type: mongoose_1.Types.ObjectId, ref: 'Venta', required: true },
             ventaOriginal: { type: VentaSchema, required: true },
             tpv: { type: mongoose_1.Types.ObjectId, ref: 'TPV', required: true },
             cliente: { type: ClienteSchema, required: true },

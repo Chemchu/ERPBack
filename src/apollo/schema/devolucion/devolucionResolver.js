@@ -198,47 +198,27 @@ const devolucionesResolver = (parent, args, context, info) => __awaiter(void 0, 
 });
 exports.devolucionesResolver = devolucionesResolver;
 const addDevolucionResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-    var _k;
     try {
         const db = database_1.Database.Instance();
-        const cliente = yield db.ClientDBController.CollectionModel.findOne({ "_id": args.fields.cliente });
-        const trabajador = yield db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajador });
         const ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
+        if (!ventaOriginal) {
+            return { message: "La venta original no está en la BBDD", successful: false };
+        }
+        const trabajador = yield db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajadorId });
         const devolucionToAdd = new db.DevolucionDBController.CollectionModel({
             productosDevueltos: args.fields.productosDevueltos,
             dineroDevuelto: args.fields.dineroDevuelto,
-            cliente: cliente,
+            cliente: ventaOriginal.cliente,
             trabajador: trabajador,
             modificadoPor: trabajador,
             tpv: args.fields.tpv,
-            ventaId: args.fields.ventaId,
             ventaOriginal: ventaOriginal
         });
         const res = yield devolucionToAdd.save();
-        const prodMap = new Map();
-        let isUpdatingCorrectly = true;
-        args.fields.productosDevueltos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
-            prodMap.set(p._id, p.cantidadDevuelta);
-            const err1 = yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": +p.cantidadDevuelta } });
-            if ((err1 === null || err1 === void 0 ? void 0 : err1.errors) && isUpdatingCorrectly) {
-                isUpdatingCorrectly = false;
-            }
-        }));
-        const updatedProductList = [];
-        (_k = ventaOriginal === null || ventaOriginal === void 0 ? void 0 : ventaOriginal.productos) === null || _k === void 0 ? void 0 : _k.forEach((prod) => {
-            let p = prod;
-            const cantidadDevuelta = prodMap.get(prod._id);
-            if (cantidadDevuelta) {
-                p.cantidadVendida -= cantidadDevuelta;
-                updatedProductList.push(p);
-            }
-        });
-        yield db.VentasDBController.CollectionModel.updateOne({ "_id": args.fields.ventaId }, { "productos": updatedProductList });
+        yield ActualizarStock(db, args.fields);
+        yield ActualizarVenta(db, args.fields, ventaOriginal);
         if (res.errors) {
             return { message: "No se ha podido añadir la devolución a la base de datos", successful: false };
-        }
-        if (!isUpdatingCorrectly) {
-            return { message: "Devolución añadida pero las cantidades no han sido actualizadas correctamente", successful: true };
         }
         return { message: "Devolución añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt };
     }
@@ -255,3 +235,45 @@ const updateDevolucionResolver = (root, args, context) => __awaiter(void 0, void
     const db = database_1.Database.Instance();
 });
 exports.updateDevolucionResolver = updateDevolucionResolver;
+const ActualizarStock = (db, fields) => __awaiter(void 0, void 0, void 0, function* () {
+    fields.productosDevueltos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
+        yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": +p.cantidadDevuelta } });
+    }));
+});
+const ActualizarVenta = (db, fields, ventaOriginal) => __awaiter(void 0, void 0, void 0, function* () {
+    const prodMap = new Map();
+    const updatedProductList = [];
+    fields.productosDevueltos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
+        prodMap.set(p._id, p.cantidadDevuelta);
+    }));
+    ventaOriginal.productos.forEach((prod) => {
+        let p = prod;
+        const cantidadDevuelta = prodMap.get(prod._id);
+        if (cantidadDevuelta) {
+            p.cantidadVendida -= cantidadDevuelta;
+            updatedProductList.push(p);
+        }
+    });
+    if (updatedProductList.length <= 0) {
+        yield db.VentasDBController.CollectionModel.deleteOne({ "_id": fields.ventaId });
+    }
+    else {
+        let precioVentaTotalSinDto = 0;
+        let precioVentaTotal = 0;
+        updatedProductList.forEach((p) => {
+            if (p.precioFinal) {
+                precioVentaTotal += p.precioFinal * p.cantidadVendida;
+            }
+            precioVentaTotal += (p.precioVenta * p.cantidadVendida * ((100 - p.dto) / 100));
+            precioVentaTotalSinDto += p.precioVenta * p.cantidadVendida;
+        });
+        let cambio = ventaOriginal.cambio || 0;
+        let updatedVenta = {
+            productos: updatedProductList,
+            precioVentaTotalSinDto: precioVentaTotalSinDto,
+            precioVentaTotal: precioVentaTotal,
+            cambio: cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)
+        };
+        yield db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta);
+    }
+});

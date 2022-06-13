@@ -205,62 +205,32 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
 export const addDevolucionResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
-
     try {
         const db = Database.Instance();
-        const cliente = await db.ClientDBController.CollectionModel.findOne({ "_id": args.fields.cliente });
-        const trabajador = await db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajador });
-        const ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
 
+        const ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ "_id": args.fields.ventaId });
+        if (!ventaOriginal) { return { message: "La venta original no está en la BBDD", successful: false } }
+
+        const trabajador = await db.EmployeeDBController.CollectionModel.findOne({ "_id": args.fields.trabajadorId });
         const devolucionToAdd = new db.DevolucionDBController.CollectionModel({
             productosDevueltos: args.fields.productosDevueltos,
             dineroDevuelto: args.fields.dineroDevuelto,
-            cliente: cliente,
+            cliente: ventaOriginal.cliente,
             trabajador: trabajador,
             modificadoPor: trabajador,
             tpv: args.fields.tpv,
-            ventaId: args.fields.ventaId,
             ventaOriginal: ventaOriginal
         } as IDevolucion);
 
         // Añadir nueva devolucion
         const res: any = await devolucionToAdd.save();
 
-        const prodMap: Map<string, number> = new Map();
-        let isUpdatingCorrectly = true;
-
-        // Actualizar la cantidad de productos de la venta original
-        args.fields.productosDevueltos.forEach(async (p: IReturnProduct) => {
-            prodMap.set(p._id, p.cantidadDevuelta)
-            const err1 = await db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": +p.cantidadDevuelta } });
-
-            if (err1?.errors && isUpdatingCorrectly) {
-                isUpdatingCorrectly = false;
-            }
-        });
-
-        const updatedProductList: ISoldProduct[] = []
-
-        ventaOriginal?.productos?.forEach((prod) => {
-            let p = prod;
-            const cantidadDevuelta = prodMap.get(prod._id)
-
-            if (cantidadDevuelta) {
-                p.cantidadVendida -= cantidadDevuelta
-                updatedProductList.push(p)
-            }
-        })
-
-        await db.VentasDBController.CollectionModel.updateOne({ "_id": args.fields.ventaId }, { "productos": updatedProductList })
+        await ActualizarStock(db, args.fields);
+        await ActualizarVenta(db, args.fields, ventaOriginal);
 
         // Comprueba si se ha añadido correctamente la venta a la base de datos
         if (res.errors) {
             return { message: "No se ha podido añadir la devolución a la base de datos", successful: false }
-        }
-
-        // Comprueba si se han actualizado correctamente las cantidades de los productos
-        if (!isUpdatingCorrectly) {
-            return { message: "Devolución añadida pero las cantidades no han sido actualizadas correctamente", successful: true }
         }
 
         return { message: "Devolución añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt }
@@ -285,3 +255,54 @@ export const updateDevolucionResolver = async (root: any, args: any, context: an
 
 }
 
+const ActualizarStock = async (db: Database, fields: any) => {
+    fields.productosDevueltos.forEach(async (p: IReturnProduct) => {
+        await db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": +p.cantidadDevuelta } });
+    });
+}
+
+const ActualizarVenta = async (db: Database, fields: any, ventaOriginal: ISale) => {
+    const prodMap: Map<string, number> = new Map();
+    const updatedProductList: ISoldProduct[] = []
+
+    // Actualizar la cantidad de productos de la venta original
+    fields.productosDevueltos.forEach(async (p: IReturnProduct) => {
+        prodMap.set(p._id, p.cantidadDevuelta)
+    });
+
+    ventaOriginal.productos.forEach((prod) => {
+        let p = prod;
+        const cantidadDevuelta = prodMap.get(prod._id)
+
+        if (cantidadDevuelta) {
+            p.cantidadVendida -= cantidadDevuelta
+            updatedProductList.push(p)
+        }
+    })
+
+    if (updatedProductList.length <= 0) {
+        await db.VentasDBController.CollectionModel.deleteOne({ "_id": fields.ventaId })
+    }
+    else {
+        let precioVentaTotalSinDto = 0;
+        let precioVentaTotal = 0;
+
+        updatedProductList.forEach((p) => {
+            if (p.precioFinal) {
+                precioVentaTotal += p.precioFinal * p.cantidadVendida
+            }
+            precioVentaTotal += (p.precioVenta * p.cantidadVendida * ((100 - p.dto) / 100))
+            precioVentaTotalSinDto += p.precioVenta * p.cantidadVendida
+        })
+
+        let cambio = ventaOriginal.cambio || 0;
+        let updatedVenta = {
+            productos: updatedProductList,
+            precioVentaTotalSinDto: precioVentaTotalSinDto,
+            precioVentaTotal: precioVentaTotal,
+            cambio: cambio + (ventaOriginal.precioVentaTotal - precioVentaTotal)
+        }
+
+        await db.VentasDBController.CollectionModel.updateOne({ "_id": fields.ventaId }, updatedVenta)
+    }
+}

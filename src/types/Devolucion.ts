@@ -12,6 +12,5 @@ export interface IDevolucion extends Document {
     trabajador: IEmployee,
     modificadoPor: IEmployee,
     tpv: ITPV['_id'],
-    ventaId: ISale['_id'],
     ventaOriginal: ISale
 }

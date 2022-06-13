@@ -8,7 +8,6 @@ const DevolucionDefs = (0, apollo_server_express_1.gql) `
         _id: ID!
         productosDevueltos: [ProductoDevuelto]
         dineroDevuelto: Float
-        ventaId: ID
         ventaOriginal: Venta
         tpv: ID
         cliente: Cliente
