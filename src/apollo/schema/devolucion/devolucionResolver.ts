@@ -110,7 +110,7 @@ export const devolucionesResolver = async (parent: any, args: DevolucionFind, co
         if (devoluciones) return devoluciones;
     }
 
-    if (args.find?.fechaInicial && args.find?.fechaFinal && !args.find.query) {
+    if (args.find?.fechaInicial && args.find?.fechaFinal) {
         let order: SortOrder = "desc";
         if (args.order) { order = args.order as mongoose.SortOrder }
         const devoluciones = await db.DevolucionDBController.CollectionModel.find(

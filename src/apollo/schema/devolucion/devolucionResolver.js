@@ -118,7 +118,7 @@ const devolucionesResolver = (parent, args, context, info) => __awaiter(void 0, 
         if (devoluciones)
             return devoluciones;
     }
-    if (((_g = args.find) === null || _g === void 0 ? void 0 : _g.fechaInicial) && ((_h = args.find) === null || _h === void 0 ? void 0 : _h.fechaFinal) && !args.find.query) {
+    if (((_g = args.find) === null || _g === void 0 ? void 0 : _g.fechaInicial) && ((_h = args.find) === null || _h === void 0 ? void 0 : _h.fechaFinal)) {
         let order = "desc";
         if (args.order) {
             order = args.order;
