@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -45,14 +54,20 @@ class Database {
         }).catch((err) => {
             console.log("¡No se pudo realizar la conexión con la base de datos!", err);
             process.exit();
-        }).then(() => {
-            this.ClientDBController.CollectionModel.findOne({ nombre: "General" }).exec().then((clienteGeneral) => {
+        }).then(() => __awaiter(this, void 0, void 0, function* () {
+            yield this.ClientDBController.CollectionModel.findOne({ nombre: "General" }).exec().then((clienteGeneral) => {
                 if (!clienteGeneral) {
                     const cliente = { nombre: "General", calle: "General", nif: "General", cp: "General" };
                     this.ClientDBController.CollectionModel.create(cliente);
                 }
             });
-        });
+            const empleados = yield this.EmployeeDBController.CollectionModel.find({}).exec();
+            if (empleados.length <= 0) {
+                const empleado = { nombre: "Administrador", calle: "Administrador", nif: "Administrador", cp: "Administrador" };
+                const pw = "admin";
+                yield this.EmployeeDBController.CreateEmployee(empleado, pw);
+            }
+        }));
     }
     static Instance() {
         if (!this.instance) {

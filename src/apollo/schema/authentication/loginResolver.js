@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginResolver = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
-var bcrypt = require('bcryptjs');
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const loginResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     if (args === null || !args || Object.keys(args).length === 0 && args.constructor === Object)
@@ -29,7 +29,7 @@ const loginResolver = (parent, args, context, info) => __awaiter(void 0, void 0,
         if (!empleado) {
             return { message: "Usuario y/o contraseña incorrectas", success: false, token: null };
         }
-        const passwordsMatch = yield bcrypt.compare(args.loginValues.password, empleado === null || empleado === void 0 ? void 0 : empleado.hashPassword);
+        const passwordsMatch = yield bcryptjs_1.default.compare(args.loginValues.password, empleado === null || empleado === void 0 ? void 0 : empleado.hashPassword);
         if (!passwordsMatch) {
             return { message: "Usuario y/o contraseña incorrectas", success: false, token: null };
         }
