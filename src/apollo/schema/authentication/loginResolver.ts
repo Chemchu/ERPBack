@@ -1,7 +1,7 @@
 import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database"
 import { Credentials } from "../../../types/types";
-var bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 
 export const loginResolver = async (parent: any, args: Credentials, context: any, info: any) => {

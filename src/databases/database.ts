@@ -18,6 +18,7 @@ import { DevolucionDBController } from './DevolucionDBController';
 import Devolucion from '../models/devolucionModel';
 import { MermaDBController } from './MermaDBController';
 import { Merma } from '../models/mermaModel';
+import { IEmployee } from '../types/Empleado';
 
 mongoose.Promise = global.Promise;
 
@@ -58,13 +59,19 @@ export class Database {
 		}).catch((err: ErrorRequestHandler) => {
 			console.log("¡No se pudo realizar la conexión con la base de datos!", err);
 			process.exit();
-		}).then(() => {
-			this.ClientDBController.CollectionModel.findOne({ nombre: "General" }).exec().then((clienteGeneral) => {
+		}).then(async () => {
+			await this.ClientDBController.CollectionModel.findOne({ nombre: "General" }).exec().then((clienteGeneral) => {
 				if (!clienteGeneral) {
 					const cliente = { nombre: "General", calle: "General", nif: "General", cp: "General" } as IClient
 					this.ClientDBController.CollectionModel.create(cliente);
 				}
 			});
+			const empleados = await this.EmployeeDBController.CollectionModel.find({}).exec();
+			if (empleados.length <= 0) {
+				const empleado = { nombre: "Administrador", calle: "Administrador", nif: "Administrador", cp: "Administrador" } as unknown as IEmployee
+				const pw = "admin"
+				await this.EmployeeDBController.CreateEmployee(empleado, pw);
+			}
 		});
 	}
 
