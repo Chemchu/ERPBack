@@ -29,18 +29,26 @@ class EmployeeDBController {
                     dni: Empleado.dni,
                     genero: Empleado.genero,
                     email: Empleado.email,
+                    rol: Empleado.rol,
                     hashPassword: hashedPassword,
                     horasPorSemana: Empleado.horasPorSemana,
-                    fechaAlta: Empleado.fechaAlta,
+                    fechaAlta: Empleado.fechaAlta || new Date(Date.now()),
                 });
-                const empleadoExistente = yield this.CollectionModel.exists({ dni: Empleado.dni });
+                const empleadoExistente = yield this.CollectionModel.exists({
+                    $or: [
+                        { dni: Empleado.dni },
+                        { email: Empleado.email }
+                    ]
+                });
                 if (empleadoExistente) {
-                    throw "Admin ya existe";
+                    throw `El empleado con correo ${Empleado.email} y/o DNI ${Empleado.dni} ya existe`;
                 }
-                yield employeeToAdd.save();
+                yield employeeToAdd.save().catch(() => { return false; });
+                return true;
             }
             catch (err) {
-                console.log(err);
+                console.error(err);
+                return false;
             }
         });
     }

@@ -1,6 +1,7 @@
 import { UserInputError } from "apollo-server-express";
 import mongoose from "mongoose";
 import { Database } from "../../../databases/database"
+import { IEmployee } from "../../../types/Empleado";
 import { EmpleadoFind, EmpleadosFind } from "../../../types/types";
 
 export const empleadoResolver = async (parent: any, args: EmpleadoFind, context: any, info: any) => {
@@ -122,50 +123,60 @@ export const addEmpleadoResolver = async (root: any, args: any, context: any) =>
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
-    const db = Database.Instance();
+    try {
+        const db = Database.Instance();
+        const fecha = new Date(Date.now());
 
-    //     public async Add(req: Request, res: Response): Promise < void> {
-    //     // El empleado en JSON de la petición
-    //     const employeeJSON = req.body;
-    //     let hashedPassword = await bcrypt.hash(employeeJSON.password, salt);
+        const Empleado = {
+            nombre: args.empleadoInput.nombre,
+            apellidos: args.empleadoInput.apellidos,
+            dni: args.empleadoInput.dni,
+            rol: args.empleadoInput.rol,
+            email: args.empleadoInput.email,
+            fechaAlta: fecha
+        } as IEmployee;
+        const empleadoAñadido = await db.EmployeeDBController.CreateEmployee(Empleado, args.empleadoInput.password)
 
-    //     // Crea el empleado
-    //     const employeeToAdd: mongoose.Document < IEmployee > = new this.CollectionModel({
-    //         nombre: employeeJSON.nombre,
-    //         apellidos: employeeJSON.apellidos,
-    //         dni: employeeJSON.dni,
-    //         genero: employeeJSON.genero,
-    //         email: employeeJSON.email,
-    //         hashPassword: hashedPassword,
-    //         horasPorSemana: employeeJSON.horasPorSemana,
-    //         fechaAlta: employeeJSON.fechaAlta,
-    //     });
-
-    //     try {
-    //         const empleadoExistente = await this.CollectionModel.exists({ dni: employeeJSON.dni });
-    //         if(empleadoExistente) { res.status(200).json({ message: `Error al añadir el empleado en la base de datos: el empleado ya existe`, success: false }); return; }
-
-    // 			await employeeToAdd.save();
-    //         res.status(200).json({ message: `El empleado ha sido añadido en la base de datos`, success: true });
-    //     }
-    // 		catch(err) {
-    //         res.status(500).json({ message: `Error al añadir el empleado en la base de datos: ${err}`, success: false });
-    //     }
-    // }
-
+        if (empleadoAñadido) {
+            return { message: "Empleado añadido correctamente", successful: true }
+        }
+        else {
+            return { message: "No se ha podido añadir el empleado", successful: false }
+        }
+    }
+    catch (err) {
+        return { message: "Error al añadir el empleado: " + err, successful: false }
+    }
 }
 
 export const deleteEmpleadoResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+    try {
+        const db = Database.Instance();
 
-    const db = Database.Instance();
+        const res = await db.EmployeeDBController.CollectionModel.deleteOne({ _id: args._id });
+
+        if (res.deletedCount > 0) {
+            return { message: "Empleado eliminado correctamente", successful: true }
+        }
+
+        return { message: "No se ha podido eliminar el empleado", successful: false }
+    }
+    catch (err) {
+        return { message: "Error al eliminar el empleado", successful: false }
+    }
 }
 
 export const updateEmpleadoResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
 
-    const db = Database.Instance();
+    try {
+        const db = Database.Instance();
 
+    }
+    catch (err) {
+        return { message: "Error al actualizar el empleado", successful: false }
+    }
 }

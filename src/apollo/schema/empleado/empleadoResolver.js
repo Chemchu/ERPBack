@@ -116,14 +116,50 @@ const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, voi
 });
 exports.empleadosResolver = empleadosResolver;
 const addEmpleadoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = database_1.Database.Instance();
+    try {
+        const db = database_1.Database.Instance();
+        const fecha = new Date(Date.now());
+        const Empleado = {
+            nombre: args.empleadoInput.nombre,
+            apellidos: args.empleadoInput.apellidos,
+            dni: args.empleadoInput.dni,
+            rol: args.empleadoInput.rol,
+            email: args.empleadoInput.email,
+            fechaAlta: fecha
+        };
+        const empleadoAñadido = yield db.EmployeeDBController.CreateEmployee(Empleado, args.empleadoInput.password);
+        if (empleadoAñadido) {
+            return { message: "Empleado añadido correctamente", successful: true };
+        }
+        else {
+            return { message: "No se ha podido añadir el empleado", successful: false };
+        }
+    }
+    catch (err) {
+        return { message: "Error al añadir el empleado: " + err, successful: false };
+    }
 });
 exports.addEmpleadoResolver = addEmpleadoResolver;
 const deleteEmpleadoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = database_1.Database.Instance();
+    try {
+        const db = database_1.Database.Instance();
+        const res = yield db.EmployeeDBController.CollectionModel.deleteOne({ _id: args._id });
+        if (res.deletedCount > 0) {
+            return { message: "Empleado eliminado correctamente", successful: true };
+        }
+        return { message: "No se ha podido eliminar el empleado", successful: false };
+    }
+    catch (err) {
+        return { message: "Error al eliminar el empleado", successful: false };
+    }
 });
 exports.deleteEmpleadoResolver = deleteEmpleadoResolver;
 const updateEmpleadoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = database_1.Database.Instance();
+    try {
+        const db = database_1.Database.Instance();
+    }
+    catch (err) {
+        return { message: "Error al actualizar el empleado", successful: false };
+    }
 });
 exports.updateEmpleadoResolver = updateEmpleadoResolver;

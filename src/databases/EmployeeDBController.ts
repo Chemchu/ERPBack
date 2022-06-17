@@ -9,7 +9,7 @@ export class EmployeeDBController {
 		this.CollectionModel = modelo
 	}
 
-	async CreateEmployee(Empleado: IEmployee, password: string) {
+	async CreateEmployee(Empleado: IEmployee, password: string): Promise<boolean> {
 		try {
 			const salt = bcrypt.genSaltSync(10);
 			let hashedPassword = await bcrypt.hash(password, salt);
@@ -21,18 +21,26 @@ export class EmployeeDBController {
 				dni: Empleado.dni,
 				genero: Empleado.genero,
 				email: Empleado.email,
+				rol: Empleado.rol,
 				hashPassword: hashedPassword,
 				horasPorSemana: Empleado.horasPorSemana,
-				fechaAlta: Empleado.fechaAlta,
+				fechaAlta: Empleado.fechaAlta || new Date(Date.now()),
 			});
 
-			const empleadoExistente = await this.CollectionModel.exists({ dni: Empleado.dni });
-			if (empleadoExistente) { throw "Admin ya existe" }
+			const empleadoExistente = await this.CollectionModel.exists({
+				$or: [
+					{ dni: Empleado.dni },
+					{ email: Empleado.email }
+				]
+			});
+			if (empleadoExistente) { throw `El empleado con correo ${Empleado.email} y/o DNI ${Empleado.dni} ya existe` }
 
-			await employeeToAdd.save();
+			await employeeToAdd.save().catch(() => { return false; });
+			return true;
 		}
 		catch (err) {
-			console.log(err);
+			console.error(err);
+			return false;
 		}
 	}
 
