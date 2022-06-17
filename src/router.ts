@@ -2,8 +2,7 @@ import { Database } from './databases/database.js';
 import express, { Request, Response } from 'express';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
-
-const cors = require('cors');
+import cors from 'cors';
 
 export class Router {
     public app;
@@ -14,10 +13,12 @@ export class Router {
         this.database = Database.Instance();
     }
 
-    public async SetRoutes(): Promise<void> {
-        var corsOptions = {
-            origin: "*"
-        };
+    public SetRoutes() {
+        const gatewayUrl = process.env.ERPGATEWAY_URL;
+        if (!gatewayUrl) { throw "GATEWAY_URL no encontrado" }
+
+        this.app.use(cors({ origin: gatewayUrl })); // --> En produccion
+        //this.app.use(cors({ origin: "*" })); // --> Para probar en el sandbox
 
         const { Strategy, ExtractJwt } = passportJWT;
         const params = {
@@ -38,8 +39,6 @@ export class Router {
                 return done(err, false);
             }
         }));
-
-        this.app.use(cors(corsOptions));
 
         // parse requests of content-type - application/json
         this.app.use(express.json({ limit: '10mb' }));

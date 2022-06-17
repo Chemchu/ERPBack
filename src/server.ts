@@ -12,10 +12,17 @@ let apiRouter = new Router();
 
 // set port, listen for requests
 const PORT = process.env.PORT || 5151;
+const gatewayUrl = process.env.ERPGATEWAY_URL;
+if (!gatewayUrl) { throw "GATEWAY_URL no encontrado" }
+
+const corsOptions = {
+  origin: [gatewayUrl, "https://studio.apollographql.com", "http://localhost:8080/"]
+};
 
 const server = new ApolloServer({
   typeDefs: TypeDefs,
   resolvers: Resolvers,
+  csrfPrevention: true,
   context: ({ req }) => ({
     user: req.user
   })
@@ -28,13 +35,14 @@ async function startApolloServer() {
   // Añadir serverRegistration a Apollo
   server.applyMiddleware({
     app: apiRouter.App,
+    cors: corsOptions,
     bodyParserConfig: {
       limit: '100mb'
     }
   });
 
   // Enruta los diferentes componentes del api
-  await apiRouter.SetRoutes();
+  apiRouter.SetRoutes();
 }
 
 // Inicia el servidor

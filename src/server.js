@@ -20,9 +20,17 @@ const Resolvers_1 = __importDefault(require("./apollo/Resolvers"));
 dotenv_1.default.config();
 let apiRouter = new router_1.Router();
 const PORT = process.env.PORT || 5151;
+const gatewayUrl = process.env.ERPGATEWAY_URL;
+if (!gatewayUrl) {
+    throw "GATEWAY_URL no encontrado";
+}
+const corsOptions = {
+    origin: [gatewayUrl, "https://studio.apollographql.com", "http://localhost:8080/"]
+};
 const server = new apollo_server_express_1.ApolloServer({
     typeDefs: TypeDefs_1.default,
     resolvers: Resolvers_1.default,
+    csrfPrevention: true,
     context: ({ req }) => ({
         user: req.user
     })
@@ -32,11 +40,12 @@ function startApolloServer() {
         yield server.start();
         server.applyMiddleware({
             app: apiRouter.App,
+            cors: corsOptions,
             bodyParserConfig: {
                 limit: '100mb'
             }
         });
-        yield apiRouter.SetRoutes();
+        apiRouter.SetRoutes();
     });
 }
 startApolloServer();
