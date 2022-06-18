@@ -19,10 +19,42 @@ const corsOptions = {
   origin: [gatewayUrl, "https://studio.apollographql.com", "http://localhost:8080/"]
 };
 
+const myPlugin = {
+  // Fires whenever a GraphQL request is received from a client.
+  async requestDidStart(requestContext: any) {
+    try {
+      const fecha = new Date(Date.now());
+      console.log('------------------------------------');
+      console.log('Petición recibida a las ' + fecha.toLocaleString());
+
+      return {
+        // Fires whenever Apollo Server will parse a GraphQL
+        // request to create its associated document AST.
+        // async parsingDidStart(requestContext: any) {
+        //   console.log('Parseando petición!');
+        // },
+
+        // // Fires whenever Apollo Server will validate a
+        // // request's document AST against your GraphQL schema.
+        // async validationDidStart(requestContext: any) {
+        //   console.log('Validando petición!');
+        // },
+        async willSendResponse(context: any) {
+          console.log(`Nombre de la ${context.operation!.operation}:`, Object.keys(context.response.data!)[0]);
+        },
+      }
+    }
+    catch (err) {
+      console.error(err);
+    }
+  },
+};
+
 const server = new ApolloServer({
   typeDefs: TypeDefs,
   resolvers: Resolvers,
   csrfPrevention: true,
+  plugins: [myPlugin],
   context: ({ req }) => ({
     user: req.user
   })

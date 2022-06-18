@@ -30,6 +30,15 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
         password: String!
     }
 
+    input EmpleadoUpdateFields {
+        nombre: String, 
+        apellidos: String, 
+        dni: String, 
+        rol: String, 
+        email: String,
+        password: String
+    }
+
     input EmpleadoFind {
         _id: ID
         nombre: String
@@ -55,7 +64,7 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
     type Mutation {
         addEmpleado(empleadoInput: EmpleadoInputFields!): EmpleadoMutationResponse!,
         deleteEmpleado(_id: ID!): EmpleadoMutationResponse!,
-        updateEmpleado(_id: ID!, empleadoInput: EmpleadoInputFields!): EmpleadoMutationResponse!,
+        updateEmpleado(_id: ID!, empleadoInput: EmpleadoUpdateFields!): EmpleadoMutationResponse!,
     }
 `;
 exports.default = EmpleadoDefs;

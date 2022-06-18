@@ -157,6 +157,22 @@ exports.deleteEmpleadoResolver = deleteEmpleadoResolver;
 const updateEmpleadoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = database_1.Database.Instance();
+        const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args._id);
+        if (!isQueryValidId) {
+            return { message: "ID del empleado inválido", successful: false };
+        }
+        const updatedEmpleado = {
+            _id: args._id,
+            nombre: args.empleadoInput.nombre,
+            apellidos: args.empleadoInput.apellidos,
+            dni: args.empleadoInput.dni,
+            rol: args.empleadoInput.rol,
+        };
+        const actualizadoCorrectamente = yield db.EmployeeDBController.UpdateEmployee(updatedEmpleado, args.empleadoInput.password);
+        if (actualizadoCorrectamente) {
+            return { message: "Empleado actualizado correctamente", successful: true };
+        }
+        return { message: "No se ha podido actualizar el empleado", successful: false };
     }
     catch (err) {
         return { message: "Error al actualizar el empleado", successful: false };

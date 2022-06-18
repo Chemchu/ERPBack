@@ -52,5 +52,51 @@ class EmployeeDBController {
             }
         });
     }
+    UpdateEmployee(Empleado, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const empleadoEnDb = yield this.CollectionModel.exists({ _id: Empleado._id });
+                if (empleadoEnDb === null) {
+                    return false;
+                }
+                if (!password) {
+                    const updatedEmpleado = {
+                        nombre: Empleado.nombre,
+                        apellidos: Empleado.apellidos,
+                        dni: Empleado.dni,
+                        rol: Empleado.rol,
+                    };
+                    const resultadoUpdate = yield this.CollectionModel.updateOne({ _id: Empleado._id }, { $set: updatedEmpleado });
+                    if (resultadoUpdate.modifiedCount > 0) {
+                        return true;
+                    }
+                    return false;
+                }
+                const emp = yield this.CollectionModel.findOne({ _id: Empleado._id });
+                const salt = bcryptjs_1.default.genSaltSync(10);
+                let hashedPassword = yield bcryptjs_1.default.hash(password, salt);
+                const updatedEmpleado = {
+                    nombre: Empleado.nombre || (emp === null || emp === void 0 ? void 0 : emp.nombre),
+                    apellidos: Empleado.apellidos || (emp === null || emp === void 0 ? void 0 : emp.apellidos),
+                    dni: Empleado.dni || (emp === null || emp === void 0 ? void 0 : emp.dni),
+                    rol: Empleado.rol || (emp === null || emp === void 0 ? void 0 : emp.rol),
+                    hashedPassword: hashedPassword
+                };
+                const resultadoUpdate = yield this.CollectionModel.updateOne({ _id: Empleado._id }, { $set: updatedEmpleado });
+                if (resultadoUpdate.modifiedCount > 0) {
+                    return true;
+                }
+                return false;
+            }
+            catch (err) {
+                console.error(err);
+                return false;
+            }
+        });
+    }
+    CheckIntegridadEmail() {
+    }
+    CheckIntegridadDNI() {
+    }
 }
 exports.EmployeeDBController = EmployeeDBController;

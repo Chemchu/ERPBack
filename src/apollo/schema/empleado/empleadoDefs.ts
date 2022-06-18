@@ -29,6 +29,15 @@ const EmpleadoDefs = gql`
         password: String!
     }
 
+    input EmpleadoUpdateFields {
+        nombre: String, 
+        apellidos: String, 
+        dni: String, 
+        rol: String, 
+        email: String,
+        password: String
+    }
+
     input EmpleadoFind {
         _id: ID
         nombre: String
@@ -54,7 +63,7 @@ const EmpleadoDefs = gql`
     type Mutation {
         addEmpleado(empleadoInput: EmpleadoInputFields!): EmpleadoMutationResponse!,
         deleteEmpleado(_id: ID!): EmpleadoMutationResponse!,
-        updateEmpleado(_id: ID!, empleadoInput: EmpleadoInputFields!): EmpleadoMutationResponse!,
+        updateEmpleado(_id: ID!, empleadoInput: EmpleadoUpdateFields!): EmpleadoMutationResponse!,
     }
 `;
 

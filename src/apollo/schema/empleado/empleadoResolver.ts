@@ -175,6 +175,25 @@ export const updateEmpleadoResolver = async (root: any, args: any, context: any)
     try {
         const db = Database.Instance();
 
+        const isQueryValidId = mongoose.Types.ObjectId.isValid(args._id);
+        if (!isQueryValidId) {
+            return { message: "ID del empleado inválido", successful: false }
+        }
+
+        const updatedEmpleado = {
+            _id: args._id,
+            nombre: args.empleadoInput.nombre,
+            apellidos: args.empleadoInput.apellidos,
+            dni: args.empleadoInput.dni,
+            rol: args.empleadoInput.rol,
+        } as unknown as IEmployee;
+
+        const actualizadoCorrectamente = await db.EmployeeDBController.UpdateEmployee(updatedEmpleado, args.empleadoInput.password)
+        if (actualizadoCorrectamente) {
+            return { message: "Empleado actualizado correctamente", successful: true }
+        }
+
+        return { message: "No se ha podido actualizar el empleado", successful: false }
     }
     catch (err) {
         return { message: "Error al actualizar el empleado", successful: false }

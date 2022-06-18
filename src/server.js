@@ -27,10 +27,32 @@ if (!gatewayUrl) {
 const corsOptions = {
     origin: [gatewayUrl, "https://studio.apollographql.com", "http://localhost:8080/"]
 };
+const myPlugin = {
+    requestDidStart(requestContext) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const fecha = new Date(Date.now());
+                console.log('------------------------------------');
+                console.log('Petición recibida a las ' + fecha.toLocaleString());
+                return {
+                    willSendResponse(context) {
+                        return __awaiter(this, void 0, void 0, function* () {
+                            console.log(`Nombre de la ${context.operation.operation}:`, Object.keys(context.response.data)[0]);
+                        });
+                    },
+                };
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
+    },
+};
 const server = new apollo_server_express_1.ApolloServer({
     typeDefs: TypeDefs_1.default,
     resolvers: Resolvers_1.default,
     csrfPrevention: true,
+    plugins: [myPlugin],
     context: ({ req }) => ({
         user: req.user
     })
