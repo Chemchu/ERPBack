@@ -61,9 +61,15 @@ class Database {
                     this.ClientDBController.CollectionModel.create(cliente);
                 }
             });
-            const empleados = yield this.EmployeeDBController.CollectionModel.find({}).exec();
-            if (empleados.length <= 0) {
-                const empleado = { nombre: "Administrador", calle: "Administrador", nif: "Administrador", cp: "Administrador" };
+            const numEmpleados = yield this.EmployeeDBController.CollectionModel.countDocuments({});
+            if (numEmpleados <= 0) {
+                const empleado = {
+                    nombre: "Administrador",
+                    apellidos: "Admin",
+                    dni: "Administrador",
+                    rol: "Administrador",
+                    email: "admin@erp.com"
+                };
                 const pw = "admin";
                 yield this.EmployeeDBController.CreateEmployee(empleado, pw);
             }

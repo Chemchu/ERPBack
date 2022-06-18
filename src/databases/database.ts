@@ -66,9 +66,15 @@ export class Database {
 					this.ClientDBController.CollectionModel.create(cliente);
 				}
 			});
-			const empleados = await this.EmployeeDBController.CollectionModel.find({}).exec();
-			if (empleados.length <= 0) {
-				const empleado = { nombre: "Administrador", calle: "Administrador", nif: "Administrador", cp: "Administrador" } as unknown as IEmployee
+			const numEmpleados = await this.EmployeeDBController.CollectionModel.countDocuments({});
+			if (numEmpleados <= 0) {
+				const empleado = {
+					nombre: "Administrador",
+					apellidos: "Admin",
+					dni: "Administrador",
+					rol: "Administrador",
+					email: "admin@erp.com"
+				} as IEmployee
 				const pw = "admin"
 				await this.EmployeeDBController.CreateEmployee(empleado, pw);
 			}
