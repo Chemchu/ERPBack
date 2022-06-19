@@ -117,14 +117,17 @@ export const addProductoResolver = async (root: any, args: { producto: ProductoA
 
     const db = Database.Instance();
 
-    const existeEan = await db.ProductDBController.CollectionModel.find({ ean: args.producto.ean });
-    if (existeEan.length > 0) {
-        return { message: "EAN en uso", successful: false }
+    console.log(args);
+
+
+    const producto = await db.ProductDBController.CollectionModel.exists({ ean: args.producto.ean });
+    if (producto !== null) {
+        return { message: "El código EAN está en uso", successful: false }
     }
 
     const existeNombre = await db.ProductDBController.CollectionModel.find({ nombre: args.producto.nombre });
     if (existeNombre.length > 0) {
-        return { message: "Nombre en uso", successful: false }
+        return { message: "El nombre del producto está en uso", successful: false }
     }
 
     const updatedProduct: mongoose.Document<IProduct> = new db.ProductDBController.CollectionModel({

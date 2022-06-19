@@ -99,13 +99,14 @@ const productosResolver = (parent, args, context, info) => __awaiter(void 0, voi
 exports.productosResolver = productosResolver;
 const addProductoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
-    const existeEan = yield db.ProductDBController.CollectionModel.find({ ean: args.producto.ean });
-    if (existeEan.length > 0) {
-        return { message: "EAN en uso", successful: false };
+    console.log(args);
+    const producto = yield db.ProductDBController.CollectionModel.exists({ ean: args.producto.ean });
+    if (producto !== null) {
+        return { message: "El código EAN está en uso", successful: false };
     }
     const existeNombre = yield db.ProductDBController.CollectionModel.find({ nombre: args.producto.nombre });
     if (existeNombre.length > 0) {
-        return { message: "Nombre en uso", successful: false };
+        return { message: "El nombre del producto está en uso", successful: false };
     }
     const updatedProduct = new db.ProductDBController.CollectionModel({
         nombre: args.producto.nombre,
