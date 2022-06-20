@@ -5,6 +5,7 @@ import { CierreTPVInput } from "../../../types/types";
 import { ICierreTPV } from "../../../types/TPV";
 import { ISale } from "../../../types/Venta";
 import { ISoldProduct } from "../../../types/Producto";
+import mongoose from "mongoose";
 
 export const cierreTpvResolver = async (parent: any, args: any, context: any, info: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
@@ -30,7 +31,7 @@ export const cierreTpvsResolver = async (parent: any, args: any, context: any, i
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const cierres = await db.CierreTPVDBController.CollectionModel.find({})
             .sort({ apertura: -1 })
-            .limit(args.limit || 3000)
+            .limit(args.limit || 200)
             .exec();
 
         return cierres;
@@ -40,19 +41,98 @@ export const cierreTpvsResolver = async (parent: any, args: any, context: any, i
         const apertura = new Date(args.find.apertura);
         const cierres = await db.CierreTPVDBController.CollectionModel.find({ apertura: apertura })
             .sort({ apertura: -1 })
-            .limit(args.limit || 3000)
+            .limit(args.limit || 200)
             .exec();
 
         return cierres;
+    }
+
+    if (args.find.query) {
+        const isQueryValidId = mongoose.Types.ObjectId.isValid(args.find.query);
+        let tpv;
+        if (isQueryValidId) {
+            const cierre = await db.CierreTPVDBController.CollectionModel.findById(args.find.query)
+            if (cierre !== null) {
+                return [cierre];
+            }
+
+            tpv = await db.TPVDBController.CollectionModel.findById(args.find.query);
+        }
+
+        if (args.find.fechaInicial && args.find.fechaFinal) {
+            const fechaInicial = new Date(args.find.fechaInicial);
+            const fechaFinal = new Date(args.find.fechaFinal);
+
+            let filtro;
+            if (tpv) {
+                filtro = {
+                    tpv: tpv._id,
+                    cierre: {
+                        $gte: fechaInicial,
+                        $lt: fechaFinal
+                    }
+                }
+            }
+            else {
+                filtro = {
+                    $or: [
+                        { "abiertoPor.nombre": args.find.query },
+                        { "abiertoPor.email": args.find.query },
+                        { "cerradoPor.nombre": args.find.query },
+                        { "cerradoPor.email": args.find.query }
+                    ],
+                    cierre: {
+                        $gte: fechaInicial,
+                        $lt: fechaFinal
+                    }
+                }
+            }
+
+            const cierres = await db.CierreTPVDBController.CollectionModel.find(filtro)
+                .sort({ apertura: -1 })
+                .limit(args.limit || 200)
+                .exec();
+
+            return cierres;
+        }
+        else {
+            let filtro;
+            if (tpv) {
+                filtro = {
+                    tpv: tpv._id
+                }
+            }
+            else {
+                filtro = {
+                    $or: [
+                        { "abiertoPor.nombre": args.find.query },
+                        { "abiertoPor.email": args.find.query },
+                        { "cerradoPor.nombre": args.find.query },
+                        { "cerradoPor.email": args.find.query }
+                    ]
+                }
+            }
+            const cierres = await db.CierreTPVDBController.CollectionModel.find(filtro)
+                .sort({ apertura: -1 })
+                .limit(args.limit || 200)
+                .exec();
+
+            return cierres;
+        }
     }
 
     if (args.find.fechaInicial && args.find.fechaFinal) {
         const fechaInicial = new Date(args.find.fechaInicial);
         const fechaFinal = new Date(args.find.fechaFinal);
 
-        const cierres = await db.CierreTPVDBController.CollectionModel.find({ createdAt: fechaInicial })
+        const cierres = await db.CierreTPVDBController.CollectionModel.find({
+            cierre: {
+                $gte: fechaInicial,
+                $lt: fechaFinal
+            }
+        })
             .sort({ apertura: -1 })
-            .limit(args.limit || 3000)
+            .limit(args.limit || 200)
             .exec();
 
         return cierres;

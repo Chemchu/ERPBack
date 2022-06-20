@@ -16,6 +16,7 @@ exports.updateCierreTpvResolver = exports.deleteCierreTpvResolver = exports.addC
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const cierreTpvResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     if (!args.find.nombre && !args.find._id)
         throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
@@ -31,7 +32,7 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
     if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
         const cierres = yield db.CierreTPVDBController.CollectionModel.find({})
             .sort({ apertura: -1 })
-            .limit(args.limit || 3000)
+            .limit(args.limit || 200)
             .exec();
         return cierres;
     }
@@ -39,16 +40,88 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
         const apertura = new Date(args.find.apertura);
         const cierres = yield db.CierreTPVDBController.CollectionModel.find({ apertura: apertura })
             .sort({ apertura: -1 })
-            .limit(args.limit || 3000)
+            .limit(args.limit || 200)
             .exec();
         return cierres;
+    }
+    if (args.find.query) {
+        const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args.find.query);
+        let tpv;
+        if (isQueryValidId) {
+            const cierre = yield db.CierreTPVDBController.CollectionModel.findById(args.find.query);
+            if (cierre !== null) {
+                return [cierre];
+            }
+            tpv = yield db.TPVDBController.CollectionModel.findById(args.find.query);
+        }
+        if (args.find.fechaInicial && args.find.fechaFinal) {
+            const fechaInicial = new Date(args.find.fechaInicial);
+            const fechaFinal = new Date(args.find.fechaFinal);
+            let filtro;
+            if (tpv) {
+                filtro = {
+                    tpv: tpv._id,
+                    cierre: {
+                        $gte: fechaInicial,
+                        $lt: fechaFinal
+                    }
+                };
+            }
+            else {
+                filtro = {
+                    $or: [
+                        { "abiertoPor.nombre": args.find.query },
+                        { "abiertoPor.email": args.find.query },
+                        { "cerradoPor.nombre": args.find.query },
+                        { "cerradoPor.email": args.find.query }
+                    ],
+                    cierre: {
+                        $gte: fechaInicial,
+                        $lt: fechaFinal
+                    }
+                };
+            }
+            const cierres = yield db.CierreTPVDBController.CollectionModel.find(filtro)
+                .sort({ apertura: -1 })
+                .limit(args.limit || 200)
+                .exec();
+            return cierres;
+        }
+        else {
+            let filtro;
+            if (tpv) {
+                filtro = {
+                    tpv: tpv._id
+                };
+            }
+            else {
+                filtro = {
+                    $or: [
+                        { "abiertoPor.nombre": args.find.query },
+                        { "abiertoPor.email": args.find.query },
+                        { "cerradoPor.nombre": args.find.query },
+                        { "cerradoPor.email": args.find.query }
+                    ]
+                };
+            }
+            const cierres = yield db.CierreTPVDBController.CollectionModel.find(filtro)
+                .sort({ apertura: -1 })
+                .limit(args.limit || 200)
+                .exec();
+            return cierres;
+        }
     }
     if (args.find.fechaInicial && args.find.fechaFinal) {
         const fechaInicial = new Date(args.find.fechaInicial);
         const fechaFinal = new Date(args.find.fechaFinal);
-        const cierres = yield db.CierreTPVDBController.CollectionModel.find({ createdAt: fechaInicial })
+        const cierres = yield db.CierreTPVDBController.CollectionModel.find({
+            cierre: {
+                $gte: fechaInicial,
+                $lt: fechaFinal
+            }
+        })
             .sort({ apertura: -1 })
-            .limit(args.limit || 3000)
+            .limit(args.limit || 200)
             .exec();
         return cierres;
     }
