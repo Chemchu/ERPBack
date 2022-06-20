@@ -19,6 +19,7 @@ import Devolucion from '../models/devolucionModel';
 import { MermaDBController } from './MermaDBController';
 import { Merma } from '../models/mermaModel';
 import { IEmployee } from '../types/Empleado';
+import { ITPV } from '../types/TPV';
 
 mongoose.Promise = global.Promise;
 
@@ -77,6 +78,37 @@ export class Database {
 				} as IEmployee
 				const pw = "admin"
 				await this.EmployeeDBController.CreateEmployee(empleado, pw);
+			}
+
+			const numTpvs = await this.TPVDBController.CollectionModel.countDocuments({});
+			if (numTpvs <= 0) {
+				const TPV1 = {
+					cajaInicial: 100,
+					nombre: "TPV1",
+					libre: true,
+					enUsoPor: {
+						nombre: "Administrador",
+						apellidos: "Admin",
+						dni: "Administrador",
+						rol: "Administrador",
+						email: "admin@erp.com"
+					} as IEmployee
+				} as unknown as ITPV
+				const TPV2 = {
+					cajaInicial: 100,
+					nombre: "TPV2",
+					libre: true,
+					enUsoPor: {
+						nombre: "Administrador",
+						apellidos: "Admin",
+						dni: "Administrador",
+						rol: "Administrador",
+						email: "admin@erp.com"
+					} as IEmployee
+				} as unknown as ITPV
+
+				await this.TPVDBController.CollectionModel.create(TPV1);
+				await this.TPVDBController.CollectionModel.create(TPV2);
 			}
 		});
 	}

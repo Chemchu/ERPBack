@@ -18,7 +18,6 @@ export class Router {
         if (!gatewayUrl) { throw "GATEWAY_URL no encontrado" }
 
         this.app.use(cors({ origin: gatewayUrl })); // --> En produccion
-        //this.app.use(cors({ origin: "*" })); // --> Para probar en el sandbox
 
         const { Strategy, ExtractJwt } = passportJWT;
         const params = {

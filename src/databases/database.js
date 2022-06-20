@@ -73,6 +73,35 @@ class Database {
                 const pw = "admin";
                 yield this.EmployeeDBController.CreateEmployee(empleado, pw);
             }
+            const numTpvs = yield this.TPVDBController.CollectionModel.countDocuments({});
+            if (numTpvs <= 0) {
+                const TPV1 = {
+                    cajaInicial: 100,
+                    nombre: "TPV1",
+                    libre: true,
+                    enUsoPor: {
+                        nombre: "Administrador",
+                        apellidos: "Admin",
+                        dni: "Administrador",
+                        rol: "Administrador",
+                        email: "admin@erp.com"
+                    }
+                };
+                const TPV2 = {
+                    cajaInicial: 100,
+                    nombre: "TPV2",
+                    libre: true,
+                    enUsoPor: {
+                        nombre: "Administrador",
+                        apellidos: "Admin",
+                        dni: "Administrador",
+                        rol: "Administrador",
+                        email: "admin@erp.com"
+                    }
+                };
+                yield this.TPVDBController.CollectionModel.create(TPV1);
+                yield this.TPVDBController.CollectionModel.create(TPV2);
+            }
         }));
     }
     static Instance() {
