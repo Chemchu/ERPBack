@@ -64,11 +64,13 @@ const cierreTpvDefs = (0, apollo_server_express_1.gql) `
 
     input CierreTPVFind {
         _id: ID
-        fecha: String
     }
 
     input CierresTPVFind {
-        fecha: String
+        apertura: String
+        fechaInicial: String
+        fechaFinal: String
+        query: String
     }
 
     ##### Query #####
