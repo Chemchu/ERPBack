@@ -1,11 +1,12 @@
 import { Database } from "../../../databases/database";
+import { CreateCierreList } from "../../../lib/cierreCreator";
 import { ProcessCSV } from "../../../lib/processCSV";
 import { CreateProductList } from "../../../lib/productCreator";
 import { CreateSaleList } from "../../../lib/salesCreator";
 import { IClient } from "../../../types/Cliente";
 import { IEmployee } from "../../../types/Empleado";
 import { IProduct } from "../../../types/Producto";
-import { ITPV } from "../../../types/TPV";
+import { ICierreTPV, ITPV } from "../../../types/TPV";
 import { ISale } from "../../../types/Venta";
 
 export const uploadProductoFileResolver = async (root: any, args: { csv: string }, context: any) => {
@@ -46,7 +47,6 @@ export const uploadProductoFileResolver = async (root: any, args: { csv: string 
         console.log(err);
         return { message: `Error al añadir los productos en la base de datos`, successful: false };
     }
-
 }
 
 export const uploadClientesFileResolver = async (root: any, args: { csv: string }, context: any) => {
@@ -134,6 +134,32 @@ export const uploadVentasFileResolver = async (root: any, args: { ventasJson: st
         return { message: `Error al añadir las ventas en la base de datos`, successful: false };
     }
 
+}
+
+export const uploadCierresFileResolver = async (root: any, args: { csv: string }, context: any) => {
+    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
+    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+
+    try {
+        const db = Database.Instance();
+        // El producto en JSON de la peticións
+        const cArray = ProcessCSV(JSON.parse(args.csv));
+        let auxCierreList: ICierreTPV[];
+        const empleadoObject = db.EmployeeDBController.CollectionModel.find({});
+        const empleado = (await empleadoObject).pop()
+        if (!empleado) {
+            return { message: `No se pueden añadir cierres sin al menos un empleado en el sistema`, successful: false };
+        }
+        auxCierreList = CreateCierreList(cArray, empleado);
+
+        // Solo se añaden productos no existentes
+        await db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
+        return { message: `Los cierres se han añadidos a la base de datos`, successful: true };
+    }
+    catch (err) {
+        console.log(err);
+        return { message: `Error al añadir los cierres en la base de datos`, successful: false };
+    }
 }
 
 const IsProductValid = (producto: IProduct): boolean => {

@@ -4,19 +4,16 @@ exports.Producto = void 0;
 const mongoose_1 = require("mongoose");
 class Producto {
     constructor() {
-        const Promocion = new mongoose_1.Schema({ cantidadNecesaria: Number, dto: Number, precioFijo: Number });
         const ProductSchema = new mongoose_1.Schema({
-            nombre: { type: String, required: false },
+            nombre: { type: String, required: true },
             proveedor: { type: String, required: false },
             familia: { type: String, required: false },
-            precioVenta: { type: Number, required: false },
-            precioCompra: { type: Number, required: false },
+            precioVenta: { type: Number, required: true },
+            precioCompra: { type: Number, required: true },
             iva: { type: Number, required: false },
-            ean: { type: String, required: false },
+            ean: { type: String, required: true },
             margen: { type: Number, required: false },
-            promociones: { type: [String], required: false },
             alta: { type: Boolean, required: false },
-            img: { type: String, required: false },
             cantidad: { type: Number, required: false },
             cantidadRestock: { type: Number, required: false },
         }, { strict: true, timestamps: true });

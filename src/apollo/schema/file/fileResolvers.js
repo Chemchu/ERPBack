@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadVentasFileResolver = exports.uploadClientesFileResolver = exports.uploadProductoFileResolver = void 0;
+exports.uploadCierresFileResolver = exports.uploadVentasFileResolver = exports.uploadClientesFileResolver = exports.uploadProductoFileResolver = void 0;
 const database_1 = require("../../../databases/database");
+const cierreCreator_1 = require("../../../lib/cierreCreator");
 const processCSV_1 = require("../../../lib/processCSV");
 const productCreator_1 = require("../../../lib/productCreator");
 const uploadProductoFileResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
@@ -94,6 +95,26 @@ const uploadVentasFileResolver = (root, args, context) => __awaiter(void 0, void
     }
 });
 exports.uploadVentasFileResolver = uploadVentasFileResolver;
+const uploadCierresFileResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const db = database_1.Database.Instance();
+        const cArray = (0, processCSV_1.ProcessCSV)(JSON.parse(args.csv));
+        let auxCierreList;
+        const empleadoObject = db.EmployeeDBController.CollectionModel.find({});
+        const empleado = (yield empleadoObject).pop();
+        if (!empleado) {
+            return { message: `No se pueden añadir cierres sin al menos un empleado en el sistema`, successful: false };
+        }
+        auxCierreList = (0, cierreCreator_1.CreateCierreList)(cArray, empleado);
+        yield db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
+        return { message: `Los cierres se han añadidos a la base de datos`, successful: true };
+    }
+    catch (err) {
+        console.log(err);
+        return { message: `Error al añadir los cierres en la base de datos`, successful: false };
+    }
+});
+exports.uploadCierresFileResolver = uploadCierresFileResolver;
 const IsProductValid = (producto) => {
     if (!producto.nombre || producto.nombre === null || producto.nombre === undefined) {
         return false;

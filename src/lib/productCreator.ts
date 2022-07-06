@@ -1,7 +1,6 @@
 import { IProduct } from "../types/Producto";
 
 export const CreateProduct = (jsonData: any): IProduct => {
-
     const producto: IProduct = {
         nombre: jsonData.NOMBRE,
         proveedor: jsonData.PROVEEDOR,

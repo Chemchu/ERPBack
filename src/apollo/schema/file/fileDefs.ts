@@ -10,6 +10,7 @@ const fileDefs = gql`
     addProductosFile(csv: String!): ResponseMutation!
     addClientesFile(csv: String!): ResponseMutation!
     addVentasFile(ventasJson: String!): ResponseMutation!
+    addCierresFile(csv: String!):  ResponseMutation!
   }
 `;
 
