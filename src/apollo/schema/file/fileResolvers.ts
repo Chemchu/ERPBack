@@ -145,13 +145,17 @@ export const uploadCierresFileResolver = async (root: any, args: { csv: string }
         // El producto en JSON de la peticións
         const cArray = ProcessCSV(JSON.parse(args.csv));
         let auxCierreList: ICierreTPV[];
-        const empleadoObject = db.EmployeeDBController.CollectionModel.find({});
-        const empleado = (await empleadoObject).pop()
+        const empleadoObject = await db.EmployeeDBController.CollectionModel.find({});
+        const empleado = empleadoObject.pop()
         if (!empleado) {
             return { message: `No se pueden añadir cierres sin al menos un empleado en el sistema`, successful: false };
         }
-        auxCierreList = CreateCierreList(cArray, empleado);
+        const tpv = await db.TPVDBController.CollectionModel.findOne({ nombre: cArray[0].TPV })
+        if (!tpv) {
+            return { message: `No se pueden añadir cierres de una TPV no existente`, successful: false };
+        }
 
+        auxCierreList = CreateCierreList(cArray, empleado, tpv._id);
         // Solo se añaden productos no existentes
         await db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
         return { message: `Los cierres se han añadidos a la base de datos`, successful: true };

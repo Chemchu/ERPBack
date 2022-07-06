@@ -50,6 +50,7 @@ const Resolvers = {
         ocupyTPV: tpvResolver_1.ocupyTpvResolver,
         freeTPV: tpvResolver_1.freeTpvResolver,
         addCierreTPV: cierreTpvResolver_1.addCierreTpvResolver,
+        addCierresFile: fileResolvers_1.uploadCierresFileResolver,
         deleteCierreTPV: cierreTpvResolver_1.deleteCierreTpvResolver,
         updateCierreTPV: cierreTpvResolver_1.updateCierreTpvResolver,
         addDevolucion: devolucionResolver_1.addDevolucionResolver,

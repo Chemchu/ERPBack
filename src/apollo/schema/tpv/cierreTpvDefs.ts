@@ -11,7 +11,6 @@ const cierreTpvDefs = gql`
         cerradoPor: Empleado,
         apertura: String,
         cierre: String,
-        numVentas: Int,
         ventasEfectivo: Float,
         ventasTarjeta: Float,
         ventasTotales: Float,
@@ -31,7 +30,6 @@ const cierreTpvDefs = gql`
         cerradoPor: EmpleadoInput!,
         apertura: String!,
         cierre: String,
-        numVentas: Int!
         ventasEfectivo: Float!,
         ventasTarjeta: Float!,
         ventasTotales: Float!,

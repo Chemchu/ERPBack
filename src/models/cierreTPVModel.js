@@ -21,7 +21,6 @@ class CierreTPV {
             apertura: { type: Date, required: true },
             cierre: { type: Date, required: true },
             cajaInicial: { type: Number, required: true },
-            numVentas: { type: Number, required: true },
             ventasEfectivo: { type: Number, required: true },
             ventasTarjeta: { type: Number, required: true },
             ventasTotales: { type: Number, required: true },

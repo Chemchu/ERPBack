@@ -3,7 +3,7 @@ import { loginResolver } from "./schema/authentication/loginResolver";
 import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver } from "./schema/cliente/clienteResolver";
 import { addDevolucionResolver, deleteDevolucionResolver, devolucionesResolver, devolucionResolver, updateDevolucionResolver } from "./schema/devolucion/devolucionResolver";
 import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
-import { uploadProductoFileResolver, uploadVentasFileResolver } from "./schema/file/fileResolvers";
+import { uploadCierresFileResolver, uploadProductoFileResolver, uploadVentasFileResolver } from "./schema/file/fileResolvers";
 import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver } from "./schema/producto/productoResolver";
 import { addCierreTpvResolver, cierreTpvResolver, cierreTpvsResolver, deleteCierreTpvResolver, updateCierreTpvResolver } from "./schema/tpv/cierreTpvResolver";
 import { addTpvResolver, deleteTpvResolver, freeTpvResolver, ocupyTpvResolver, tpvResolver, tpvsResolver, updateTpvResolver } from "./schema/tpv/tpvResolver";
@@ -54,6 +54,7 @@ const Resolvers = {
         freeTPV: freeTpvResolver,
 
         addCierreTPV: addCierreTpvResolver,
+        addCierresFile: uploadCierresFileResolver,
         deleteCierreTPV: deleteCierreTpvResolver,
         updateCierreTPV: updateCierreTpvResolver,
 
