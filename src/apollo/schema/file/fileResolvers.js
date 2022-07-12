@@ -37,8 +37,14 @@ const uploadProductoFileResolver = (root, args, context) => __awaiter(void 0, vo
             }
             prodList.push(auxProductList[i]);
         }
-        yield db.ProductDBController.CollectionModel.insertMany(prodList);
-        return { message: `Los productos han sido añadidos en la base de datos`, successful: true };
+        const res = yield db.ProductDBController.CollectionModel.insertMany(prodList);
+        if (res.length <= 0) {
+            return { message: `No se ha podido añadir los productos a la base de datos`, successful: false };
+        }
+        if (res.length === prodList.length) {
+            return { message: `Los productos han sido añadidos en la base de datos`, successful: true };
+        }
+        return { message: `No se ha podido añadir todos los productos a la base de datos`, successful: false };
     }
     catch (err) {
         console.log(err);
@@ -50,7 +56,7 @@ const uploadClientesFileResolver = (root, args, context) => __awaiter(void 0, vo
     try {
         const db = database_1.Database.Instance();
         const pArray = (0, processCSV_1.ProcessCSV)(JSON.parse(args.csv));
-        return { message: `Los clientes han sido añadidos en la base de datos`, successful: true };
+        return { message: `Error al añadir los clientes en la base de datos: No implementado`, successful: false };
     }
     catch (err) {
         console.log(err);
@@ -86,8 +92,14 @@ const uploadVentasFileResolver = (root, args, context) => __awaiter(void 0, void
             v.tpv = tpv._id;
             ventas.push(v);
         }
-        yield db.VentasDBController.CollectionModel.insertMany(ventas);
-        return { message: `Las ventas han sido añadidas en la base de datos`, successful: true };
+        const res = yield db.VentasDBController.CollectionModel.insertMany(ventas);
+        if (res.length <= 0) {
+            return { message: `No se ha podido añadir las ventas a la base de datos`, successful: false };
+        }
+        if (res.length === ventas.length) {
+            return { message: `Las ventas han sido añadidos en la base de datos`, successful: true };
+        }
+        return { message: `No se ha podido añadir todos las ventas a la base de datos`, successful: false };
     }
     catch (err) {
         console.log(err);
@@ -110,8 +122,14 @@ const uploadCierresFileResolver = (root, args, context) => __awaiter(void 0, voi
             return { message: `No se pueden añadir cierres de una TPV no existente`, successful: false };
         }
         auxCierreList = (0, cierreCreator_1.CreateCierreList)(cArray, empleado, tpv._id);
-        yield db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
-        return { message: `Los cierres se han añadidos a la base de datos`, successful: true };
+        const res = yield db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
+        if (res.length <= 0) {
+            return { message: `No se ha podido añadir los cierres a la base de datos`, successful: false };
+        }
+        if (res.length === auxCierreList.length) {
+            return { message: `Los cierres han sido añadidos en la base de datos`, successful: true };
+        }
+        return { message: `No se ha podido añadir todos los cierres a la base de datos`, successful: false };
     }
     catch (err) {
         console.log(err);

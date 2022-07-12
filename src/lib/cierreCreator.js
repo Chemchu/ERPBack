@@ -7,20 +7,20 @@ const CreateCierre = (jsonData, empleado, tpvID) => {
     if (jsonData.CERRADO_POR) {
         return {
             tpv: tpvID,
-            abiertoPor: jsonData.ABIERTO_POR,
-            cerradoPor: jsonData.CERRADO_POR,
-            apertura: horaApertura,
-            cierre: horaCierre,
-            cajaInicial: Number(jsonData.CAJA_INICIAL),
-            ventasEfectivo: Number(jsonData.VENTAS_EFECTIVO),
-            ventasTarjeta: Number(jsonData.VENTAS_TARJETA),
-            ventasTotales: Number(jsonData.VENTAS_TOTALES),
-            dineroEsperadoEnCaja: Number(jsonData.DINERO_ESPERADO_EN_CAJA),
-            dineroRealEnCaja: Number(jsonData.DINERO_REAL_EN_CAJA),
-            dineroRetirado: Number(jsonData.DINERO_RETIRADO),
-            fondoDeCaja: Number(jsonData.FONDO_DE_CAJA),
-            beneficio: Number(jsonData.BENEFICIO),
-            nota: jsonData.NOTA || ""
+            abiertoPor: jsonData.ABIERTO_POR || jsonData.abiertoPor,
+            cerradoPor: jsonData.CERRADO_POR || jsonData.cerradoPor,
+            apertura: horaApertura || jsonData.apertura,
+            cierre: horaCierre || jsonData.cierre,
+            cajaInicial: Number(jsonData.CAJA_INICIAL) || jsonData.cajaInicial,
+            ventasEfectivo: Number(jsonData.VENTAS_EFECTIVO) || jsonData.ventasEfectivo,
+            ventasTarjeta: Number(jsonData.VENTAS_TARJETA) || jsonData.ventasTarjeta,
+            ventasTotales: Number(jsonData.VENTAS_TOTALES) || jsonData.ventasTotales,
+            dineroEsperadoEnCaja: Number(jsonData.DINERO_ESPERADO_EN_CAJA) || jsonData.dineroEsperadoEnCaja,
+            dineroRealEnCaja: Number(jsonData.DINERO_REAL_EN_CAJA) || jsonData.dineroRealEnCaja,
+            dineroRetirado: Number(jsonData.DINERO_RETIRADO) || jsonData.dineroRetirado,
+            fondoDeCaja: Number(jsonData.FONDO_DE_CAJA) || jsonData.fondoDeCaja,
+            beneficio: Number(jsonData.BENEFICIO) || jsonData.beneficio,
+            nota: jsonData.NOTA || "" || jsonData.nota,
         };
     }
     const cierre = {

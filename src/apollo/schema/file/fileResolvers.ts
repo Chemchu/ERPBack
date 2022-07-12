@@ -2,8 +2,6 @@ import { Database } from "../../../databases/database";
 import { CreateCierreList } from "../../../lib/cierreCreator";
 import { ProcessCSV } from "../../../lib/processCSV";
 import { CreateProductList } from "../../../lib/productCreator";
-import { CreateSaleList } from "../../../lib/salesCreator";
-import { IClient } from "../../../types/Cliente";
 import { IEmployee } from "../../../types/Empleado";
 import { IProduct } from "../../../types/Producto";
 import { ICierreTPV, ITPV } from "../../../types/TPV";
@@ -15,7 +13,6 @@ export const uploadProductoFileResolver = async (root: any, args: { csv: string 
 
     try {
         const db = Database.Instance();
-        // El producto en JSON de la peticións
         const pArray = ProcessCSV(JSON.parse(args.csv));
 
         const auxProductList: IProduct[] = CreateProductList(pArray);
@@ -39,9 +36,16 @@ export const uploadProductoFileResolver = async (root: any, args: { csv: string 
         }
 
         // Solo se añaden productos no existentes
-        await db.ProductDBController.CollectionModel.insertMany(prodList);
+        const res = await db.ProductDBController.CollectionModel.insertMany(prodList);
+        if (res.length <= 0) {
+            return { message: `No se ha podido añadir los productos a la base de datos`, successful: false };
+        }
 
-        return { message: `Los productos han sido añadidos en la base de datos`, successful: true };
+        if (res.length === prodList.length) {
+            return { message: `Los productos han sido añadidos en la base de datos`, successful: true };
+        }
+
+        return { message: `No se ha podido añadir todos los productos a la base de datos`, successful: false };
     }
     catch (err) {
         console.log(err);
@@ -81,7 +85,8 @@ export const uploadClientesFileResolver = async (root: any, args: { csv: string 
         // // Solo se añaden productos no existentes
         // await db.ProductDBController.CollectionModel.insertMany(prodList);
 
-        return { message: `Los clientes han sido añadidos en la base de datos`, successful: true };
+        // return { message: `Los clientes han sido añadidos en la base de datos`, successful: true };
+        return { message: `Error al añadir los clientes en la base de datos: No implementado`, successful: false };
     }
     catch (err) {
         console.log(err);
@@ -125,9 +130,16 @@ export const uploadVentasFileResolver = async (root: any, args: { ventasJson: st
             ventas.push(v);
         }
 
-        await db.VentasDBController.CollectionModel.insertMany(ventas);
+        const res = await db.VentasDBController.CollectionModel.insertMany(ventas);
+        if (res.length <= 0) {
+            return { message: `No se ha podido añadir las ventas a la base de datos`, successful: false };
+        }
 
-        return { message: `Las ventas han sido añadidas en la base de datos`, successful: true };
+        if (res.length === ventas.length) {
+            return { message: `Las ventas han sido añadidos en la base de datos`, successful: true };
+        }
+
+        return { message: `No se ha podido añadir todos las ventas a la base de datos`, successful: false };
     }
     catch (err) {
         console.log(err);
@@ -157,8 +169,16 @@ export const uploadCierresFileResolver = async (root: any, args: { csv: string }
 
         auxCierreList = CreateCierreList(cArray, empleado, tpv._id);
         // Solo se añaden productos no existentes
-        await db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
-        return { message: `Los cierres se han añadidos a la base de datos`, successful: true };
+        const res = await db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
+        if (res.length <= 0) {
+            return { message: `No se ha podido añadir los cierres a la base de datos`, successful: false };
+        }
+
+        if (res.length === auxCierreList.length) {
+            return { message: `Los cierres han sido añadidos en la base de datos`, successful: true };
+        }
+
+        return { message: `No se ha podido añadir todos los cierres a la base de datos`, successful: false };
     }
     catch (err) {
         console.log(err);
