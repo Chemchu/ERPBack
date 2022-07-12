@@ -5,6 +5,7 @@ import DevolucionDefs from "./schema/devolucion/devolucionDefs";
 import EmpleadoDefs from "./schema/empleado/empleadoDefs";
 import fileDefs from "./schema/file/fileDefs";
 import productoDefs from "./schema/producto/productoDefs";
+import ProveedorDefs from "./schema/proveedor/proveedorDefs";
 import CierreTpvDefs from "./schema/tpv/cierreTpvDefs";
 import TpvDefs from "./schema/tpv/tpvDefs";
 import VentaDefs from "./schema/venta/ventaDefs";
@@ -20,7 +21,8 @@ const TypeDefs = [
     LoginDefs,
     JwtValidatorDefs,
     fileDefs,
-    DevolucionDefs
+    DevolucionDefs,
+    ProveedorDefs
 ];
 
 export default TypeDefs

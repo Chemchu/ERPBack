@@ -110,7 +110,6 @@ export const productosResolver = async (parent: any, args: ProductosFind, contex
     return [];
 }
 
-// TODO
 export const addProductoResolver = async (root: any, args: { producto: ProductoAddInput }, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }

@@ -31,6 +31,8 @@ const DevolucionDBController_1 = require("./DevolucionDBController");
 const devolucionModel_1 = __importDefault(require("../models/devolucionModel"));
 const MermaDBController_1 = require("./MermaDBController");
 const mermaModel_1 = require("../models/mermaModel");
+const ProveedorDBController_1 = require("./ProveedorDBController");
+const proveedorModel_1 = __importDefault(require("../models/proveedorModel"));
 mongoose.Promise = global.Promise;
 dotenv.config();
 const dbInformation = {
@@ -49,6 +51,7 @@ class Database {
         this.TPVDBController = new TPVDBController_1.TPVDBController(new tpvModel_1.TPV().Model);
         this.DevolucionDBController = new DevolucionDBController_1.DevolucionDBController(new devolucionModel_1.default().Model);
         this.MermaDBController = new MermaDBController_1.MermaDBController(new mermaModel_1.Merma().Model);
+        this.ProveedorDBController = new ProveedorDBController_1.ProveedorDBController(new proveedorModel_1.default().Model);
         this.db.connect(dbInformation.url + dbInformation.dbName).then(() => {
             console.log("¡Conexión realizada con la base de datos!");
         }).catch((err) => {

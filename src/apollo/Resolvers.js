@@ -7,6 +7,7 @@ const devolucionResolver_1 = require("./schema/devolucion/devolucionResolver");
 const empleadoResolver_1 = require("./schema/empleado/empleadoResolver");
 const fileResolvers_1 = require("./schema/file/fileResolvers");
 const productoResolver_1 = require("./schema/producto/productoResolver");
+const proveedorResolvers_1 = require("./schema/proveedor/proveedorResolvers");
 const cierreTpvResolver_1 = require("./schema/tpv/cierreTpvResolver");
 const tpvResolver_1 = require("./schema/tpv/tpvResolver");
 const ventaResolver_1 = require("./schema/venta/ventaResolver");
@@ -27,7 +28,8 @@ const Resolvers = {
         cierresTPVs: cierreTpvResolver_1.cierreTpvsResolver,
         validateJwt: jwtValidatorResolver_1.jwtValidatorResolver,
         devolucion: devolucionResolver_1.devolucionResolver,
-        devoluciones: devolucionResolver_1.devolucionesResolver
+        devoluciones: devolucionResolver_1.devolucionesResolver,
+        proveedores: proveedorResolvers_1.proveedoresResolver
     },
     Mutation: {
         addProducto: productoResolver_1.addProductoResolver,
@@ -55,7 +57,10 @@ const Resolvers = {
         updateCierreTPV: cierreTpvResolver_1.updateCierreTpvResolver,
         addDevolucion: devolucionResolver_1.addDevolucionResolver,
         deleteDevolucion: devolucionResolver_1.deleteDevolucionResolver,
-        updateDevolucion: devolucionResolver_1.updateDevolucionResolver
+        updateDevolucion: devolucionResolver_1.updateDevolucionResolver,
+        addProveedor: proveedorResolvers_1.addProveedorResolver,
+        deleteProveedor: proveedorResolvers_1.deleteProveedorResolver,
+        updateProveedor: proveedorResolvers_1.updateProveedorResolver
     }
 };
 exports.default = Resolvers;
