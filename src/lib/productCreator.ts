@@ -2,6 +2,7 @@ import { IProduct } from "../types/Producto";
 
 export const CreateProduct = (jsonData: any): IProduct => {
     const producto: IProduct = {
+        _id: jsonData.ID || jsonData._id,
         nombre: jsonData.NOMBRE || jsonData.nombre,
         proveedor: jsonData.PROVEEDOR || jsonData.proveedor,
         familia: jsonData.FAMILIA || jsonData.familia,
@@ -15,6 +16,10 @@ export const CreateProduct = (jsonData: any): IProduct => {
         cantidad: jsonData.CANTIDAD || jsonData.cantidad,
         cantidadRestock: jsonData.CANTIDAD_RESTOCK || jsonData.cantidadRestock,
     } as IProduct;
+
+    if (!producto._id) {
+        delete producto._id
+    }
 
     return producto;
 }

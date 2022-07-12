@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductList = exports.CreateProduct = void 0;
 const CreateProduct = (jsonData) => {
     const producto = {
+        _id: jsonData.ID || jsonData._id,
         nombre: jsonData.NOMBRE || jsonData.nombre,
         proveedor: jsonData.PROVEEDOR || jsonData.proveedor,
         familia: jsonData.FAMILIA || jsonData.familia,
@@ -16,6 +17,9 @@ const CreateProduct = (jsonData) => {
         cantidad: jsonData.CANTIDAD || jsonData.cantidad,
         cantidadRestock: jsonData.CANTIDAD_RESTOCK || jsonData.cantidadRestock,
     };
+    if (!producto._id) {
+        delete producto._id;
+    }
     return producto;
 };
 exports.CreateProduct = CreateProduct;

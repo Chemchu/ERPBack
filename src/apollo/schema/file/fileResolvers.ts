@@ -35,7 +35,6 @@ export const uploadProductoFileResolver = async (root: any, args: { csv: string 
             prodList.push(auxProductList[i]);
         }
 
-        // Solo se añaden productos no existentes
         const res = await db.ProductDBController.CollectionModel.insertMany(prodList);
         if (res.length <= 0) {
             return { message: `No se ha podido añadir los productos a la base de datos`, successful: false };
