@@ -1,9 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCierreList = exports.CreateCierre = void 0;
+const FormatDate = (strDate) => {
+    const dateParts = strDate.split(" ");
+    const fecha = dateParts[0].split("/");
+    const dia = Number(fecha[0]);
+    const mes = Number(fecha[1]) - 1;
+    const anyo = Number("20" + fecha[2]);
+    const tiempo = dateParts[1].split(":");
+    const hora = Number(tiempo[0]);
+    const minuto = Number(tiempo[1]);
+    const fechaFin = new Date(anyo, mes, dia, hora, minuto);
+    fechaFin.setDate(fechaFin.getDate() - 1);
+    return fechaFin;
+};
 const CreateCierre = (jsonData, empleado, tpvID) => {
-    const horaApertura = new Date(jsonData.APERTURA + ":00");
-    const horaCierre = new Date(jsonData.CIERRE);
+    const horaApertura = FormatDate(jsonData.APERTURA + ":00");
+    const horaCierre = FormatDate(jsonData.CIERRE);
     if (jsonData.CERRADO_POR) {
         return {
             tpv: tpvID,

@@ -6,7 +6,6 @@ export class Producto {
   private modelo: Model<IProduct>;
 
   constructor() {
-    // const Promocion = new Schema({ cantidadNecesaria: Number, dto: Number, precioFijo: Number });
     // const ProveedorSchema = new Schema({
     //   nombre: { type: String, requiered: true },
     //   cif: { type: String, requiered: true },
@@ -32,7 +31,6 @@ export class Producto {
       alta: { type: Boolean, required: false },
       cantidad: { type: Number, required: false },
       cantidadRestock: { type: Number, required: false },
-      // promociones: { type: [String], required: false },
     }, { strict: true, timestamps: true }) as Schema<IProduct>;
 
     this.modelo = model<IProduct>('Producto', ProductSchema);

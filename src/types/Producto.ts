@@ -1,4 +1,4 @@
-import { Document, SchemaDefinition } from 'mongoose';
+import { Document } from 'mongoose';
 import { IProveedor } from './Proveedor';
 
 export interface IProduct extends Document {
