@@ -1,9 +1,8 @@
 import { Document } from 'mongoose';
-import { IProveedor } from './Proveedor';
 
 export interface IProduct extends Document {
     nombre: string
-    proveedor: IProveedor
+    proveedor: string
     familia: string
     precioVenta: number
     precioCompra: number

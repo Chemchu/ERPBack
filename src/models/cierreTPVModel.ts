@@ -30,7 +30,7 @@ export class CierreTPV {
             dineroRealEnCaja: { type: Number, required: true },
             dineroRetirado: { type: Number, required: true },
             fondoDeCaja: { type: Number, required: true },
-            beneficio: { type: Number, required: true },
+            beneficio: { type: Number, required: false },
             nota: { type: String, required: false }
 
         }, { strict: true }) as Schema<ICierreTPV>;

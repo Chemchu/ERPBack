@@ -18,7 +18,7 @@ const CreateCierre = (jsonData, empleado, tpvID) => {
     const horaApertura = FormatDate(jsonData.APERTURA + ":00");
     const horaCierre = FormatDate(jsonData.CIERRE);
     if (jsonData.CERRADO_POR) {
-        return {
+        const cierre = {
             tpv: tpvID,
             abiertoPor: jsonData.ABIERTO_POR || jsonData.abiertoPor,
             cerradoPor: jsonData.CERRADO_POR || jsonData.cerradoPor,
@@ -32,9 +32,13 @@ const CreateCierre = (jsonData, empleado, tpvID) => {
             dineroRealEnCaja: Number(jsonData.DINERO_REAL_EN_CAJA) || jsonData.dineroRealEnCaja,
             dineroRetirado: Number(jsonData.DINERO_RETIRADO) || jsonData.dineroRetirado,
             fondoDeCaja: Number(jsonData.FONDO_DE_CAJA) || jsonData.fondoDeCaja,
-            beneficio: Number(jsonData.BENEFICIO) || jsonData.beneficio,
+            beneficio: -1,
             nota: jsonData.NOTA || "" || jsonData.nota,
         };
+        if (cierre.beneficio && cierre.beneficio < 0) {
+            delete cierre.beneficio;
+        }
+        return cierre;
     }
     const cierre = {
         tpv: tpvID,
@@ -50,9 +54,12 @@ const CreateCierre = (jsonData, empleado, tpvID) => {
         dineroRealEnCaja: Number(jsonData.DINERO_REAL_EN_CAJA),
         dineroRetirado: Number(jsonData.DINERO_RETIRADO),
         fondoDeCaja: Number(jsonData.FONDO_DE_CAJA),
-        beneficio: Number(jsonData.BENEFICIO),
+        beneficio: Number(jsonData.BENEFICIO) || -1,
         nota: jsonData.NOTA || ""
     };
+    if (cierre.beneficio && cierre.beneficio < 0) {
+        delete cierre.beneficio;
+    }
     return cierre;
 };
 exports.CreateCierre = CreateCierre;

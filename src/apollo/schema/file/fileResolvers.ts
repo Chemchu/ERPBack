@@ -167,6 +167,7 @@ export const uploadCierresFileResolver = async (root: any, args: { csv: string }
         }
 
         auxCierreList = CreateCierreList(cArray, empleado, tpv._id);
+
         // Solo se añaden productos no existentes
         const res = await db.CierreTPVDBController.CollectionModel.insertMany(auxCierreList);
         if (res.length <= 0) {

@@ -162,7 +162,7 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
         const ventas = yield db.VentasDBController.CollectionModel.find({ "createdAt": { $gte: fechaApertura, $lt: fechaActual } }).exec();
         const productosVendidos = ventas.map(v => v.productos).flat();
         let beneficio = productosVendidos.reduce((total, p) => {
-            return total += p.margen;
+            return total += (p.precioCompra - p.precioFinal) * p.cantidadVendida;
         }, 0);
         const res = yield db.CierreTPVDBController.CollectionModel.create({
             tpv: args.cierre.tpv,

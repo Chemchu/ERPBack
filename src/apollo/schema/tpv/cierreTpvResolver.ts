@@ -183,7 +183,7 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
         const productosVendidos: ISoldProduct[] = ventas.map(v => v.productos).flat();
 
         let beneficio = productosVendidos.reduce((total: number, p: ISoldProduct): number => {
-            return total += p.margen;
+            return total += (p.precioCompra - p.precioFinal) * p.cantidadVendida;
         }, 0);
 
         const res = await db.CierreTPVDBController.CollectionModel.create({
