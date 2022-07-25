@@ -2,6 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductList = exports.CreateProduct = void 0;
 const CreateProduct = (jsonData) => {
+    let alta = jsonData.alta;
+    if (alta === "TRUE" || alta === 1 || alta === "true" || alta === "True") {
+        alta = true;
+    }
+    else {
+        alta = false;
+    }
     const producto = {
         _id: jsonData.ID || jsonData._id,
         nombre: jsonData.NOMBRE || jsonData.nombre,
@@ -13,7 +20,7 @@ const CreateProduct = (jsonData) => {
         margen: jsonData.MARGEN || jsonData.margen,
         promociones: jsonData.PROMOCIONES || jsonData.promociones,
         ean: jsonData.EAN || jsonData.ean,
-        alta: jsonData.ALTA || jsonData.alta || true,
+        alta: jsonData.ALTA || alta || true,
         cantidad: jsonData.CANTIDAD || jsonData.cantidad,
         cantidadRestock: jsonData.CANTIDAD_RESTOCK || jsonData.cantidadRestock,
     };
