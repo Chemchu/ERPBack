@@ -273,8 +273,39 @@ export const deleteVentaResolver = async (root: any, args: any, context: any) =>
 export const updateVentaResolver = async (root: any, args: any, context: any) => {
     // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
     // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
+    const isQueryValidId = mongoose.Types.ObjectId.isValid(args._id);
+    if (!isQueryValidId) {
+        return { message: "ID de venta inválido", successful: false }
+    }
 
     const db = Database.Instance();
+    const ventaOriginal = await db.VentasDBController.CollectionModel.findOne({ _id: args._id })
+    if (!ventaOriginal) {
+        return { message: "La venta original no existe", successful: false }
+    }
 
+    const venta = {
+        productos: ventaOriginal.productos,
+        dineroEntregadoEfectivo: ventaOriginal.dineroEntregadoEfectivo,
+        dineroEntregadoTarjeta: ventaOriginal.dineroEntregadoTarjeta,
+        precioVentaTotalSinDto: ventaOriginal.precioVentaTotalSinDto,
+        precioVentaTotal: args.precioVentaTotal,
+        cambio: ventaOriginal.cambio,
+        cliente: args.cliente,
+        vendidoPor: ventaOriginal.vendidoPor,
+        modificadoPor: args.modificadoPor,
+        tipo: args.tipo,
+        descuentoEfectivo: ventaOriginal.descuentoEfectivo,
+        descuentoPorcentaje: ventaOriginal.descuentoPorcentaje,
+        tpv: ventaOriginal.tpv,
+    } as unknown as ISale;
+
+    const resultadoUpdate = await db.VentasDBController.CollectionModel.updateOne({ _id: args._id }, { $set: venta });
+    const updatedSale: any = await db.VentasDBController.CollectionModel.findOne({ _id: args._id });
+    if (resultadoUpdate.modifiedCount > 0) {
+        return { _id: args._id, message: "Venta actualizada correctamente", successful: true, createdAt: updatedSale?.createdAt }
+    }
+
+    return { message: "No se ha podido actualizar la venta", successful: false }
 }
 

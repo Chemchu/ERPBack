@@ -251,6 +251,35 @@ const deleteVentaResolver = (root, args, context) => __awaiter(void 0, void 0, v
 });
 exports.deleteVentaResolver = deleteVentaResolver;
 const updateVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+    const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args._id);
+    if (!isQueryValidId) {
+        return { message: "ID de venta inválido", successful: false };
+    }
     const db = database_1.Database.Instance();
+    const ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({ _id: args._id });
+    if (!ventaOriginal) {
+        return { message: "La venta original no existe", successful: false };
+    }
+    const venta = {
+        productos: ventaOriginal.productos,
+        dineroEntregadoEfectivo: ventaOriginal.dineroEntregadoEfectivo,
+        dineroEntregadoTarjeta: ventaOriginal.dineroEntregadoTarjeta,
+        precioVentaTotalSinDto: ventaOriginal.precioVentaTotalSinDto,
+        precioVentaTotal: args.precioVentaTotal,
+        cambio: ventaOriginal.cambio,
+        cliente: args.cliente,
+        vendidoPor: ventaOriginal.vendidoPor,
+        modificadoPor: args.modificadoPor,
+        tipo: args.tipo,
+        descuentoEfectivo: ventaOriginal.descuentoEfectivo,
+        descuentoPorcentaje: ventaOriginal.descuentoPorcentaje,
+        tpv: ventaOriginal.tpv,
+    };
+    const resultadoUpdate = yield db.VentasDBController.CollectionModel.updateOne({ _id: args._id }, { $set: venta });
+    const updatedSale = yield db.VentasDBController.CollectionModel.findOne({ _id: args._id });
+    if (resultadoUpdate.modifiedCount > 0) {
+        return { _id: args._id, message: "Venta actualizada correctamente", successful: true, createdAt: updatedSale === null || updatedSale === void 0 ? void 0 : updatedSale.createdAt };
+    }
+    return { message: "No se ha podido actualizar la venta", successful: false };
 });
 exports.updateVentaResolver = updateVentaResolver;
