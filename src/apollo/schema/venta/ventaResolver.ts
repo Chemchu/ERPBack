@@ -218,24 +218,10 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
 
     try {
         const db = Database.Instance();
-        const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel({
-            productos: args.fields.productos,
-            dineroEntregadoEfectivo: args.fields.dineroEntregadoEfectivo,
-            dineroEntregadoTarjeta: args.fields.dineroEntregadoTarjeta,
-            precioVentaTotalSinDto: args.fields.precioVentaTotalSinDto,
-            precioVentaTotal: args.fields.precioVentaTotal,
-            cambio: args.fields.cambio,
-            cliente: args.fields.cliente,
-            vendidoPor: args.fields.vendidoPor,
-            modificadoPor: args.fields.modificadoPor,
-            tipo: args.fields.tipo,
-            descuentoEfectivo: args.fields.descuentoEfectivo,
-            descuentoPorcentaje: args.fields.descuentoPorcentaje,
-            tpv: args.fields.tpv
-        } as ISale);
 
-        // Añadir nueva venta
-        const res: any = await saleToAdd.save(); // ---> Uso de any como solución temporal
+        const ventaFixed = FixVentaConsistency(args.fields);
+        const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel(ventaFixed);
+        const res: any = await saleToAdd.save();
 
         let isUpdatingCorrectly = true;
         // Actualizar la cantidad de productos
@@ -309,3 +295,100 @@ export const updateVentaResolver = async (root: any, args: any, context: any) =>
     return { message: "No se ha podido actualizar la venta", successful: false }
 }
 
+const FixVentaConsistency = (venta: any): ISale => {
+    try {
+        const [productosVendidosFixed, precioVentaTotal, precioVentaTotalSinDto] = FixProductInconsistency(venta.productos)
+
+        if (productosVendidosFixed.length <= 0 && precioVentaTotal < 0 && precioVentaTotalSinDto < 0) {
+            return {
+                productos: venta.productos,
+                dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
+                dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
+                precioVentaTotalSinDto: venta.precioVentaTotalSinDto,
+                precioVentaTotal: venta.precioVentaTotal,
+                cambio: venta.cambio,
+                cliente: venta.cliente,
+                vendidoPor: venta.vendidoPor,
+                modificadoPor: venta.modificadoPor,
+                tipo: venta.tipo,
+                descuentoEfectivo: venta.descuentoEfectivo,
+                descuentoPorcentaje: venta.descuentoPorcentaje,
+                tpv: venta.tpv
+            } as ISale
+        }
+
+        const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
+        const ventaFixed = {
+            productos: productosVendidosFixed,
+            dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
+            dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
+            precioVentaTotalSinDto: precioVentaTotalSinDto,
+            precioVentaTotal: precioVentaTotal,
+            cambio: cambio > 0 ? cambio : 0,
+            cliente: venta.cliente,
+            vendidoPor: venta.vendidoPor,
+            modificadoPor: venta.modificadoPor,
+            tipo: venta.tipo,
+            descuentoEfectivo: venta.descuentoEfectivo,
+            descuentoPorcentaje: venta.descuentoPorcentaje,
+            tpv: venta.tpv
+        } as ISale
+
+        return ventaFixed;
+    }
+    catch (err) {
+        return {
+            productos: venta.productos,
+            dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
+            dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
+            precioVentaTotalSinDto: venta.precioVentaTotalSinDto,
+            precioVentaTotal: venta.precioVentaTotal,
+            cambio: venta.cambio,
+            cliente: venta.cliente,
+            vendidoPor: venta.vendidoPor,
+            modificadoPor: venta.modificadoPor,
+            tipo: venta.tipo,
+            descuentoEfectivo: venta.descuentoEfectivo,
+            descuentoPorcentaje: venta.descuentoPorcentaje,
+            tpv: venta.tpv
+        } as ISale
+    }
+}
+
+const FixProductInconsistency = (productos: ISoldProduct[]): [ISoldProduct[], number, number] => {
+    try {
+        let productosFixed: ISoldProduct[] = []
+        let precioVentaTotal = 0
+        let precioVentaTotalSinDto = 0
+
+        for (let index = 0; index < productos.length; index++) {
+            let producto: ISoldProduct = productos[index];
+            try {
+                if (!producto.familia) { producto.familia = "" }
+                if (!producto.precioCompra) {
+                    const iva = producto.iva || 10
+                    const margen = producto.margen || 20
+                    producto.precioCompra = producto.precioVenta / (1 + ((iva + margen) / 100))
+                }
+                if (producto.margen <= 0 || !producto.margen) {
+                    const iva = producto.iva || 10
+                    const precioConIva = producto.precioCompra + (producto.precioCompra * (iva / 100))
+                    producto.margen = 1 - ((producto.precioFinal / precioConIva) * 100)
+                }
+                if (producto.precioFinal > producto.precioVenta) { producto.precioFinal = producto.precioVenta * (1 - (producto.dto / 100)) }
+                if (producto.precioFinal === producto.precioVenta) { producto.dto = 0 }
+            }
+            catch (err) { }
+            finally {
+                productosFixed.push(producto)
+                precioVentaTotal += producto.precioFinal * producto.cantidadVendida
+                precioVentaTotalSinDto += producto.precioVenta * producto.cantidadVendida
+            }
+        }
+
+        return [productosFixed, precioVentaTotal, precioVentaTotalSinDto];
+    }
+    catch (err) {
+        return [[], -1, -1]
+    }
+}
