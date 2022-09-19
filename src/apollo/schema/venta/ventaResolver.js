@@ -283,7 +283,7 @@ const FixVentaConsistency = (venta) => {
             dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
             precioVentaTotalSinDto: precioVentaTotalSinDto,
             precioVentaTotal: precioVentaTotal,
-            cambio: cambio > 0 ? cambio : 0,
+            cambio: cambio > 0 ? Number(cambio.toFixed(2)) : 0,
             cliente: venta.cliente,
             vendidoPor: venta.vendidoPor,
             modificadoPor: venta.modificadoPor,
@@ -313,14 +313,17 @@ const FixProductInconsistency = (productos) => {
                     const iva = producto.iva || 10;
                     const margen = producto.margen || 20;
                     producto.precioCompra = producto.precioVenta / (1 + ((iva + margen) / 100));
+                    producto.precioCompra = Number(producto.precioCompra.toFixed(2));
                 }
                 if (producto.margen <= 0 || !producto.margen) {
                     const iva = producto.iva || 10;
                     const precioConIva = producto.precioCompra + (producto.precioCompra * (iva / 100));
                     producto.margen = 1 - ((producto.precioFinal / precioConIva) * 100);
+                    producto.margen = Number(producto.margen.toFixed(2));
                 }
                 if (producto.precioFinal > producto.precioVenta) {
                     producto.precioFinal = producto.precioVenta * (1 - (producto.dto / 100));
+                    producto.precioFinal = Number(producto.precioFinal.toFixed(2));
                 }
                 if (producto.precioFinal === producto.precioVenta) {
                     producto.dto = 0;
@@ -333,7 +336,7 @@ const FixProductInconsistency = (productos) => {
                 precioVentaTotalSinDto += producto.precioVenta * producto.cantidadVendida;
             }
         }
-        return [productosFixed, precioVentaTotal, precioVentaTotalSinDto];
+        return [productosFixed, Number(precioVentaTotal.toFixed(2)), Number(precioVentaTotalSinDto.toFixed(2))];
     }
     catch (err) {
         return [[], -1, -1];
