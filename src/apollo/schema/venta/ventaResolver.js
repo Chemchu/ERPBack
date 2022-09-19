@@ -274,21 +274,7 @@ const FixVentaConsistency = (venta) => {
     try {
         const [productosVendidosFixed, precioVentaTotal, precioVentaTotalSinDto] = FixProductInconsistency(venta.productos);
         if (productosVendidosFixed.length <= 0 && precioVentaTotal < 0 && precioVentaTotalSinDto < 0) {
-            return {
-                productos: venta.productos,
-                dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
-                dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
-                precioVentaTotalSinDto: venta.precioVentaTotalSinDto,
-                precioVentaTotal: venta.precioVentaTotal,
-                cambio: venta.cambio,
-                cliente: venta.cliente,
-                vendidoPor: venta.vendidoPor,
-                modificadoPor: venta.modificadoPor,
-                tipo: venta.tipo,
-                descuentoEfectivo: venta.descuentoEfectivo,
-                descuentoPorcentaje: venta.descuentoPorcentaje,
-                tpv: venta.tpv
-            };
+            return CreateUncheckedSale(venta);
         }
         const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
         const ventaFixed = {
@@ -309,21 +295,7 @@ const FixVentaConsistency = (venta) => {
         return ventaFixed;
     }
     catch (err) {
-        return {
-            productos: venta.productos,
-            dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
-            dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
-            precioVentaTotalSinDto: venta.precioVentaTotalSinDto,
-            precioVentaTotal: venta.precioVentaTotal,
-            cambio: venta.cambio,
-            cliente: venta.cliente,
-            vendidoPor: venta.vendidoPor,
-            modificadoPor: venta.modificadoPor,
-            tipo: venta.tipo,
-            descuentoEfectivo: venta.descuentoEfectivo,
-            descuentoPorcentaje: venta.descuentoPorcentaje,
-            tpv: venta.tpv
-        };
+        return CreateUncheckedSale(venta);
     }
 };
 const FixProductInconsistency = (productos) => {
@@ -366,4 +338,21 @@ const FixProductInconsistency = (productos) => {
     catch (err) {
         return [[], -1, -1];
     }
+};
+const CreateUncheckedSale = (venta) => {
+    return {
+        productos: venta.productos,
+        dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
+        dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
+        precioVentaTotalSinDto: venta.precioVentaTotalSinDto,
+        precioVentaTotal: venta.precioVentaTotal,
+        cambio: venta.cambio,
+        cliente: venta.cliente,
+        vendidoPor: venta.vendidoPor,
+        modificadoPor: venta.modificadoPor,
+        tipo: venta.tipo,
+        descuentoEfectivo: venta.descuentoEfectivo,
+        descuentoPorcentaje: venta.descuentoPorcentaje,
+        tpv: venta.tpv
+    };
 };
