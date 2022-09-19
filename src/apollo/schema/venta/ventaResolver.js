@@ -273,7 +273,7 @@ exports.updateVentaResolver = updateVentaResolver;
 const FixVentaConsistency = (venta) => {
     try {
         const [productosVendidosFixed, precioVentaTotal, precioVentaTotalSinDto] = FixProductInconsistency(venta.productos);
-        if (productosVendidosFixed.length <= 0 && precioVentaTotal < 0 && precioVentaTotalSinDto < 0) {
+        if (productosVendidosFixed.length <= 0 || venta.productos.length != productosVendidosFixed.length) {
             return CreateUncheckedSale(venta);
         }
         const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
