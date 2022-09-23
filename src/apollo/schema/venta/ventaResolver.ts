@@ -131,7 +131,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
                 }
             })
             .sort({ createdAt: order })
-            .limit(args.limit || 500)
+            .limit(args.limit || 25000)
             .skip(args.offset || 0)
             .exec();
 
@@ -163,7 +163,7 @@ export const ventasResolver = async (parent: any, args: VentasFind, context: any
                 }
             }];
 
-            limite = 1000
+            limite = 25000
         }
 
         const tpv = await db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": query, "$options": "i" } });

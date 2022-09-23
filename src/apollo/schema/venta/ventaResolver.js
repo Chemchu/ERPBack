@@ -139,7 +139,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             }
         })
             .sort({ createdAt: order })
-            .limit(args.limit || 500)
+            .limit(args.limit || 25000)
             .skip(args.offset || 0)
             .exec();
         if (ventas)
@@ -164,7 +164,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
                         $lt: new Date(Number(args.find.fechaFinal))
                     }
                 }];
-            limite = 1000;
+            limite = 25000;
         }
         const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": query, "$options": "i" } });
         if (tpv) {
