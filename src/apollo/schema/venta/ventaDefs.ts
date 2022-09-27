@@ -5,7 +5,7 @@ const VentaDefs = gql`
 
     type Venta {
         _id: ID!
-        numFactura: Int
+        numFactura: String
         productos: [ProductoVendido]
         dineroEntregadoEfectivo: Float
         dineroEntregadoTarjeta: Float

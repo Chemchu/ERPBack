@@ -273,15 +273,17 @@ exports.updateVentaResolver = updateVentaResolver;
 const FixVentaConsistency = (venta) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
     const numVentas = yield db.VentasDBController.CollectionModel.countDocuments();
+    const currentYear = new Date().getFullYear();
+    const nFactura = `${currentYear}/${numVentas + 1}`;
     try {
         const [productosVendidosFixed, precioVentaTotal, precioVentaTotalSinDto] = FixProductInconsistency(venta.productos);
         if (productosVendidosFixed.length <= 0 || venta.productos.length != productosVendidosFixed.length) {
-            return CreateUncheckedSale(venta, numVentas + 1);
+            return CreateUncheckedSale(venta, nFactura);
         }
         const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
         const ventaFixed = {
             productos: productosVendidosFixed,
-            numFactura: numVentas + 1,
+            numFactura: nFactura,
             dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
             dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
             precioVentaTotalSinDto: precioVentaTotalSinDto,
@@ -298,7 +300,7 @@ const FixVentaConsistency = (venta) => __awaiter(void 0, void 0, void 0, functio
         return ventaFixed;
     }
     catch (err) {
-        return CreateUncheckedSale(venta, numVentas + 1);
+        return CreateUncheckedSale(venta, nFactura);
     }
 });
 const FixProductInconsistency = (productos) => {
@@ -345,10 +347,10 @@ const FixProductInconsistency = (productos) => {
         return [[], -1, -1];
     }
 };
-const CreateUncheckedSale = (venta, numVentas) => {
+const CreateUncheckedSale = (venta, numFactura) => {
     return {
         productos: venta.productos,
-        numFactura: numVentas,
+        numFactura: numFactura,
         dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
         dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
         precioVentaTotalSinDto: venta.precioVentaTotalSinDto,

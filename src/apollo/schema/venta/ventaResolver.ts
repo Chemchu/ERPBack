@@ -297,18 +297,20 @@ export const updateVentaResolver = async (root: any, args: any, context: any) =>
 const FixVentaConsistency = async (venta: any): Promise<ISale> => {
     const db = Database.Instance();
     const numVentas = await db.VentasDBController.CollectionModel.countDocuments();
+    const currentYear = new Date().getFullYear()
+    const nFactura = `${currentYear}/${numVentas + 1}`
 
     try {
         const [productosVendidosFixed, precioVentaTotal, precioVentaTotalSinDto] = FixProductInconsistency(venta.productos)
 
         if (productosVendidosFixed.length <= 0 || venta.productos.length != productosVendidosFixed.length) {
-            return CreateUncheckedSale(venta, numVentas + 1)
+            return CreateUncheckedSale(venta, nFactura)
         }
 
         const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
         const ventaFixed = {
             productos: productosVendidosFixed,
-            numFactura: numVentas + 1,
+            numFactura: nFactura,
             dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
             dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
             precioVentaTotalSinDto: precioVentaTotalSinDto,
@@ -326,7 +328,7 @@ const FixVentaConsistency = async (venta: any): Promise<ISale> => {
         return ventaFixed;
     }
     catch (err) {
-        return CreateUncheckedSale(venta, numVentas + 1)
+        return CreateUncheckedSale(venta, nFactura)
     }
 }
 
@@ -373,10 +375,10 @@ const FixProductInconsistency = (productos: ISoldProduct[]): [ISoldProduct[], nu
     }
 }
 
-const CreateUncheckedSale = (venta: any, numVentas: number): ISale => {
+const CreateUncheckedSale = (venta: any, numFactura: string): ISale => {
     return {
         productos: venta.productos,
-        numFactura: numVentas,
+        numFactura: numFactura,
         dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
         dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
         precioVentaTotalSinDto: venta.precioVentaTotalSinDto,
