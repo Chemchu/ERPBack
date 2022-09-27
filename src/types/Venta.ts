@@ -5,6 +5,7 @@ import { ISoldProduct } from './Producto';
 import { ITPV } from './TPV';
 
 export interface ISale extends Document {
+    numFactura: number
     productos: ISoldProduct[],
     dineroEntregadoEfectivo: number,
     dineroEntregadoTarjeta: number,

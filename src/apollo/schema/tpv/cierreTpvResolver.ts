@@ -226,7 +226,7 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
         }
 
         return {
-            message: "Cierre añadido correctamenete",
+            message: "Cierre añadido correctamente",
             successful: true,
             token: `Bearer ${token}`,
             cierre: res

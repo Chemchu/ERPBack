@@ -218,8 +218,7 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
 
     try {
         const db = Database.Instance();
-
-        const ventaFixed = FixVentaConsistency(args.fields);
+        const ventaFixed = await FixVentaConsistency(args.fields);
         const saleToAdd: mongoose.Document<ISale> = new db.VentasDBController.CollectionModel(ventaFixed);
         const res: any = await saleToAdd.save();
 
@@ -295,17 +294,21 @@ export const updateVentaResolver = async (root: any, args: any, context: any) =>
     return { message: "No se ha podido actualizar la venta", successful: false }
 }
 
-const FixVentaConsistency = (venta: any): ISale => {
+const FixVentaConsistency = async (venta: any): Promise<ISale> => {
+    const db = Database.Instance();
+    const numVentas = await db.VentasDBController.CollectionModel.countDocuments();
+
     try {
         const [productosVendidosFixed, precioVentaTotal, precioVentaTotalSinDto] = FixProductInconsistency(venta.productos)
 
         if (productosVendidosFixed.length <= 0 || venta.productos.length != productosVendidosFixed.length) {
-            return CreateUncheckedSale(venta)
+            return CreateUncheckedSale(venta, numVentas + 1)
         }
 
         const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
         const ventaFixed = {
             productos: productosVendidosFixed,
+            numFactura: numVentas + 1,
             dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
             dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
             precioVentaTotalSinDto: precioVentaTotalSinDto,
@@ -323,7 +326,7 @@ const FixVentaConsistency = (venta: any): ISale => {
         return ventaFixed;
     }
     catch (err) {
-        return CreateUncheckedSale(venta)
+        return CreateUncheckedSale(venta, numVentas + 1)
     }
 }
 
@@ -370,9 +373,10 @@ const FixProductInconsistency = (productos: ISoldProduct[]): [ISoldProduct[], nu
     }
 }
 
-const CreateUncheckedSale = (venta: any): ISale => {
+const CreateUncheckedSale = (venta: any, numVentas: number): ISale => {
     return {
         productos: venta.productos,
+        numFactura: numVentas,
         dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
         dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
         precioVentaTotalSinDto: venta.precioVentaTotalSinDto,

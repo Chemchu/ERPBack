@@ -6,6 +6,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
 
     type Venta {
         _id: ID!
+        numFactura: Int
         productos: [ProductoVendido]
         dineroEntregadoEfectivo: Float
         dineroEntregadoTarjeta: Float

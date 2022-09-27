@@ -200,7 +200,7 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
             };
         }
         return {
-            message: "Cierre añadido correctamenete",
+            message: "Cierre añadido correctamente",
             successful: true,
             token: `Bearer ${token}`,
             cierre: res

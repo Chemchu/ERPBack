@@ -210,7 +210,7 @@ exports.ventasResolver = ventasResolver;
 const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = database_1.Database.Instance();
-        const ventaFixed = FixVentaConsistency(args.fields);
+        const ventaFixed = yield FixVentaConsistency(args.fields);
         const saleToAdd = new db.VentasDBController.CollectionModel(ventaFixed);
         const res = yield saleToAdd.save();
         let isUpdatingCorrectly = true;
@@ -270,15 +270,18 @@ const updateVentaResolver = (root, args, context) => __awaiter(void 0, void 0, v
     return { message: "No se ha podido actualizar la venta", successful: false };
 });
 exports.updateVentaResolver = updateVentaResolver;
-const FixVentaConsistency = (venta) => {
+const FixVentaConsistency = (venta) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = database_1.Database.Instance();
+    const numVentas = yield db.VentasDBController.CollectionModel.countDocuments();
     try {
         const [productosVendidosFixed, precioVentaTotal, precioVentaTotalSinDto] = FixProductInconsistency(venta.productos);
         if (productosVendidosFixed.length <= 0 || venta.productos.length != productosVendidosFixed.length) {
-            return CreateUncheckedSale(venta);
+            return CreateUncheckedSale(venta, numVentas + 1);
         }
         const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
         const ventaFixed = {
             productos: productosVendidosFixed,
+            numFactura: numVentas + 1,
             dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
             dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
             precioVentaTotalSinDto: precioVentaTotalSinDto,
@@ -295,9 +298,9 @@ const FixVentaConsistency = (venta) => {
         return ventaFixed;
     }
     catch (err) {
-        return CreateUncheckedSale(venta);
+        return CreateUncheckedSale(venta, numVentas + 1);
     }
-};
+});
 const FixProductInconsistency = (productos) => {
     try {
         let productosFixed = [];
@@ -342,9 +345,10 @@ const FixProductInconsistency = (productos) => {
         return [[], -1, -1];
     }
 };
-const CreateUncheckedSale = (venta) => {
+const CreateUncheckedSale = (venta, numVentas) => {
     return {
         productos: venta.productos,
+        numFactura: numVentas,
         dineroEntregadoEfectivo: venta.dineroEntregadoEfectivo,
         dineroEntregadoTarjeta: venta.dineroEntregadoTarjeta,
         precioVentaTotalSinDto: venta.precioVentaTotalSinDto,
