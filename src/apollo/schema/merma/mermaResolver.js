@@ -61,7 +61,7 @@ const addMermaResolver = (root, args, context) => __awaiter(void 0, void 0, void
     try {
         const db = database_1.Database.Instance();
         const empleado = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.merma.empleadoId });
-        if (empleado === null) {
+        if (!empleado) {
             return { message: "El empleado no existe en el sistema", successful: false };
         }
         const costes = yield CalcularMermaValues(args.merma.productos);
@@ -69,16 +69,20 @@ const addMermaResolver = (root, args, context) => __awaiter(void 0, void 0, void
         const merma = {
             productos: productosMermados,
             creadoPor: empleado,
-            costeProductos: costes.costeProductos,
-            ventasPerdidas: costes.ventas,
-            beneficioPerdido: costes.beneficio
+            costeProductos: Number(costes.costeProductos.toFixed(2)),
+            ventasPerdidas: Number(costes.ventas.toFixed(2)),
+            beneficioPerdido: Number(costes.beneficio.toFixed(2))
         };
-        const updatedProduct = new db.MermaDBController.CollectionModel(merma);
-        const resultado = yield updatedProduct.save();
-        if (resultado.id) {
-            return { message: "Merma añadido correctamente", successful: true, };
+        const newMerma = new db.MermaDBController.CollectionModel(merma);
+        const mermaGuardada = yield newMerma.save();
+        if (mermaGuardada !== newMerma) {
+            return { message: "No se ha podido añadir la merma", successful: false };
         }
-        return { message: "No se ha podido añadir el merma", successful: false };
+        const cantidadActualizada = yield ActualizarCantidadProductos(merma);
+        if (!cantidadActualizada) {
+            return { message: "Merma creada pero no se ha podido actualizar las cantidades", successful: true };
+        }
+        return { message: "Merma añadida correctamente", successful: true, };
     }
     catch (err) {
         return { message: err, successful: false };
@@ -87,16 +91,11 @@ const addMermaResolver = (root, args, context) => __awaiter(void 0, void 0, void
 exports.addMermaResolver = addMermaResolver;
 const deleteMermaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const db = database_1.Database.Instance();
         const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args._id);
         if (!isQueryValidId) {
             return { message: "ID de merma inválido", successful: false };
         }
-        const deletedProd = yield db.MermaDBController.CollectionModel.deleteOne({ _id: args._id });
-        if (deletedProd.deletedCount > 0) {
-            return { message: "merma eliminado correctamente", successful: true };
-        }
-        return { message: "No se ha podido eliminar el merma", successful: false };
+        return yield DeleteMerma(args._id);
     }
     catch (err) {
         return { message: err, successful: false };
@@ -106,32 +105,43 @@ exports.deleteMermaResolver = deleteMermaResolver;
 const updateMermaResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = database_1.Database.Instance();
-        const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args.input._id);
+        const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args._id);
         if (!isQueryValidId) {
             return { message: "ID de merma inválido", successful: false };
         }
-        const empleado = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.input.merma.empleadoId });
+        const empleado = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.merma.empleadoId });
         if (empleado === null) {
             return { message: "El empleado no existe en el sistema", successful: false };
         }
-        const mermaVieja = yield db.MermaDBController.CollectionModel.findOne({ _id: args.input._id });
-        if (!mermaVieja) {
-            return { message: "La merma a actualizar no existe en el sistema", successful: false };
+        const mermaVieja = yield db.MermaDBController.CollectionModel.findOne({ _id: args._id });
+        if (mermaVieja === null) {
+            return { message: "No se puede actualizar una merma que no existe", successful: false };
         }
-        const costes = yield CalcularMermaValues(args.input.merma.productos);
-        const productosMermados = yield GetProductosMermados(args.input.merma.productos);
+        CheckMermaConsistency(args.merma);
+        const { successful } = yield DeleteMerma(args._id);
+        if (!successful) {
+            return { message: "No se ha podido actualizar la merma correctamente", successful: false };
+        }
+        const costes = yield CalcularMermaValues(args.merma.productos);
+        const productosMermados = yield GetProductosMermados(args.merma.productos);
         const updatedMerma = {
+            _id: args._id,
             productos: productosMermados,
-            creadoPor: args.input.merma.empleadoId,
-            costeProductos: costes.costeProductos,
-            ventasPerdidas: costes.ventas,
-            beneficioPerdido: costes.beneficio,
+            creadoPor: empleado,
+            costeProductos: Number(costes.costeProductos.toFixed(2)),
+            ventasPerdidas: Number(costes.ventas.toFixed(2)),
+            beneficioPerdido: Number(costes.beneficio.toFixed(2))
         };
-        const resultadoUpdate = yield db.MermaDBController.CollectionModel.updateOne({ _id: args.input._id }, { $set: updatedMerma });
-        if (resultadoUpdate.modifiedCount > 0) {
-            return { message: "Merma actualizada correctamente", successful: true };
+        const newMerma = new db.MermaDBController.CollectionModel(updatedMerma);
+        const mermaGuardada = yield newMerma.save();
+        if (mermaGuardada !== newMerma) {
+            return { message: "No se ha podido actualizar la merma", successful: false };
         }
-        return { message: "No se ha podido actualizar el merma", successful: false };
+        const cantidadActualizada = yield ActualizarCantidadProductos(updatedMerma);
+        if (!cantidadActualizada) {
+            return { message: "Merma creada pero no se ha podido actualizar las cantidades", successful: true };
+        }
+        return { message: "Merma actualizada correctamente", successful: true };
     }
     catch (err) {
         return { message: err, successful: false };
@@ -141,45 +151,46 @@ exports.updateMermaResolver = updateMermaResolver;
 const CalcularMermaValues = (productosMermados) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
     const prodMap = new Map();
-    yield db.ProductDBController.CollectionModel
-        .find()
-        .cursor()
-        .eachAsync(prod => {
-        prodMap.set(prod._id, prod);
+    const cursor = db.ProductDBController.CollectionModel.find({}).cursor();
+    yield cursor.eachAsync((prod) => {
+        prodMap.set(prod._id.valueOf(), prod);
     });
     let costes = { costeProductos: 0, ventas: 0, beneficio: 0 };
     for (let index = 0; index < productosMermados.length; index++) {
         const prodMermado = productosMermados[index];
+        if (prodMermado.cantidad <= 0) {
+            throw "Una merma no puede tener una cantidad igual o inferior a cero";
+        }
         const producto = prodMap.get(prodMermado._id);
-        if (!producto) {
+        if (producto === null || producto === undefined) {
             throw "El producto añadido a la merma no existe en el sistema";
         }
+        const precioCompraIva = producto.precioCompra + (producto.precioCompra * (producto.iva / 100));
         costes.costeProductos += producto.precioCompra * prodMermado.cantidad;
         costes.ventas += producto.precioVenta * prodMermado.cantidad;
-        costes.beneficio += ((producto.precioVenta / (1 + (producto.iva / 100))) - producto.precioCompra) * prodMermado.cantidad;
+        costes.beneficio += (producto.precioVenta - precioCompraIva) * prodMermado.cantidad;
     }
     return costes;
 });
 const GetProductosMermados = (productosMermados) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
     const prodMap = new Map();
-    yield db.ProductDBController.CollectionModel
-        .find()
-        .cursor()
-        .eachAsync(prod => {
-        prodMap.set(prod._id, prod);
+    const cursor = db.ProductDBController.CollectionModel.find({}).cursor();
+    yield cursor.eachAsync((prod) => {
+        prodMap.set(prod._id.valueOf(), prod);
     });
     let resultado = [];
     for (let index = 0; index < productosMermados.length; index++) {
         const productoMermado = productosMermados[index];
         const prod = prodMap.get(productoMermado._id);
-        if (!prod) {
+        if (prod === null || prod === undefined) {
             throw "El producto añadido a la merma no existe en el sistema";
         }
         const pRes = {
+            _id: prod._id,
             nombre: prod.nombre,
             proveedor: prod.proveedor,
-            cantidad: prod.cantidad,
+            cantidad: productoMermado.cantidad,
             familia: prod.familia,
             margen: prod.margen,
             ean: prod.ean,
@@ -192,3 +203,49 @@ const GetProductosMermados = (productosMermados) => __awaiter(void 0, void 0, vo
     }
     return resultado;
 });
+const DeleteMerma = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const db = database_1.Database.Instance();
+        const merma = yield db.MermaDBController.CollectionModel.findOne({ _id: _id });
+        if (!merma) {
+            return { message: "No se ha encontrado la merma que se quiere eliminar o modificar", successful: false };
+        }
+        const actualizadoCorrectamente = yield ActualizarCantidadProductos(merma, true);
+        if (!actualizadoCorrectamente) {
+            return { message: "No se ha podido actualizar las cantidades", successful: false };
+        }
+        const deletedMerm = yield db.MermaDBController.CollectionModel.deleteOne({ _id: _id });
+        if (deletedMerm.deletedCount <= 0) {
+            return { message: "No se ha podido eliminar la merma", successful: false };
+        }
+        return { message: "Merma eliminada correctamente", successful: true };
+    }
+    catch (err) {
+        return { message: "Error al eliminar la merma: " + err, successful: false };
+    }
+});
+const ActualizarCantidadProductos = (merma, isDeleting) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const db = database_1.Database.Instance();
+        for (let index = 0; index < merma.productos.length; index++) {
+            const productoMermado = merma.productos[index];
+            const res = yield db.ProductDBController.CollectionModel
+                .updateOne({ _id: productoMermado._id }, { "$inc": { "cantidad": isDeleting ? productoMermado.cantidad : -productoMermado.cantidad } });
+            if (res.modifiedCount <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    catch (err) {
+        return false;
+    }
+});
+const CheckMermaConsistency = (merma) => {
+    for (let index = 0; index < merma.productos.length; index++) {
+        const prod = merma.productos[index];
+        if (prod.cantidad <= 0) {
+            throw "Una merma no puede tener una cantidad igual o inferior a cero";
+        }
+    }
+};

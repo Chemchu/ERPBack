@@ -8,6 +8,7 @@ export class Merma {
 
     constructor() {
         const ProductoMermadoSchema = new Schema({
+            _id: { type: Schema.Types.ObjectId, requiered: true },
             nombre: { type: String, requiered: true },
             proveedor: { type: String, requiered: true },
             cantidad: { type: Number, required: true },
@@ -25,16 +26,15 @@ export class Merma {
             apellidos: { type: String, requiered: true },
             dni: { type: String, requiered: true },
             email: { type: String, requiered: true },
-            fechaAlta: { type: Date, required: false },
-            genero: { type: String, requiered: false },
-            hashPassword: { type: String, requiered: false },
-            horasPorSemana: { type: Number, requiered: false },
             rol: { type: String, requiered: true },
         }, { strict: true, timestamps: false }) as Schema<IEmployee>;
 
         const MermaSchema = new Schema({
             productos: { type: [ProductoMermadoSchema], required: true },
             creadoPor: { type: EmpleadoSchema, required: true },
+            costeProductos: { type: Number, requiered: false },
+            ventasPerdidas: { type: Number, requiered: false },
+            beneficioPerdido: { type: Number, requiered: false },
         }, { strict: true, timestamps: true }) as Schema<IMerma>;
 
         this.modelo = model<IMerma>('Merma', MermaSchema);

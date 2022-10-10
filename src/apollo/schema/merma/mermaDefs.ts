@@ -15,6 +15,7 @@ const MermaDefs = gql`
     }
 
     type ProductoMermado {
+        _id: ID
         nombre: String,
         proveedor: String,
         cantidad: Int,

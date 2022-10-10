@@ -5,6 +5,7 @@ const mongoose_1 = require("mongoose");
 class Merma {
     constructor() {
         const ProductoMermadoSchema = new mongoose_1.Schema({
+            _id: { type: mongoose_1.Schema.Types.ObjectId, requiered: true },
             nombre: { type: String, requiered: true },
             proveedor: { type: String, requiered: true },
             cantidad: { type: Number, required: true },
@@ -21,15 +22,14 @@ class Merma {
             apellidos: { type: String, requiered: true },
             dni: { type: String, requiered: true },
             email: { type: String, requiered: true },
-            fechaAlta: { type: Date, required: false },
-            genero: { type: String, requiered: false },
-            hashPassword: { type: String, requiered: false },
-            horasPorSemana: { type: Number, requiered: false },
             rol: { type: String, requiered: true },
         }, { strict: true, timestamps: false });
         const MermaSchema = new mongoose_1.Schema({
             productos: { type: [ProductoMermadoSchema], required: true },
             creadoPor: { type: EmpleadoSchema, required: true },
+            costeProductos: { type: Number, requiered: false },
+            ventasPerdidas: { type: Number, requiered: false },
+            beneficioPerdido: { type: Number, requiered: false },
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('Merma', MermaSchema);
     }

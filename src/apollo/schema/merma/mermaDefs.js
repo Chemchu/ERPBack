@@ -16,6 +16,7 @@ const MermaDefs = (0, apollo_server_express_1.gql) `
     }
 
     type ProductoMermado {
+        _id: ID
         nombre: String,
         proveedor: String,
         cantidad: Int,
