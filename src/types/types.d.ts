@@ -169,3 +169,29 @@ export interface ProductoUpdateInput {
     alta: boolean
     img: string
 }
+
+export interface MermaFind {
+    find: {
+        _id: string
+    }
+}
+
+export interface MermasFind {
+    find: {
+        fechaInicial: string,
+        fechaFinal: string,
+        empleadoId: string
+    },
+    limit: number
+}
+
+export interface MermaInput {
+    productos: [NuevoProductoMermado],
+    empleadoId: string
+}
+
+export type NuevoProductoMermado = {
+    _id: string,
+    cantidad: number,
+    motivo: MotivoMerma | string,
+}
