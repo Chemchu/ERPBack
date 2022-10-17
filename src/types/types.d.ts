@@ -178,11 +178,11 @@ export interface MermaFind {
 
 export interface MermasFind {
     find: {
-        fechaInicial: string,
-        fechaFinal: string,
-        empleadoId: string
+        fechaInicial?: string,
+        fechaFinal?: string,
+        query?: string
     },
-    limit: number
+    limit?: number
 }
 
 export interface MermaInput {

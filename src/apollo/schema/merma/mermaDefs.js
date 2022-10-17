@@ -41,7 +41,7 @@ const MermaDefs = (0, apollo_server_express_1.gql) `
     input MermasFind {
         fechaInicial: String
         fechaFinal: String
-        empleadoId: String
+        query: String
     }
 
     input MermaInput {

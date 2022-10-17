@@ -28,8 +28,41 @@ export const mermasResolver = async (parent: any, args: MermasFind, context: any
     const db = Database.Instance();
     let order: SortOrder = "desc";
 
-    if (args.find?.empleadoId) {
-        const mermas = await db.MermaDBController.CollectionModel.find({ "creadoPor._id": args.find.empleadoId })
+    if (args.find?.query) {
+        const isQueryValidId = mongoose.Types.ObjectId.isValid(args.find.query);
+        if (isQueryValidId) {
+            const mermas = await db.MermaDBController.CollectionModel.find({ _id: args.find.query })
+                .limit(args.limit || 150)
+                .exec();
+
+            return mermas;
+        }
+
+        const mermas = await db.MermaDBController.CollectionModel.find({
+            $or: [
+                { "productos.nombre": { "$regex": args.find.query, "$options": "i" } },
+                { "productos.ean": args.find.query },
+                { "productos.proveedor": { "$regex": args.find.query, "$options": "i" } },
+                { "productos.familia": { "$regex": args.find.query, "$options": "i" } },
+                { "productos.motivo": { "$regex": args.find.query, "$options": "i" } },
+                { "creadoPor.nombre": args.find.query },
+                { "creadoPor.email": args.find.query },
+                { "creadoPor.dni": args.find.query },
+            ],
+            $and: args.find.fechaInicial && args.find.fechaFinal ?
+                [
+                    {
+                        "createdAt":
+                        {
+                            $gte: new Date(Number(args.find.fechaInicial)),
+                            $lt: new Date(Number(args.find.fechaFinal))
+                        }
+                    }
+                ]
+                :
+                []
+        })
+            .sort(order)
             .limit(args.limit || 150)
             .exec();
 

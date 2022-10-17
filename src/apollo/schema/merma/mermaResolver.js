@@ -32,8 +32,38 @@ const mermasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
     var _a, _b, _c;
     const db = database_1.Database.Instance();
     let order = "desc";
-    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a.empleadoId) {
-        const mermas = yield db.MermaDBController.CollectionModel.find({ "creadoPor._id": args.find.empleadoId })
+    if ((_a = args.find) === null || _a === void 0 ? void 0 : _a.query) {
+        const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(args.find.query);
+        if (isQueryValidId) {
+            const mermas = yield db.MermaDBController.CollectionModel.find({ _id: args.find.query })
+                .limit(args.limit || 150)
+                .exec();
+            return mermas;
+        }
+        const mermas = yield db.MermaDBController.CollectionModel.find({
+            $or: [
+                { "productos.nombre": { "$regex": args.find.query, "$options": "i" } },
+                { "productos.ean": args.find.query },
+                { "productos.proveedor": { "$regex": args.find.query, "$options": "i" } },
+                { "productos.familia": { "$regex": args.find.query, "$options": "i" } },
+                { "productos.motivo": { "$regex": args.find.query, "$options": "i" } },
+                { "creadoPor.nombre": args.find.query },
+                { "creadoPor.email": args.find.query },
+                { "creadoPor.dni": args.find.query },
+            ],
+            $and: args.find.fechaInicial && args.find.fechaFinal ?
+                [
+                    {
+                        "createdAt": {
+                            $gte: new Date(Number(args.find.fechaInicial)),
+                            $lt: new Date(Number(args.find.fechaFinal))
+                        }
+                    }
+                ]
+                :
+                    []
+        })
+            .sort(order)
             .limit(args.limit || 150)
             .exec();
         return mermas;

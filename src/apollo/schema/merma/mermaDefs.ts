@@ -40,7 +40,7 @@ const MermaDefs = gql`
     input MermasFind {
         fechaInicial: String
         fechaFinal: String
-        empleadoId: String
+        query: String
     }
 
     input MermaInput {
