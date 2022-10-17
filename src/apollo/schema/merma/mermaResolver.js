@@ -61,7 +61,7 @@ const mermasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
                     }
                 ]
                 :
-                    []
+                    [{}]
         })
             .sort(order)
             .limit(args.limit || 150)

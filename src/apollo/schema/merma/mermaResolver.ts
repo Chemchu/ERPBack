@@ -60,7 +60,7 @@ export const mermasResolver = async (parent: any, args: MermasFind, context: any
                     }
                 ]
                 :
-                []
+                [{}]
         })
             .sort(order)
             .limit(args.limit || 150)
