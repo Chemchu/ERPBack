@@ -15,6 +15,8 @@ const cierreTpvDefs = (0, apollo_server_express_1.gql) `
         ventasEfectivo: Float,
         ventasTarjeta: Float,
         ventasTotales: Float,
+        dineroEsperadoEnCaja: Float,
+        dineroRealEnCaja: Float,
         dineroRetirado:Float,
         fondoDeCaja: Float,
         beneficio: Float,
@@ -29,7 +31,6 @@ const cierreTpvDefs = (0, apollo_server_express_1.gql) `
         cerradoPor: EmpleadoInput!,
         apertura: String!,
         cierre: String,
-        numVentas: Int!
         ventasEfectivo: Float!,
         ventasTarjeta: Float!,
         ventasTotales: Float!,
@@ -56,15 +57,18 @@ const cierreTpvDefs = (0, apollo_server_express_1.gql) `
         message: String!
         successful: Boolean!
         token: String
+        cierre: CierreTPV
     }
 
     input CierreTPVFind {
         _id: ID
-        fecha: String
     }
 
     input CierresTPVFind {
-        fecha: String
+        apertura: String
+        fechaInicial: String
+        fechaFinal: String
+        query: String
     }
 
     ##### Query #####

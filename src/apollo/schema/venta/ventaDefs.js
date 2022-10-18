@@ -6,9 +6,11 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
 
     type Venta {
         _id: ID!
+        numFactura: String
         productos: [ProductoVendido]
         dineroEntregadoEfectivo: Float
         dineroEntregadoTarjeta: Float
+        precioVentaTotalSinDto: Float
         precioVentaTotal: Float
         cambio: Float
         cliente: Cliente
@@ -36,12 +38,14 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         familia: String
         precioVenta: Float
         precioCompra: Float
+        precioFinal: Float
         iva: Float
         margen: Float
         ean: String
         cantidadVendida: Int
         createdAt: String
         updatedAt: String
+        dto: Float
     }
 
     input ProductoVendidoInput {
@@ -51,6 +55,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         familia: String
         precioVenta: Float
         precioCompra: Float
+        precioFinal: Float
         iva: Float
         margen: Float
         ean: String
@@ -66,7 +71,10 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         tipo: String
         vendedorId: String
         createdAt: String
+        fechaInicial: String
+        fechaFinal: String
         tpv: ID
+        query: String
     }
 
     input ClienteInput {
@@ -93,6 +101,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         productos: [ProductoVendidoInput]!
         dineroEntregadoEfectivo: Float!
         dineroEntregadoTarjeta: Float!
+        precioVentaTotalSinDto: Float!
         precioVentaTotal: Float!
         cambio: Float!
         cliente: ClienteInput!
@@ -119,7 +128,7 @@ const VentaDefs = (0, apollo_server_express_1.gql) `
         deleteVenta(_id: ID!): VentaMutationResponse!
         
         updateVenta(_id: ID!, productos: [ProductoVendidoInput], dineroEntregadoEfectivo: Float, descuentoPorcentaje: Float, precioVentaTotal: Float!, cambio: Float,
-            clienteId: ClienteInput, vendidoPor: EmpleadoInput, modificadoPor: EmpleadoInput, tipo: String, descuentoEfectivo: Float): VentaMutationResponse!
+        cliente: ClienteInput, vendidoPor: EmpleadoInput, modificadoPor: EmpleadoInput, tipo: String, descuentoEfectivo: Float): VentaMutationResponse!
     }
 `;
 exports.default = VentaDefs;

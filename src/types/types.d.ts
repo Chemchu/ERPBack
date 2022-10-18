@@ -12,6 +12,7 @@ export interface ProductosFind {
         nombre?: string
         familia?: string
         proveedor?: string
+        query?: string
     }
     limit?: number
 }
@@ -28,6 +29,25 @@ export interface VentasFind {
         vendedorId?: string
         createdAt?: string
         tpv?: string
+        fechaInicial?: string
+        fechaFinal?: string
+        query?: string
+    }
+    limit?: number
+    order?: string
+    offset?: number
+}
+
+export interface DevolucionFind {
+    find?: {
+        _ids?: string[]
+        clienteId?: string
+        vendedorId?: string
+        createdAt?: string
+        tpv?: string
+        fechaInicial?: string
+        fechaFinal?: string
+        query?: string
     }
     limit?: number
     order?: string
@@ -47,6 +67,7 @@ export interface EmpleadosFind {
         _ids?: string[]
         nombre?: string
         rol?: string
+        query?: string
     }
     limit?: number
 }
@@ -63,6 +84,7 @@ export interface ClientesFind {
     find?: {
         _ids?: string[]
         nombre?: string
+        query?: string
     }
     limit?: number
 }
@@ -113,4 +135,63 @@ export interface CierreTPVInput {
     dineroRetirado: number!,
     fondoDeCaja: number!,
     nota: string,
+}
+
+export interface ProductoAddInput {
+    nombre: string!
+    proveedor: string
+    familia: string
+    precioVenta: number!
+    precioCompra: number!
+    iva: number!
+    margen: number!
+    promociones: [string]
+    ean: string!
+    cantidad: number
+    cantidadRestock: number
+    alta: Boolean!
+    img: string
+}
+
+export interface ProductoUpdateInput {
+    _id: ID!
+    nombre: string
+    proveedor: string
+    familia: string
+    precioVenta: number
+    precioCompra: number
+    iva: number
+    margen: number
+    promociones: [string]
+    ean: string
+    cantidad: number
+    cantidadRestock: number
+    alta: boolean
+    img: string
+}
+
+export interface MermaFind {
+    find: {
+        _id: string
+    }
+}
+
+export interface MermasFind {
+    find: {
+        fechaInicial?: string,
+        fechaFinal?: string,
+        query?: string
+    },
+    limit?: number
+}
+
+export interface MermaInput {
+    productos: [NuevoProductoMermado],
+    empleadoId: string
+}
+
+export type NuevoProductoMermado = {
+    _id: string,
+    cantidad: number,
+    motivo: MotivoMerma | string,
 }

@@ -9,7 +9,7 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
         nombre: String
         enUsoPor: Empleado
         libre: Boolean
-        cajaInicial: Int
+        cajaInicial: Float
         createdAt: String
         updatedAt: String
     }
@@ -33,6 +33,7 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
 
     type TPVMutationJwtResponse {
         token: String!
+        successful: Boolean
     }
 
     input TPVFind {

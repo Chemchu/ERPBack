@@ -1,35 +1,42 @@
-import { truncate } from 'fs';
 import { Schema, model, Model } from 'mongoose';
-import { IDBState } from '../types/DBState';
 import { IProduct } from '../types/Producto';
+import { IProveedor } from '../types/Proveedor';
 
 export class Producto {
-  private modelo: Model<IProduct & IDBState>;
+  private modelo: Model<IProduct>;
 
   constructor() {
-    const Promocion = new Schema({ cantidadNecesaria: Number, dto: Number, precioFijo: Number });
+    // const ProveedorSchema = new Schema({
+    //   nombre: { type: String, requiered: true },
+    //   cif: { type: String, requiered: true },
+    //   telefono: { type: String, requiered: false },
+    //   direccion: { type: String, requiered: false },
+    //   localidad: { type: String, requiered: false },
+    //   provincia: { type: String, requiered: false },
+    //   cp: { type: String, requiered: false },
+    //   pais: { type: String, requiered: false },
+    //   email: { type: String, requiered: false },
+    //   nombreContacto: { type: String, requiered: false },
+    // }, { strict: true, timestamps: false }) as Schema<IProveedor>;
+
     const ProductSchema = new Schema({
-      nombre: { type: String, required: false },
+      nombre: { type: String, required: true },
       proveedor: { type: String, required: false },
       familia: { type: String, required: false },
-      precioVenta: { type: Number, required: false },
-      precioCompra: { type: Number, required: false },
+      precioVenta: { type: Number, required: true },
+      precioCompra: { type: Number, required: true },
       iva: { type: Number, required: false },
-      ean: { type: String, required: false },
+      ean: { type: String, required: true },
       margen: { type: Number, required: false },
-      promociones: { type: [String], required: false },
       alta: { type: Boolean, required: false },
-      img: { type: String, required: false },
       cantidad: { type: Number, required: false },
       cantidadRestock: { type: Number, required: false },
-      databaseState: { type: String, required: false }
+    }, { strict: true, timestamps: true }) as Schema<IProduct>;
 
-    }, { strict: true, timestamps: true }) as Schema<IProduct & IDBState>;
-
-    this.modelo = model<IProduct & IDBState>('Producto', ProductSchema);
+    this.modelo = model<IProduct>('Producto', ProductSchema);
   }
 
-  public get Model(): Model<IProduct & IDBState> {
+  public get Model(): Model<IProduct> {
     return this.modelo;
   }
 }

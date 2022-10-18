@@ -10,7 +10,7 @@ export const jwtValidatorResolver = async (parent: any, args: { jwt: string }, c
         const secret = process.env.JWT_SECRET;
 
         if (secret) {
-            const validado = jwt.verify(args.jwt, secret);
+            const validado: any = jwt.verify(args.jwt, secret);
             const db = Database.Instance();
 
             const empleadoValidado = await db.EmployeeDBController.CollectionModel.findOne({ _id: validado._id }).exec();

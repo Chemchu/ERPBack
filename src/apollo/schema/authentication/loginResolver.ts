@@ -1,7 +1,7 @@
 import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database"
 import { Credentials } from "../../../types/types";
-var bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 
 export const loginResolver = async (parent: any, args: Credentials, context: any, info: any) => {
@@ -38,14 +38,14 @@ export const loginResolver = async (parent: any, args: Credentials, context: any
             // Finally return user token
             return {
                 message: "Autenticación realizada con éxito",
-                success: true,
+                successful: true,
                 token: `Bearer ${token}`
             };
         }
 
-        return { message: "Usuario y/o contraseña incorrectas", success: false, token: null }
+        return { message: "Usuario y/o contraseña incorrectas", successful: false, token: null }
     }
     catch (err) {
-        return { message: "Usuario y/o contraseña incorrectas", success: false, token: null }
+        return { message: "Usuario y/o contraseña incorrectas", successful: false, token: null }
     }
 }

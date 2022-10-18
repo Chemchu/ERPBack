@@ -21,6 +21,24 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
         successful: Boolean!
     }
 
+    input EmpleadoInputFields {
+        nombre: String!, 
+        apellidos: String!, 
+        dni: String!, 
+        rol: String!, 
+        email: String!,
+        password: String!
+    }
+
+    input EmpleadoUpdateFields {
+        nombre: String, 
+        apellidos: String, 
+        dni: String, 
+        rol: String, 
+        email: String,
+        password: String
+    }
+
     input EmpleadoFind {
         _id: ID
         nombre: String
@@ -31,6 +49,7 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
         _ids: [ID!]
         nombre: String
         rol: String
+        query: String
     }
 
     ##### Query #####
@@ -43,9 +62,9 @@ const EmpleadoDefs = (0, apollo_server_express_1.gql) `
     ##### Mutation #####
     
     type Mutation {
-        addEmpleado(nombre: String!, apellidos: String!, dni: String!, rol: String!, genero: String, email: String!): EmpleadoMutationResponse!,
+        addEmpleado(empleadoInput: EmpleadoInputFields!): EmpleadoMutationResponse!,
         deleteEmpleado(_id: ID!): EmpleadoMutationResponse!,
-        updateEmpleado(_id: ID!, nombre: String, apellidos: String, dni: String, rol: String, genero: String, email: String, horasPorSemana: Float, fechaAlta: String): EmpleadoMutationResponse!,
+        updateEmpleado(_id: ID!, empleadoInput: EmpleadoUpdateFields!): EmpleadoMutationResponse!,
     }
 `;
 exports.default = EmpleadoDefs;

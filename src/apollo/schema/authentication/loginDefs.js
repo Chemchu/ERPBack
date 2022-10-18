@@ -6,7 +6,7 @@ const LoginDefs = (0, apollo_server_express_1.gql) `
 
     type LoginResult {
         message: String!
-        success: Boolean!
+        successful: Boolean!
         token: String
     }
 

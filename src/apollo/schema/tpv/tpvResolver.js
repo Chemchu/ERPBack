@@ -81,7 +81,7 @@ const tpvsResolver = (parent, args, context, info) => __awaiter(void 0, void 0, 
         return tpv;
     }
     if (args.find) {
-        const tpv = yield db.TPVDBController.CollectionModel.find({ abierta: args.find.libre })
+        const tpv = yield db.TPVDBController.CollectionModel.find({ libre: args.find.libre })
             .limit(150)
             .exec();
         return tpv;
@@ -112,6 +112,8 @@ const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void
         const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV }).exec();
         if (!tpv)
             throw new apollo_server_express_1.UserInputError('TPV no encontrada');
+        if (!tpv.libre)
+            throw new apollo_server_express_1.UserInputError('TPV actualmente ocupada por otro empleado');
         const empleadoClean = {
             _id: empleado._id,
             nombre: empleado.nombre,
@@ -130,9 +132,14 @@ const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void
             expiresIn: 3600 * Number(jwtHoursDuration)
         });
         return {
-            token: `Bearer ${token}`
+            token: `Bearer ${token}`,
+            successful: true
         };
     }
+    return {
+        token: `Bearer`,
+        successful: false
+    };
 });
 exports.ocupyTpvResolver = ocupyTpvResolver;
 const freeTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
@@ -146,6 +153,8 @@ const freeTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void 
         const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV }).exec();
         if (!tpv)
             throw new apollo_server_express_1.UserInputError('TPV no encontrada');
+        if (tpv.libre)
+            throw new apollo_server_express_1.UserInputError('TPV actualmente ocupada por otro empleado');
         const empleadoClean = {
             _id: empleado._id,
             nombre: empleado.nombre,
@@ -164,8 +173,13 @@ const freeTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void 
             expiresIn: 3600 * Number(jwtHoursDuration)
         });
         return {
-            token: `Bearer ${token}`
+            token: `Bearer ${token} `,
+            successful: true
         };
     }
+    return {
+        token: `Bearer`,
+        successful: false
+    };
 });
 exports.freeTpvResolver = freeTpvResolver;

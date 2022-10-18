@@ -3,9 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jwtValidatorResolver_1 = require("./schema/authentication/jwtValidatorResolver");
 const loginResolver_1 = require("./schema/authentication/loginResolver");
 const clienteResolver_1 = require("./schema/cliente/clienteResolver");
+const devolucionResolver_1 = require("./schema/devolucion/devolucionResolver");
 const empleadoResolver_1 = require("./schema/empleado/empleadoResolver");
 const fileResolvers_1 = require("./schema/file/fileResolvers");
+const mermaResolver_1 = require("./schema/merma/mermaResolver");
 const productoResolver_1 = require("./schema/producto/productoResolver");
+const proveedorResolvers_1 = require("./schema/proveedor/proveedorResolvers");
 const cierreTpvResolver_1 = require("./schema/tpv/cierreTpvResolver");
 const tpvResolver_1 = require("./schema/tpv/tpvResolver");
 const ventaResolver_1 = require("./schema/venta/ventaResolver");
@@ -24,7 +27,12 @@ const Resolvers = {
         tpvs: tpvResolver_1.tpvsResolver,
         cierreTPV: cierreTpvResolver_1.cierreTpvResolver,
         cierresTPVs: cierreTpvResolver_1.cierreTpvsResolver,
-        validateJwt: jwtValidatorResolver_1.jwtValidatorResolver
+        validateJwt: jwtValidatorResolver_1.jwtValidatorResolver,
+        devolucion: devolucionResolver_1.devolucionResolver,
+        devoluciones: devolucionResolver_1.devolucionesResolver,
+        proveedores: proveedorResolvers_1.proveedoresResolver,
+        merma: mermaResolver_1.mermaResolver,
+        mermas: mermaResolver_1.mermasResolver
     },
     Mutation: {
         addProducto: productoResolver_1.addProductoResolver,
@@ -35,6 +43,7 @@ const Resolvers = {
         deleteCliente: clienteResolver_1.deleteClienteResolver,
         updateCliente: clienteResolver_1.updateClienteResolver,
         addVenta: ventaResolver_1.addVentaResolver,
+        addVentasFile: fileResolvers_1.uploadVentasFileResolver,
         deleteVenta: ventaResolver_1.deleteVentaResolver,
         updateVenta: ventaResolver_1.updateVentaResolver,
         addEmpleado: empleadoResolver_1.addEmpleadoResolver,
@@ -46,8 +55,18 @@ const Resolvers = {
         ocupyTPV: tpvResolver_1.ocupyTpvResolver,
         freeTPV: tpvResolver_1.freeTpvResolver,
         addCierreTPV: cierreTpvResolver_1.addCierreTpvResolver,
+        addCierresFile: fileResolvers_1.uploadCierresFileResolver,
         deleteCierreTPV: cierreTpvResolver_1.deleteCierreTpvResolver,
-        updateCierreTPV: cierreTpvResolver_1.updateCierreTpvResolver
+        updateCierreTPV: cierreTpvResolver_1.updateCierreTpvResolver,
+        addDevolucion: devolucionResolver_1.addDevolucionResolver,
+        deleteDevolucion: devolucionResolver_1.deleteDevolucionResolver,
+        updateDevolucion: devolucionResolver_1.updateDevolucionResolver,
+        addProveedor: proveedorResolvers_1.addProveedorResolver,
+        deleteProveedor: proveedorResolvers_1.deleteProveedorResolver,
+        updateProveedor: proveedorResolvers_1.updateProveedorResolver,
+        addMerma: mermaResolver_1.addMermaResolver,
+        deleteMerma: mermaResolver_1.deleteMermaResolver,
+        updateMerma: mermaResolver_1.updateMermaResolver,
     }
 };
 exports.default = Resolvers;

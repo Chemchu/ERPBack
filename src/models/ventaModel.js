@@ -10,6 +10,7 @@ class Venta {
             proveedor: { type: String, requiered: true },
             precioCompra: { type: Number, requiered: true },
             precioVenta: { type: Number, requiered: true },
+            precioFinal: { type: Number, requiered: true },
             cantidadVendida: { type: Number, requiered: true },
             dto: { type: Number, requiered: true },
             iva: { type: Number, requiered: true },
@@ -35,8 +36,10 @@ class Venta {
         }, { strict: true, timestamps: false });
         const VentaSchema = new mongoose_1.Schema({
             productos: { type: [ProductoVendidoSchema], required: true },
+            numFactura: { type: String, required: true },
             dineroEntregadoEfectivo: { type: Number, required: true },
             dineroEntregadoTarjeta: { type: Number, required: true },
+            precioVentaTotalSinDto: { type: Number, required: true },
             precioVentaTotal: { type: Number, required: true },
             cambio: { type: Number, required: true },
             cliente: { type: ClienteSchema, required: true },

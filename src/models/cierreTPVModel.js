@@ -21,7 +21,6 @@ class CierreTPV {
             apertura: { type: Date, required: true },
             cierre: { type: Date, required: true },
             cajaInicial: { type: Number, required: true },
-            numVentas: { type: Number, required: true },
             ventasEfectivo: { type: Number, required: true },
             ventasTarjeta: { type: Number, required: true },
             ventasTotales: { type: Number, required: true },
@@ -29,7 +28,7 @@ class CierreTPV {
             dineroRealEnCaja: { type: Number, required: true },
             dineroRetirado: { type: Number, required: true },
             fondoDeCaja: { type: Number, required: true },
-            beneficio: { type: Number, required: true },
+            beneficio: { type: Number, required: false },
             nota: { type: String, required: false }
         }, { strict: true });
         this.modelo = (0, mongoose_1.model)('CierresTPV', CierreTPVSchema);

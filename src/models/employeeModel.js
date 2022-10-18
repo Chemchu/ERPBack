@@ -12,7 +12,7 @@ class Empleado {
             genero: { type: String, required: false },
             email: { type: String, required: true },
             hashPassword: { type: String, required: true },
-            horasPorSemana: { type: Number, required: true },
+            horasPorSemana: { type: Number, required: false },
             fechaAlta: { type: Date, required: true },
         }, { strict: true });
         this.modelo = (0, mongoose_1.model)('Empleados', EmpleadoSchema);

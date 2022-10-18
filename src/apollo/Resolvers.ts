@@ -1,9 +1,12 @@
 import { jwtValidatorResolver } from "./schema/authentication/jwtValidatorResolver";
 import { loginResolver } from "./schema/authentication/loginResolver";
 import { addClienteResolver, clienteResolver, clientesResolver, deleteClienteResolver, updateClienteResolver } from "./schema/cliente/clienteResolver";
+import { addDevolucionResolver, deleteDevolucionResolver, devolucionesResolver, devolucionResolver, updateDevolucionResolver } from "./schema/devolucion/devolucionResolver";
 import { addEmpleadoResolver, deleteEmpleadoResolver, empleadoResolver, empleadosResolver, updateEmpleadoResolver } from "./schema/empleado/empleadoResolver";
-import { uploadProductoFileResolver } from "./schema/file/fileResolvers";
+import { uploadCierresFileResolver, uploadProductoFileResolver, uploadVentasFileResolver } from "./schema/file/fileResolvers";
+import { addMermaResolver, deleteMermaResolver, mermaResolver, mermasResolver, updateMermaResolver } from "./schema/merma/mermaResolver";
 import { addProductoResolver, deleteProductoResolver, productoResolver, productosResolver, updateProductoResolver } from "./schema/producto/productoResolver";
+import { addProveedorResolver, deleteProveedorResolver, proveedoresResolver, updateProveedorResolver } from "./schema/proveedor/proveedorResolvers";
 import { addCierreTpvResolver, cierreTpvResolver, cierreTpvsResolver, deleteCierreTpvResolver, updateCierreTpvResolver } from "./schema/tpv/cierreTpvResolver";
 import { addTpvResolver, deleteTpvResolver, freeTpvResolver, ocupyTpvResolver, tpvResolver, tpvsResolver, updateTpvResolver } from "./schema/tpv/tpvResolver";
 import { addVentaResolver, deleteVentaResolver, updateVentaResolver, ventaResolver, ventasResolver } from "./schema/venta/ventaResolver";
@@ -23,7 +26,12 @@ const Resolvers = {
         tpvs: tpvsResolver,
         cierreTPV: cierreTpvResolver,
         cierresTPVs: cierreTpvsResolver,
-        validateJwt: jwtValidatorResolver
+        validateJwt: jwtValidatorResolver,
+        devolucion: devolucionResolver,
+        devoluciones: devolucionesResolver,
+        proveedores: proveedoresResolver,
+        merma: mermaResolver,
+        mermas: mermasResolver
     },
     Mutation: {
         addProducto: addProductoResolver,
@@ -36,6 +44,7 @@ const Resolvers = {
         updateCliente: updateClienteResolver,
 
         addVenta: addVentaResolver,
+        addVentasFile: uploadVentasFileResolver,
         deleteVenta: deleteVentaResolver,
         updateVenta: updateVentaResolver,
 
@@ -50,8 +59,21 @@ const Resolvers = {
         freeTPV: freeTpvResolver,
 
         addCierreTPV: addCierreTpvResolver,
+        addCierresFile: uploadCierresFileResolver,
         deleteCierreTPV: deleteCierreTpvResolver,
-        updateCierreTPV: updateCierreTpvResolver
+        updateCierreTPV: updateCierreTpvResolver,
+
+        addDevolucion: addDevolucionResolver,
+        deleteDevolucion: deleteDevolucionResolver,
+        updateDevolucion: updateDevolucionResolver,
+
+        addProveedor: addProveedorResolver,
+        deleteProveedor: deleteProveedorResolver,
+        updateProveedor: updateProveedorResolver,
+
+        addMerma: addMermaResolver,
+        deleteMerma: deleteMermaResolver,
+        updateMerma: updateMermaResolver,
     }
 };
 

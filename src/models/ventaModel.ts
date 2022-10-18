@@ -15,6 +15,7 @@ export class Venta {
             proveedor: { type: String, requiered: true },
             precioCompra: { type: Number, requiered: true },
             precioVenta: { type: Number, requiered: true },
+            precioFinal: { type: Number, requiered: true },
             cantidadVendida: { type: Number, requiered: true },
             dto: { type: Number, requiered: true },
             iva: { type: Number, requiered: true },
@@ -43,8 +44,10 @@ export class Venta {
 
         const VentaSchema = new Schema({
             productos: { type: [ProductoVendidoSchema], required: true },
+            numFactura: { type: String, required: true },
             dineroEntregadoEfectivo: { type: Number, required: true },
             dineroEntregadoTarjeta: { type: Number, required: true },
+            precioVentaTotalSinDto: { type: Number, required: true },
             precioVentaTotal: { type: Number, required: true },
             cambio: { type: Number, required: true },
             cliente: { type: ClienteSchema, required: true },
@@ -55,7 +58,6 @@ export class Venta {
             descuentoPorcentaje: { type: Number, required: true },
             tpv: { type: Types.ObjectId, ref: 'TPV', required: true },
         }, { strict: true, timestamps: true }) as Schema<ISale>;
-
         this.modelo = model<ISale>('Venta', VentaSchema);
     }
 

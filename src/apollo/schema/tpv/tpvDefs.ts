@@ -8,7 +8,7 @@ const tpvDefs = gql`
         nombre: String
         enUsoPor: Empleado
         libre: Boolean
-        cajaInicial: Int
+        cajaInicial: Float
         createdAt: String
         updatedAt: String
     }
@@ -32,6 +32,7 @@ const tpvDefs = gql`
 
     type TPVMutationJwtResponse {
         token: String!
+        successful: Boolean
     }
 
     input TPVFind {
