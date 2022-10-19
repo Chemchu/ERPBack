@@ -6,6 +6,7 @@ const tpvDefs = gql`
     type TPV {
         _id: ID!
         nombre: String
+        abiertoPor: Empleado
         enUsoPor: Empleado
         libre: Boolean
         cajaInicial: Float
