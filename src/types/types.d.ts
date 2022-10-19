@@ -68,6 +68,7 @@ export interface EmpleadosFind {
         nombre?: string
         rol?: string
         query?: string
+        isLibre?: boolean
     }
     limit?: number
 }
