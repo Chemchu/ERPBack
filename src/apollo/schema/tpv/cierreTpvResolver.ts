@@ -147,8 +147,6 @@ export const cierreTpvsResolver = async (parent: any, args: any, context: any, i
 }
 
 export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVInput }, context: any) => {
-    // Check de autenticidad para aceptar peticiones válidas. Descomentar en producción
-    // if (!context.user) { throw new UserInputError('Usuario sin autenticar'); }
     try {
         const secret = process.env.JWT_SECRET;
         if (!secret) {
