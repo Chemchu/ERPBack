@@ -157,13 +157,8 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
                 token: `Bearer ${token}`
             };
         }
-        const fechaApertura = new Date().setTime(Number(args.cierre.apertura));
+        const fechaApertura = new Date().setTime(tpv.fechaApertura || Number(args.cierre.apertura));
         const fechaActual = Date.now();
-        const ventas = yield db.VentasDBController.CollectionModel.find({ "createdAt": { $gte: fechaApertura, $lt: fechaActual } }).exec();
-        const productosVendidos = ventas.map(v => v.productos).flat();
-        let beneficio = productosVendidos.reduce((total, p) => {
-            return total += (p.precioCompra - p.precioFinal) * p.cantidadVendida;
-        }, 0);
         const res = yield db.CierreTPVDBController.CollectionModel.create({
             tpv: args.cierre.tpv,
             abiertoPor: args.cierre.abiertoPor,
@@ -179,14 +174,13 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
             ventasTotales: args.cierre.ventasTotales,
             dineroRetirado: args.cierre.dineroRetirado,
             fondoDeCaja: args.cierre.fondoDeCaja,
-            beneficio: beneficio,
             nota: args.cierre.nota || ""
         });
         if (res.errors) {
             return {
                 message: "No se ha podido añadir el cierre de caja",
                 successful: false,
-                token: token,
+                token: `Bearer ${token}`,
                 cierre: null
             };
         }

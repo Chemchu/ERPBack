@@ -52,6 +52,7 @@ const Resolvers = {
         addTPV: tpvResolver_1.addTpvResolver,
         deleteTPV: tpvResolver_1.deleteTpvResolver,
         updateTPV: tpvResolver_1.updateTpvResolver,
+        transferirTpv: tpvResolver_1.transferirTpvResolver,
         ocupyTPV: tpvResolver_1.ocupyTpvResolver,
         freeTPV: tpvResolver_1.freeTpvResolver,
         addCierreTPV: cierreTpvResolver_1.addCierreTpvResolver,

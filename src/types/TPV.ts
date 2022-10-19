@@ -3,9 +3,11 @@ import { IEmployee } from './Empleado';
 
 export interface ITPV extends Document {
     nombre: string
+    abiertoPor: IEmployee
     enUsoPor: IEmployee
     libre: boolean
     cajaInicial: number
+    fechaApertura: number
 }
 
 export interface ICierreTPV extends Document {

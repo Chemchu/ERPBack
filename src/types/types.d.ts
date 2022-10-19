@@ -196,3 +196,12 @@ export type NuevoProductoMermado = {
     cantidad: number,
     motivo: MotivoMerma | string,
 }
+
+export type JWTPayload = {
+    _id: string,
+    nombre: string,
+    apellidos: string,
+    email: string,
+    rol: string,
+    TPV?: string
+}

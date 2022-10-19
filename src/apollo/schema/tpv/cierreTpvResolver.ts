@@ -1,7 +1,7 @@
 import { UserInputError } from "apollo-server-express";
 import { Database } from "../../../databases/database";
 import jwt from "jsonwebtoken";
-import { CierreTPVInput } from "../../../types/types";
+import { CierreTPVInput, JWTPayload } from "../../../types/types";
 import { ICierreTPV } from "../../../types/TPV";
 import { ISale } from "../../../types/Venta";
 import { ISoldProduct } from "../../../types/Producto";
@@ -161,7 +161,7 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
 
         const db = Database.Instance();
 
-        const payload = { _id: args.cierre.abiertoPor._id, nombre: args.cierre.abiertoPor.nombre, apellidos: args.cierre.abiertoPor.apellidos, email: args.cierre.abiertoPor.email, rol: args.cierre.abiertoPor.rol };
+        const payload: JWTPayload = { _id: args.cierre.abiertoPor._id, nombre: args.cierre.abiertoPor.nombre, apellidos: args.cierre.abiertoPor.apellidos, email: args.cierre.abiertoPor.email, rol: args.cierre.abiertoPor.rol };
         const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
         const token = jwt.sign(payload, secret, {
             expiresIn: 3600 * Number(jwtHoursDuration)
@@ -176,15 +176,11 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
             }
         }
 
-        const fechaApertura = new Date().setTime(Number(args.cierre.apertura));
+        const fechaApertura = new Date().setTime(tpv.fechaApertura || Number(args.cierre.apertura));
         const fechaActual = Date.now();
 
-        const ventas = await db.VentasDBController.CollectionModel.find({ "createdAt": { $gte: fechaApertura, $lt: fechaActual } }).exec();
-        const productosVendidos: ISoldProduct[] = ventas.map(v => v.productos).flat();
-
-        let beneficio = productosVendidos.reduce((total: number, p: ISoldProduct): number => {
-            return total += (p.precioCompra - p.precioFinal) * p.cantidadVendida;
-        }, 0);
+        // const ventas = await db.VentasDBController.CollectionModel.find({ "createdAt": { $gte: fechaApertura, $lt: fechaActual } }).exec();
+        // const productosVendidos: ISoldProduct[] = ventas.map(v => v.productos).flat();
 
         const res = await db.CierreTPVDBController.CollectionModel.create({
             tpv: args.cierre.tpv,
@@ -201,7 +197,6 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
             ventasTotales: args.cierre.ventasTotales,
             dineroRetirado: args.cierre.dineroRetirado,
             fondoDeCaja: args.cierre.fondoDeCaja,
-            beneficio: beneficio,
             nota: args.cierre.nota || ""
         } as unknown as ICierreTPV);
 
@@ -209,13 +204,12 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
             return {
                 message: "No se ha podido añadir el cierre de caja",
                 successful: false,
-                token: token,
+                token: `Bearer ${token}`,
                 cierre: null
             }
         }
 
         const tpvUpdated = await db.TPVDBController.CollectionModel.updateOne({ _id: tpv._id }, { libre: true });
-
         if (tpvUpdated.modifiedCount <= 0) {
             return {
                 message: "No se ha podido liberar la TPV",
