@@ -171,7 +171,7 @@ const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void
         abiertoPor: empleadoClean,
         enUsoPor: empleadoClean,
         cajaInicial: args.cajaInicial,
-        fechaApertura: Date.now(),
+        fechaApertura: String(Date.now()),
     };
     yield tpv.updateOne(tpvUpdate);
     const payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol, TPV: tpv._id };

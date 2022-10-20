@@ -7,7 +7,7 @@ export interface ITPV extends Document {
     enUsoPor: IEmployee
     libre: boolean
     cajaInicial: number
-    fechaApertura: number
+    fechaApertura: string
 }
 
 export interface ICierreTPV extends Document {

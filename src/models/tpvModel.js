@@ -18,7 +18,7 @@ class TPV {
             enUsoPor: { type: EmpleadoSchema, requiered: true },
             libre: { type: Boolean, requiered: true },
             cajaInicial: { type: Number, requiered: true },
-            fechaApertura: { type: Number, requiered: true },
+            fechaApertura: { type: String, requiered: true },
         }, { strict: true, timestamps: true });
         this.modelo = (0, mongoose_1.model)('TPV', TPVSchema);
     }

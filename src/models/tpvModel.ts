@@ -22,7 +22,7 @@ export class TPV {
             enUsoPor: { type: EmpleadoSchema, requiered: true },
             libre: { type: Boolean, requiered: true },
             cajaInicial: { type: Number, requiered: true },
-            fechaApertura: { type: Number, requiered: true },
+            fechaApertura: { type: String, requiered: true },
         }, { strict: true, timestamps: true }) as Schema<ITPV>;
 
         this.modelo = model<ITPV>('TPV', TPVSchema);

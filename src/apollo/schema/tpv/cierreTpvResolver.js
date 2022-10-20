@@ -157,7 +157,7 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
                 token: `Bearer ${token}`
             };
         }
-        const fechaApertura = new Date().setTime(tpv.fechaApertura || Number(args.cierre.apertura));
+        const fechaApertura = new Date().setTime(Number(tpv.fechaApertura) || Number(args.cierre.apertura));
         const fechaActual = Date.now();
         const res = yield db.CierreTPVDBController.CollectionModel.create({
             tpv: args.cierre.tpv,

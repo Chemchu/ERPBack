@@ -13,7 +13,7 @@ const tpvDefs = (0, apollo_server_express_1.gql) `
         cajaInicial: Float
         createdAt: String
         updatedAt: String
-        fechaApertura: Int
+        fechaApertura: String
     }
 
     type Empleado {

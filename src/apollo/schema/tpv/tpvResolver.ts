@@ -189,7 +189,7 @@ export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, id
         abiertoPor: empleadoClean,
         enUsoPor: empleadoClean,
         cajaInicial: args.cajaInicial,
-        fechaApertura: Date.now(),
+        fechaApertura: String(Date.now()),
     }
     await tpv.updateOne(tpvUpdate);
 

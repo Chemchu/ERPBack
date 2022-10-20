@@ -174,7 +174,7 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
             }
         }
 
-        const fechaApertura = new Date().setTime(tpv.fechaApertura || Number(args.cierre.apertura));
+        const fechaApertura = new Date().setTime(Number(tpv.fechaApertura) || Number(args.cierre.apertura));
         const fechaActual = Date.now();
 
         // const ventas = await db.VentasDBController.CollectionModel.find({ "createdAt": { $gte: fechaApertura, $lt: fechaActual } }).exec();

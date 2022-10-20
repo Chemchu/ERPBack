@@ -12,7 +12,7 @@ const tpvDefs = gql`
         cajaInicial: Float
         createdAt: String
         updatedAt: String
-        fechaApertura: Int
+        fechaApertura: String
     }
 
     type Empleado {
