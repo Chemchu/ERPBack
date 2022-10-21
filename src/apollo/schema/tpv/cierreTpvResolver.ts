@@ -3,8 +3,6 @@ import { Database } from "../../../databases/database";
 import jwt from "jsonwebtoken";
 import { CierreTPVInput, CierreTPVUpdateInput, JWTPayload } from "../../../types/types";
 import { ICierreTPV } from "../../../types/TPV";
-import { ISale } from "../../../types/Venta";
-import { ISoldProduct } from "../../../types/Producto";
 import mongoose from "mongoose";
 
 export const cierreTpvResolver = async (parent: any, args: any, context: any, info: any) => {
@@ -198,7 +196,7 @@ export const addCierreTpvResolver = async (root: any, args: { cierre: CierreTPVI
             ventasTarjeta: args.cierre.ventasTarjeta,
             ventasTotales: args.cierre.ventasTotales,
             dineroRetirado: args.cierre.dineroRetirado,
-            fondoDeCaja: args.cierre.fondoDeCaja,
+            fondoDeCaja: args.cierre.dineroRealEnCaja - args.cierre.dineroRetirado,
             nota: args.cierre.nota || ""
         } as unknown as ICierreTPV);
 

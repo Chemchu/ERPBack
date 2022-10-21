@@ -31,7 +31,6 @@ const cierreTpvDefs = gql`
         dineroEsperadoEnCaja: Float!,
         dineroRealEnCaja: Float!,
         dineroRetirado:Float!,
-        fondoDeCaja: Float!,
         nota: String,
     }
 

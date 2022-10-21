@@ -180,7 +180,7 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
             ventasTarjeta: args.cierre.ventasTarjeta,
             ventasTotales: args.cierre.ventasTotales,
             dineroRetirado: args.cierre.dineroRetirado,
-            fondoDeCaja: args.cierre.fondoDeCaja,
+            fondoDeCaja: args.cierre.dineroRealEnCaja - args.cierre.dineroRetirado,
             nota: args.cierre.nota || ""
         });
         if (res.errors) {
