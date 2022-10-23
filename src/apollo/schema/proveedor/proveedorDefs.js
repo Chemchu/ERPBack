@@ -4,7 +4,7 @@ const apollo_server_express_1 = require("apollo-server-express");
 const ProveedorDefs = (0, apollo_server_express_1.gql) `
     ##### Tipos #####
 
-    type ProoveedorType {
+    type Prooveedor {
         _id: ID!
         nombre: String
         direccion: String
@@ -29,10 +29,14 @@ const ProveedorDefs = (0, apollo_server_express_1.gql) `
         pais: String
         telefono: String
         email:String
-        contacto: String
-        createdAt: String
-        updatedAt: String
+        contacto: ContactoInput
         cif: String
+    }
+
+    input ContactoInput {
+        nombre: String,
+        telefono: String
+        email: String,
     }
 
     input ProveedorFind {
@@ -42,14 +46,14 @@ const ProveedorDefs = (0, apollo_server_express_1.gql) `
     type ProveedorMutationResponse {
         message: String
         successful: Boolean
-        data: [ProoveedorType]
+        data: [Prooveedor]
     }
 
 
     ##### Query #####
 
     type Query {        
-        proveedores(find: ProveedorFind, limit: Int): [ProoveedorType]!
+        proveedores(find: ProveedorFind, limit: Int): [Prooveedor]!
     }
 
     ##### Mutation #####
