@@ -2,6 +2,12 @@ import { gql } from "apollo-server-express"
 
 const ProveedorDefs = gql`
     ##### Tipos #####
+    
+    type Contacto {
+        nombre: String,
+        telefono: String
+        email: String,
+    }
 
     type Prooveedor {
         _id: ID!
@@ -13,7 +19,7 @@ const ProveedorDefs = gql`
         pais: String
         telefono: String
         email:String
-        contacto: String
+        contacto: Contacto 
         createdAt: String
         updatedAt: String
         cif: String

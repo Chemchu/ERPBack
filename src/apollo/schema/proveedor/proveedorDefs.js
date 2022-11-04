@@ -3,6 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const apollo_server_express_1 = require("apollo-server-express");
 const ProveedorDefs = (0, apollo_server_express_1.gql) `
     ##### Tipos #####
+    
+    type Contacto {
+        nombre: String,
+        telefono: String
+        email: String,
+    }
 
     type Prooveedor {
         _id: ID!
@@ -14,7 +20,7 @@ const ProveedorDefs = (0, apollo_server_express_1.gql) `
         pais: String
         telefono: String
         email:String
-        contacto: String
+        contacto: Contacto 
         createdAt: String
         updatedAt: String
         cif: String
