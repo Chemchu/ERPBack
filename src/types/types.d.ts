@@ -68,6 +68,7 @@ export interface EmpleadosFind {
         nombre?: string
         rol?: string
         query?: string
+        isLibre?: boolean
     }
     limit?: number
 }
@@ -119,6 +120,19 @@ export interface EmpleadoInput {
 }
 
 export interface CierreTPVInput {
+    empleadoCerrandoId: string!,
+    tpv: string!,
+    ventasEfectivo: Float!,
+    ventasTarjeta: Float!,
+    ventasTotales: Float!,
+    dineroEsperadoEnCaja: Float!,
+    dineroRealEnCaja: Float!,
+    dineroRetirado: Float!,
+    fondoDeCaja: Float!,
+    nota: String,
+}
+
+export interface CierreTPVUpdateInput {
     _id: ID,
     tpv: ID!,
     cajaInicial: number!,
@@ -194,4 +208,13 @@ export type NuevoProductoMermado = {
     _id: string,
     cantidad: number,
     motivo: MotivoMerma | string,
+}
+
+export type JWTPayload = {
+    _id: string,
+    nombre: string,
+    apellidos: string,
+    email: string,
+    rol: string,
+    TPV?: string
 }
