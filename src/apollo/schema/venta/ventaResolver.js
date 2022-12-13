@@ -215,7 +215,7 @@ const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void
         const res = yield saleToAdd.save();
         let isUpdatingCorrectly = true;
         args.fields.productos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
-            const err = yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": -p.cantidadVendida } });
+            const err = yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": -p.cantidadVendida } }, { timestamps: false });
             if ((err === null || err === void 0 ? void 0 : err.errors) && isUpdatingCorrectly) {
                 isUpdatingCorrectly = false;
             }

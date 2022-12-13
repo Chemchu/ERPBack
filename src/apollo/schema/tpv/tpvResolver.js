@@ -152,6 +152,10 @@ const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void
     if (!empleado) {
         return { token: null, successful: false };
     }
+    const tpvEnUsoPorEmpleado = yield db.TPVDBController.CollectionModel.findOne({ libre: false, "enUsoPor._id": args.idEmpleado });
+    if (!tpvEnUsoPorEmpleado) {
+        return { token: null, successful: false };
+    }
     const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV });
     if (!tpv) {
         return { token: null, successful: false };

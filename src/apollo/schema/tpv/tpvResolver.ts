@@ -166,9 +166,15 @@ export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, id
         throw "No se ha encontrado la clave privada del JWT"
     }
 
+    // Comprobar que el empleado existe
     const empleado = await db.EmployeeDBController.CollectionModel.findOne({ _id: args.idEmpleado });
     if (!empleado) { return { token: null, successful: false } }
 
+    // Comprobar que el empleado no está ocupando ya una TPV
+    const tpvEnUsoPorEmpleado = await db.TPVDBController.CollectionModel.findOne({ libre: false, "enUsoPor._id": args.idEmpleado })
+    if (!tpvEnUsoPorEmpleado) { return { token: null, successful: false } }
+
+    // Comprobar que la TPV que se quiere ocupar existe y está libre
     const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV });
     if (!tpv) { return { token: null, successful: false } }
     if (!tpv.libre) return { token: null, successful: false }

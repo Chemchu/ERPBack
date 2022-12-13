@@ -225,7 +225,9 @@ export const addVentaResolver = async (root: any, args: any, context: any) => {
         let isUpdatingCorrectly = true;
         // Actualizar la cantidad de productos
         args.fields.productos.forEach(async (p: ISoldProduct) => {
-            const err = await db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": -p.cantidadVendida } });
+            const err = await db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id },
+                { "$inc": { "cantidad": -p.cantidadVendida } },
+                { timestamps: false });
             if (err?.errors && isUpdatingCorrectly) {
                 isUpdatingCorrectly = false;
             }
