@@ -172,7 +172,7 @@ export const ocupyTpvResolver = async (root: any, args: { idEmpleado: string, id
 
     // Comprobar que el empleado no está ocupando ya una TPV
     const tpvEnUsoPorEmpleado = await db.TPVDBController.CollectionModel.findOne({ libre: false, "enUsoPor._id": args.idEmpleado })
-    if (!tpvEnUsoPorEmpleado) { return { token: null, successful: false } }
+    if (tpvEnUsoPorEmpleado) { return { token: null, successful: false } }
 
     // Comprobar que la TPV que se quiere ocupar existe y está libre
     const tpv = await db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV });
