@@ -290,7 +290,9 @@ const ActualizarCantidadProductos = async (merma: IMerma | IMerma & { _id: mongo
         for (let index = 0; index < merma.productos.length; index++) {
             const productoMermado = merma.productos[index];
             const res = await db.ProductDBController.CollectionModel
-                .updateOne({ _id: productoMermado._id }, { "$inc": { "cantidad": isDeleting ? productoMermado.cantidad : -productoMermado.cantidad } })
+                .updateOne({ _id: productoMermado._id },
+                    { "$inc": { "cantidad": isDeleting ? productoMermado.cantidad : -productoMermado.cantidad } },
+                    { timestamps: false })
 
             if (res.modifiedCount <= 0) { return false }
         }
