@@ -17,11 +17,15 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const ventaResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    if (args === null || !args || Object.keys(args).length === 0 && args.constructor === Object)
-        throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
+    if (args === null ||
+        !args ||
+        (Object.keys(args).length === 0 && args.constructor === Object))
+        throw new apollo_server_express_1.UserInputError("Argumentos inválidos: Find no puede estar vacío");
     const db = database_1.Database.Instance();
     if (args._id) {
-        const venta = yield db.VentasDBController.CollectionModel.findOne({ _id: args._id }).exec();
+        const venta = yield db.VentasDBController.CollectionModel.findOne({
+            _id: args._id,
+        }).exec();
         if (venta)
             return venta;
     }
@@ -31,8 +35,14 @@ exports.ventaResolver = ventaResolver;
 const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     const db = database_1.Database.Instance();
-    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-        const ventas = yield db.VentasDBController.CollectionModel.find({}).sort({ createdAt: "desc" }).limit(args.limit || 500).skip(args.offset || 0).exec();
+    if (args.find === null ||
+        !args.find ||
+        (Object.keys(args.find).length === 0 && args.find.constructor === Object)) {
+        const ventas = yield db.VentasDBController.CollectionModel.find({})
+            .sort({ createdAt: "desc" })
+            .limit(args.limit || 500)
+            .skip(args.offset || 0)
+            .exec();
         if (ventas)
             return ventas;
     }
@@ -41,7 +51,10 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (args.order) {
             order = args.order;
         }
-        const ventas = yield db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv, "createdAt": { $gte: parseInt(args.find.createdAt), $lt: Date.now() } })
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            tpv: args.find.tpv,
+            createdAt: { $gte: parseInt(args.find.createdAt), $lt: Date.now() },
+        })
             .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
@@ -54,7 +67,9 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (args.order) {
             order = args.order;
         }
-        const ventas = yield db.VentasDBController.CollectionModel.find({ _id: args.find._ids })
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            _id: args.find._ids,
+        })
             .sort({ createdAt: order || "desc" })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
@@ -67,7 +82,9 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (args.order) {
             order = args.order;
         }
-        const ventas = yield db.VentasDBController.CollectionModel.find({ $cliente: { _id: args.find.clienteId } })
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            $cliente: { _id: args.find.clienteId },
+        })
             .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
@@ -80,7 +97,9 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (args.order) {
             order = args.order;
         }
-        const ventas = yield db.VentasDBController.CollectionModel.find({ tipo: args.find.tipo })
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            tipo: args.find.tipo,
+        })
             .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
@@ -93,7 +112,9 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (args.order) {
             order = args.order;
         }
-        const ventas = yield db.VentasDBController.CollectionModel.find({ $vendidoPor: { _id: args.find.vendedorId } })
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            $vendidoPor: { _id: args.find.vendedorId },
+        })
             .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
@@ -106,7 +127,9 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (args.order) {
             order = args.order;
         }
-        const ventas = yield db.VentasDBController.CollectionModel.find({ createdAt: args.find.createdAt })
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            createdAt: args.find.createdAt,
+        })
             .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
@@ -119,7 +142,9 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         if (args.order) {
             order = args.order;
         }
-        const ventas = yield db.VentasDBController.CollectionModel.find({ tpv: args.find.tpv })
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            tpv: args.find.tpv,
+        })
             .sort({ createdAt: order })
             .limit(args.limit || 500)
             .skip(args.offset || 0)
@@ -133,10 +158,10 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
             order = args.order;
         }
         const ventas = yield db.VentasDBController.CollectionModel.find({
-            "createdAt": {
+            createdAt: {
                 $gte: new Date(Number(args.find.fechaInicial)),
-                $lt: new Date(Number(args.find.fechaFinal))
-            }
+                $lte: new Date(Number(args.find.fechaFinal)),
+            },
         })
             .sort({ createdAt: order })
             .limit(args.limit || 25000)
@@ -158,22 +183,26 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         let queryConFecha = [{}];
         let limite = args.limit || 150;
         if (args.find.fechaInicial && args.find.fechaFinal) {
-            queryConFecha = [{
-                    "createdAt": {
+            queryConFecha = [
+                {
+                    createdAt: {
                         $gte: new Date(Number(args.find.fechaInicial)),
-                        $lt: new Date(Number(args.find.fechaFinal))
-                    }
-                }];
+                        $lt: new Date(Number(args.find.fechaFinal)),
+                    },
+                },
+            ];
             limite = 25000;
         }
-        const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: { "$regex": query, "$options": "i" } });
+        const tpv = yield db.TPVDBController.CollectionModel.findOne({
+            nombre: { $regex: query, $options: "i" },
+        });
         if (tpv) {
             const r = yield db.VentasDBController.CollectionModel.find({
                 tpv: tpv._id,
-                "createdAt": {
+                createdAt: {
                     $gte: new Date(Number(args.find.fechaInicial)),
-                    $lt: new Date(Number(args.find.fechaFinal))
-                }
+                    $lte: new Date(Number(args.find.fechaFinal)),
+                },
             })
                 .limit(args.limit || 150)
                 .exec();
@@ -181,26 +210,26 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         }
         ventas = yield db.VentasDBController.CollectionModel.find({
             $or: [
-                { "productos.nombre": { "$regex": query, "$options": "i" } },
-                { "productos.ean": { "$regex": query, "$options": "i" } },
-                { "productos.proveedor": { "$regex": query, "$options": "i" } },
-                { "productos.familia": { "$regex": query, "$options": "i" } },
-                { "vendidoPor.nombre": { "$regex": query, "$options": "i" } },
-                { "vendidoPor.email": { "$regex": query, "$options": "i" } },
-                { "vendidoPor.dni": { "$regex": query, "$options": "i" } },
-                { "vendidoPor.rol": { "$regex": query, "$options": "i" } },
-                { "modificadoPor.nombre": { "$regex": query, "$options": "i" } },
-                { "modificadoPor.email": { "$regex": query, "$options": "i" } },
-                { "modificadoPor.dni": { "$regex": query, "$options": "i" } },
-                { "modificadoPor.rol": { "$regex": query, "$options": "i" } },
-                { "tipo": { "$regex": query, "$options": "i" } },
-                { "cliente.nombre": { "$regex": query, "$options": "i" } },
-                { "cliente.nif": { "$regex": query, "$options": "i" } }
+                { "productos.nombre": { $regex: query, $options: "i" } },
+                { "productos.ean": { $regex: query, $options: "i" } },
+                { "productos.proveedor": { $regex: query, $options: "i" } },
+                { "productos.familia": { $regex: query, $options: "i" } },
+                { "vendidoPor.nombre": { $regex: query, $options: "i" } },
+                { "vendidoPor.email": { $regex: query, $options: "i" } },
+                { "vendidoPor.dni": { $regex: query, $options: "i" } },
+                { "vendidoPor.rol": { $regex: query, $options: "i" } },
+                { "modificadoPor.nombre": { $regex: query, $options: "i" } },
+                { "modificadoPor.email": { $regex: query, $options: "i" } },
+                { "modificadoPor.dni": { $regex: query, $options: "i" } },
+                { "modificadoPor.rol": { $regex: query, $options: "i" } },
+                { tipo: { $regex: query, $options: "i" } },
+                { "cliente.nombre": { $regex: query, $options: "i" } },
+                { "cliente.nif": { $regex: query, $options: "i" } },
             ],
             $and: queryConFecha,
         })
             .limit(limite)
-            .sort({ "createdAt": -1 })
+            .sort({ createdAt: -1 })
             .exec();
         return ventas;
     }
@@ -215,18 +244,29 @@ const addVentaResolver = (root, args, context) => __awaiter(void 0, void 0, void
         const res = yield saleToAdd.save();
         let isUpdatingCorrectly = true;
         args.fields.productos.forEach((p) => __awaiter(void 0, void 0, void 0, function* () {
-            const err = yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { "$inc": { "cantidad": -p.cantidadVendida } }, { timestamps: false });
+            const err = yield db.ProductDBController.CollectionModel.findOneAndUpdate({ _id: p._id }, { $inc: { cantidad: -p.cantidadVendida } }, { timestamps: false });
             if ((err === null || err === void 0 ? void 0 : err.errors) && isUpdatingCorrectly) {
                 isUpdatingCorrectly = false;
             }
         }));
         if (res.errors) {
-            return { message: "No se ha podido añadir la venta a la base de datos", successful: false };
+            return {
+                message: "No se ha podido añadir la venta a la base de datos",
+                successful: false,
+            };
         }
         if (!isUpdatingCorrectly) {
-            return { message: "Venta añadida pero las cantidades no han sido actualizadas correctamente", successful: true };
+            return {
+                message: "Venta añadida pero las cantidades no han sido actualizadas correctamente",
+                successful: true,
+            };
         }
-        return { message: "Venta añadida con éxito", successful: true, _id: res._id, createdAt: res.createdAt };
+        return {
+            message: "Venta añadida con éxito",
+            successful: true,
+            _id: res._id,
+            createdAt: res.createdAt,
+        };
     }
     catch (err) {
         return { message: err, successful: false };
@@ -243,7 +283,9 @@ const updateVentaResolver = (root, args, context) => __awaiter(void 0, void 0, v
         return { message: "ID de venta inválido", successful: false };
     }
     const db = database_1.Database.Instance();
-    const ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({ _id: args._id });
+    const ventaOriginal = yield db.VentasDBController.CollectionModel.findOne({
+        _id: args._id,
+    });
     if (!ventaOriginal) {
         return { message: "La venta original no existe", successful: false };
     }
@@ -263,9 +305,16 @@ const updateVentaResolver = (root, args, context) => __awaiter(void 0, void 0, v
         tpv: ventaOriginal.tpv,
     };
     const resultadoUpdate = yield db.VentasDBController.CollectionModel.updateOne({ _id: args._id }, { $set: venta });
-    const updatedSale = yield db.VentasDBController.CollectionModel.findOne({ _id: args._id });
+    const updatedSale = yield db.VentasDBController.CollectionModel.findOne({
+        _id: args._id,
+    });
     if (resultadoUpdate.modifiedCount > 0) {
-        return { _id: args._id, message: "Venta actualizada correctamente", successful: true, createdAt: updatedSale === null || updatedSale === void 0 ? void 0 : updatedSale.createdAt };
+        return {
+            _id: args._id,
+            message: "Venta actualizada correctamente",
+            successful: true,
+            createdAt: updatedSale === null || updatedSale === void 0 ? void 0 : updatedSale.createdAt,
+        };
     }
     return { message: "No se ha podido actualizar la venta", successful: false };
 });
@@ -276,12 +325,16 @@ const FixVentaConsistency = (venta) => __awaiter(void 0, void 0, void 0, functio
     const currentYear = new Date().getFullYear();
     const nFactura = `${currentYear}/${numVentas + 1}`;
     try {
-        const [productosVendidosFixed, precioVentaTotalProductos, precioVentaTotalSinDtoProductos] = FixProductsInconsistency(venta.productos);
-        if (productosVendidosFixed.length <= 0 || venta.productos.length != productosVendidosFixed.length) {
+        const [productosVendidosFixed, precioVentaTotalProductos, precioVentaTotalSinDtoProductos,] = FixProductsInconsistency(venta.productos);
+        if (productosVendidosFixed.length <= 0 ||
+            venta.productos.length != productosVendidosFixed.length) {
             return CreateUncheckedSale(venta, nFactura);
         }
-        let precioVentaTotal = (precioVentaTotalProductos - venta.descuentoEfectivo) * (1 - (venta.descuentoPorcentaje / 100));
-        const cambio = (venta.dineroEntregadoEfectivo + venta.dineroEntregadoTarjeta) - precioVentaTotal;
+        let precioVentaTotal = (precioVentaTotalProductos - venta.descuentoEfectivo) *
+            (1 - venta.descuentoPorcentaje / 100);
+        const cambio = venta.dineroEntregadoEfectivo +
+            venta.dineroEntregadoTarjeta -
+            precioVentaTotal;
         const ventaFixed = {
             productos: productosVendidosFixed,
             numFactura: nFactura,
@@ -296,7 +349,7 @@ const FixVentaConsistency = (venta) => __awaiter(void 0, void 0, void 0, functio
             tipo: venta.tipo,
             descuentoEfectivo: venta.descuentoEfectivo,
             descuentoPorcentaje: venta.descuentoPorcentaje,
-            tpv: venta.tpv
+            tpv: venta.tpv,
         };
         return ventaFixed;
     }
@@ -318,31 +371,39 @@ const FixProductsInconsistency = (productos) => {
                 if (!producto.precioCompra) {
                     const iva = producto.iva || 10;
                     const margen = producto.margen || 20;
-                    producto.precioCompra = producto.precioVenta / (1 + ((iva + margen) / 100));
+                    producto.precioCompra =
+                        producto.precioVenta / (1 + (iva + margen) / 100);
                     producto.precioCompra = Number(producto.precioCompra.toFixed(2));
                 }
                 if (producto.margen <= 0 || !producto.margen) {
                     const iva = producto.iva || 10;
-                    const precioConIva = producto.precioCompra + (producto.precioCompra * (iva / 100));
-                    producto.margen = 1 - ((producto.precioFinal / precioConIva) * 100);
+                    const precioConIva = producto.precioCompra + producto.precioCompra * (iva / 100);
+                    producto.margen = 1 - (producto.precioFinal / precioConIva) * 100;
                     producto.margen = Number(producto.margen.toFixed(2));
                 }
                 if (producto.precioFinal > producto.precioVenta) {
-                    producto.precioFinal = producto.precioVenta * (1 - (producto.dto / 100));
+                    producto.precioFinal =
+                        producto.precioVenta * (1 - producto.dto / 100);
                     producto.precioFinal = Number(producto.precioFinal.toFixed(2));
                 }
                 if (producto.precioFinal === producto.precioVenta) {
                     producto.dto = 0;
                 }
             }
-            catch (err) { }
+            catch (err) {
+            }
             finally {
                 productosFixed.push(producto);
                 precioVentaTotal += producto.precioFinal * producto.cantidadVendida;
-                precioVentaTotalSinDto += producto.precioVenta * producto.cantidadVendida;
+                precioVentaTotalSinDto +=
+                    producto.precioVenta * producto.cantidadVendida;
             }
         }
-        return [productosFixed, Number(precioVentaTotal.toFixed(2)), Number(precioVentaTotalSinDto.toFixed(2))];
+        return [
+            productosFixed,
+            Number(precioVentaTotal.toFixed(2)),
+            Number(precioVentaTotalSinDto.toFixed(2)),
+        ];
     }
     catch (err) {
         return [[], -1, -1];
@@ -363,6 +424,6 @@ const CreateUncheckedSale = (venta, numFactura) => {
         tipo: venta.tipo,
         descuentoEfectivo: venta.descuentoEfectivo,
         descuentoPorcentaje: venta.descuentoPorcentaje,
-        tpv: venta.tpv
+        tpv: venta.tpv,
     };
 };
