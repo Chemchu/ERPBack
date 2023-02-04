@@ -181,7 +181,7 @@ export const ventasResolver = async (
     const ventas = await db.VentasDBController.CollectionModel.find({
       createdAt: {
         $gte: new Date(Number(args.find.fechaInicial)),
-        $lt: new Date(Number(args.find.fechaFinal)),
+        $lte: new Date(Number(args.find.fechaFinal)),
       },
     })
       .sort({ createdAt: order })
@@ -229,7 +229,7 @@ export const ventasResolver = async (
         tpv: tpv._id,
         createdAt: {
           $gte: new Date(Number(args.find.fechaInicial)),
-          $lt: new Date(Number(args.find.fechaFinal)),
+          $lte: new Date(Number(args.find.fechaFinal)),
         },
       })
         .limit(args.limit || 150)

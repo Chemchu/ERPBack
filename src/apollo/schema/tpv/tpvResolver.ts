@@ -43,7 +43,7 @@ export const tpvResolver = async (
           nombre: empleado.nombre,
           apellidos: empleado.apellidos,
           rol: empleado.rol,
-          email: String(empleado.email).toLowerCase(),
+          email: empleado.email,
           dni: empleado.dni,
         } as IEmployee;
 
@@ -68,7 +68,7 @@ export const tpvResolver = async (
           nombre: empleado.nombre,
           apellidos: empleado.apellidos,
           rol: empleado.rol,
-          email: String(empleado.email).toLowerCase(),
+          email: empleado.email,
           dni: empleado.dni,
         } as IEmployee;
 
@@ -204,7 +204,7 @@ export const transferirTpvResolver = async (
     nombre: empleadoDestinatario.nombre,
     apellidos: empleadoDestinatario.apellidos,
     rol: empleadoDestinatario.rol,
-    email: String(empleadoDestinatario.email).toLowerCase(),
+    email: empleadoDestinatario.email,
     dni: empleadoDestinatario.dni,
   } as IEmployee;
   const res = await db.TPVDBController.CollectionModel.updateOne(
@@ -224,7 +224,7 @@ export const transferirTpvResolver = async (
     _id: empleadoRemitente._id,
     nombre: empleadoRemitente.nombre,
     apellidos: empleadoRemitente.apellidos,
-    email: String(empleadoRemitente.email).toLowerCase(),
+    email: empleadoRemitente.email,
     rol: empleadoRemitente.rol,
   };
   const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
@@ -261,13 +261,8 @@ export const ocupyTpvResolver = async (
   }
 
   // Comprobar que el empleado no está ocupando ya una TPV
-  const tpvEnUsoPorEmpleado = await db.TPVDBController.CollectionModel.findOne({
-    libre: false,
-    "enUsoPor._id": args.idEmpleado,
-  });
-  if (tpvEnUsoPorEmpleado) {
-    return { token: null, successful: false };
-  }
+  // const tpvEnUsoPorEmpleado = await db.TPVDBController.CollectionModel.findOne({ libre: false, "enUsoPor._id": args.idEmpleado })
+  // if (tpvEnUsoPorEmpleado) { return { token: null, successful: false } }
 
   // Comprobar que la TPV que se quiere ocupar existe y está libre
   const tpv = await db.TPVDBController.CollectionModel.findOne({
@@ -283,7 +278,7 @@ export const ocupyTpvResolver = async (
     nombre: empleado.nombre,
     apellidos: empleado.apellidos,
     rol: empleado.rol,
-    email: String(empleado.email).toLowerCase(),
+    email: empleado.email,
     dni: empleado.dni,
   } as IEmployee;
 
@@ -305,10 +300,10 @@ export const ocupyTpvResolver = async (
     _id: empleado._id,
     nombre: empleado.nombre,
     apellidos: empleado.apellidos,
-    email: String(empleado.email).toLowerCase(),
+    email: empleado.email,
     rol: empleado.rol,
     TPV: tpv._id,
-  };
+  }
   const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
 
   // Create Token Expires in 1 hour
@@ -355,7 +350,7 @@ export const freeTpvResolver = async (
     nombre: empleado.nombre,
     apellidos: empleado.apellidos,
     rol: empleado.rol,
-    email: String(empleado.email).toLowerCase(),
+    email: empleado.email,
     dni: empleado.dni,
   } as IEmployee;
   await tpv.updateOne({ libre: true, enUsoPor: empleadoClean });
@@ -365,7 +360,7 @@ export const freeTpvResolver = async (
     _id: empleado._id,
     nombre: empleado.nombre,
     apellidos: empleado.apellidos,
-    email: String(empleado.email).toLowerCase(),
+    email: empleado.email,
     rol: empleado.rol,
   };
   const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;

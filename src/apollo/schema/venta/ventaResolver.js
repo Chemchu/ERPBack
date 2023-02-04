@@ -160,7 +160,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
         const ventas = yield db.VentasDBController.CollectionModel.find({
             createdAt: {
                 $gte: new Date(Number(args.find.fechaInicial)),
-                $lt: new Date(Number(args.find.fechaFinal)),
+                $lte: new Date(Number(args.find.fechaFinal)),
             },
         })
             .sort({ createdAt: order })
@@ -201,7 +201,7 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
                 tpv: tpv._id,
                 createdAt: {
                     $gte: new Date(Number(args.find.fechaInicial)),
-                    $lt: new Date(Number(args.find.fechaFinal)),
+                    $lte: new Date(Number(args.find.fechaFinal)),
                 },
             })
                 .limit(args.limit || 150)
