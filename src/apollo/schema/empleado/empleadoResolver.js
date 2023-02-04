@@ -17,25 +17,33 @@ const apollo_server_express_1 = require("apollo-server-express");
 const mongoose_1 = __importDefault(require("mongoose"));
 const database_1 = require("../../../databases/database");
 const empleadoResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object)
-        throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
+    if (args.find === null ||
+        !args.find ||
+        (Object.keys(args.find).length === 0 && args.find.constructor === Object))
+        throw new apollo_server_express_1.UserInputError("Argumentos inválidos: Find no puede estar vacío");
     const db = database_1.Database.Instance();
     if (args.find._id) {
-        let e = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+        let e = yield db.EmployeeDBController.CollectionModel.findOne({
+            _id: args.find._id,
+        }).exec();
         if (e) {
             e.hashPassword = "undefined";
             return e;
         }
     }
     if (args.find.dni) {
-        let e = yield db.EmployeeDBController.CollectionModel.findOne({ dni: args.find.dni }).exec();
+        let e = yield db.EmployeeDBController.CollectionModel.findOne({
+            dni: args.find.dni,
+        }).exec();
         if (e) {
             e.hashPassword = "undefined";
             return e;
         }
     }
     if (args.find.nombre) {
-        let e = yield db.EmployeeDBController.CollectionModel.findOne({ nombre: { "$regex": args.find.nombre, "$options": "i" } }).exec();
+        let e = yield db.EmployeeDBController.CollectionModel.findOne({
+            nombre: { $regex: args.find.nombre, $options: "i" },
+        }).exec();
         if (e) {
             e.hashPassword = "undefined";
             return e;
@@ -47,8 +55,12 @@ exports.empleadoResolver = empleadoResolver;
 const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f;
     const db = database_1.Database.Instance();
-    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
-        let empleados = yield db.EmployeeDBController.CollectionModel.find({}).limit(args.limit || 3000).exec();
+    if (args.find === null ||
+        !args.find ||
+        (Object.keys(args.find).length === 0 && args.find.constructor === Object)) {
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({})
+            .limit(args.limit || 3000)
+            .exec();
         if (empleados) {
             empleados.forEach((e) => {
                 e.hashPassword = "undefined";
@@ -57,7 +69,9 @@ const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, voi
         }
     }
     if ((_a = args.find) === null || _a === void 0 ? void 0 : _a._ids) {
-        let empleados = yield db.EmployeeDBController.CollectionModel.find({ _id: args.find._ids })
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({
+            _id: args.find._ids,
+        })
             .limit(args.limit || 3000)
             .exec();
         if (empleados) {
@@ -68,7 +82,9 @@ const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, voi
         }
     }
     if ((_b = args.find) === null || _b === void 0 ? void 0 : _b.nombre) {
-        let empleados = yield db.EmployeeDBController.CollectionModel.find({ nombre: args.find.nombre })
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({
+            nombre: args.find.nombre,
+        })
             .limit(args.limit || 3000)
             .exec();
         if (empleados) {
@@ -79,7 +95,9 @@ const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, voi
         }
     }
     if ((_c = args.find) === null || _c === void 0 ? void 0 : _c.rol) {
-        let empleados = yield db.EmployeeDBController.CollectionModel.find({ rol: args.find.rol })
+        let empleados = yield db.EmployeeDBController.CollectionModel.find({
+            rol: args.find.rol,
+        })
             .limit(args.limit || 3000)
             .exec();
         if (empleados) {
@@ -94,18 +112,20 @@ const empleadosResolver = (parent, args, context, info) => __awaiter(void 0, voi
         const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(query);
         let empleados = {};
         if (isQueryValidId) {
-            empleados = yield db.EmployeeDBController.CollectionModel.find({ _id: query })
+            empleados = yield db.EmployeeDBController.CollectionModel.find({
+                _id: query,
+            })
                 .limit(args.limit || 150)
                 .exec();
         }
         else {
             empleados = yield db.EmployeeDBController.CollectionModel.find({
                 $or: [
-                    { nombre: { "$regex": query, "$options": "i" } },
-                    { apellidos: { "$regex": query, "$options": "i" } },
-                    { rol: { "$regex": query, "$options": "i" } },
-                    { email: { "$regex": query, "$options": "i" } }
-                ]
+                    { nombre: { $regex: query, $options: "i" } },
+                    { apellidos: { $regex: query, $options: "i" } },
+                    { rol: { $regex: query, $options: "i" } },
+                    { email: { $regex: String(query).toLowerCase(), $options: "i" } },
+                ],
             })
                 .limit(args.limit || 150)
                 .exec();
@@ -161,30 +181,41 @@ const addEmpleadoResolver = (root, args, context) => __awaiter(void 0, void 0, v
             apellidos: args.empleadoInput.apellidos,
             dni: args.empleadoInput.dni,
             rol: args.empleadoInput.rol,
-            email: args.empleadoInput.email,
-            fechaAlta: fecha
+            email: String(args.empleadoInput.email).toLowerCase(),
+            fechaAlta: fecha,
         };
         const empleadoAñadido = yield db.EmployeeDBController.CreateEmployee(Empleado, args.empleadoInput.password);
         if (empleadoAñadido) {
             return { message: "Empleado añadido correctamente", successful: true };
         }
         else {
-            return { message: "No se ha podido añadir el empleado", successful: false };
+            return {
+                message: "No se ha podido añadir el empleado",
+                successful: false,
+            };
         }
     }
     catch (err) {
-        return { message: "Error al añadir el empleado: " + err, successful: false };
+        return {
+            message: "Error al añadir el empleado: " + err,
+            successful: false,
+        };
     }
 });
 exports.addEmpleadoResolver = addEmpleadoResolver;
 const deleteEmpleadoResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = database_1.Database.Instance();
-        const res = yield db.EmployeeDBController.CollectionModel.deleteOne({ _id: args._id });
+        const res = yield db.EmployeeDBController.CollectionModel.deleteOne({
+            _id: args._id,
+        });
         if (res.deletedCount > 0) {
             return { message: "Empleado eliminado correctamente", successful: true };
         }
-        return { message: "No se ha podido eliminar el empleado", successful: false };
+        return {
+            message: "No se ha podido eliminar el empleado",
+            successful: false,
+        };
     }
     catch (err) {
         return { message: "Error al eliminar el empleado", successful: false };
@@ -207,9 +238,15 @@ const updateEmpleadoResolver = (root, args, context) => __awaiter(void 0, void 0
         };
         const actualizadoCorrectamente = yield db.EmployeeDBController.UpdateEmployee(updatedEmpleado, args.empleadoInput.password);
         if (actualizadoCorrectamente) {
-            return { message: "Empleado actualizado correctamente", successful: true };
+            return {
+                message: "Empleado actualizado correctamente",
+                successful: true,
+            };
         }
-        return { message: "No se ha podido actualizar el empleado", successful: false };
+        return {
+            message: "No se ha podido actualizar el empleado",
+            successful: false,
+        };
     }
     catch (err) {
         return { message: "Error al actualizar el empleado", successful: false };

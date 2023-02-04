@@ -18,7 +18,9 @@ const database_1 = require("../../../databases/database");
 const proveedoresResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const db = database_1.Database.Instance();
-    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
+    if (args.find === null ||
+        !args.find ||
+        (Object.keys(args.find).length === 0 && args.find.constructor === Object)) {
         const prooveedores = yield db.ProveedorDBController.CollectionModel.find()
             .limit(args.limit || 150)
             .exec();
@@ -29,22 +31,24 @@ const proveedoresResolver = (parent, args, context, info) => __awaiter(void 0, v
         const isQueryValidId = mongoose_1.default.Types.ObjectId.isValid(query);
         let prooveedores = {};
         if (isQueryValidId) {
-            prooveedores = yield db.ProveedorDBController.CollectionModel.find({ _id: query })
+            prooveedores = yield db.ProveedorDBController.CollectionModel.find({
+                _id: query,
+            })
                 .limit(args.limit || 150)
                 .exec();
         }
         else {
             prooveedores = yield db.ProveedorDBController.CollectionModel.find({
                 $or: [
-                    { nombre: { "$regex": query, "$options": "i" } },
-                    { email: { "$regex": query, "$options": "i" } },
-                    { contacto: { "$regex": query, "$options": "i" } },
-                    { localidad: { "$regex": query, "$options": "i" } },
-                    { pais: { "$regex": query, "$options": "i" } },
-                    { provincia: { "$regex": query, "$options": "i" } },
-                    { cp: { "$regex": query, "$options": "i" } },
-                    { direccion: { "$regex": query, "$options": "i" } },
-                ]
+                    { nombre: { $regex: query, $options: "i" } },
+                    { email: { $regex: String(query).toLowerCase(), $options: "i" } },
+                    { contacto: { $regex: query, $options: "i" } },
+                    { localidad: { $regex: query, $options: "i" } },
+                    { pais: { $regex: query, $options: "i" } },
+                    { provincia: { $regex: query, $options: "i" } },
+                    { cp: { $regex: query, $options: "i" } },
+                    { direccion: { $regex: query, $options: "i" } },
+                ],
             })
                 .limit(args.limit || 150)
                 .exec();
@@ -57,18 +61,30 @@ exports.proveedoresResolver = proveedoresResolver;
 const addProveedorResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
     var _b, _c, _d;
     const db = database_1.Database.Instance();
-    const prov = yield db.ProveedorDBController.CollectionModel.exists({ nombre: args.fields.nombre });
+    const prov = yield db.ProveedorDBController.CollectionModel.exists({
+        nombre: args.fields.nombre,
+    });
     if (prov) {
-        return { message: "Nombre del proveedor en uso", successful: false, data: null };
+        return {
+            message: "Nombre del proveedor en uso",
+            successful: false,
+            data: null,
+        };
     }
-    const cif = yield db.ProveedorDBController.CollectionModel.exists({ nombre: args.fields.cif });
+    const cif = yield db.ProveedorDBController.CollectionModel.exists({
+        nombre: args.fields.cif,
+    });
     if (cif) {
-        return { message: "El CIF del proveedor está en uso", successful: false, data: null };
+        return {
+            message: "El CIF del proveedor está en uso",
+            successful: false,
+            data: null,
+        };
     }
     const proveedorContacto = {
         nombre: ((_b = args.fields.contacto) === null || _b === void 0 ? void 0 : _b.nombre) || "",
         telefono: ((_c = args.fields.contacto) === null || _c === void 0 ? void 0 : _c.telefono) || "",
-        email: ((_d = args.fields.contacto) === null || _d === void 0 ? void 0 : _d.email) || ""
+        email: String((_d = args.fields.contacto) === null || _d === void 0 ? void 0 : _d.email).toLowerCase() || "",
     };
     const updatedProv = new db.ProveedorDBController.CollectionModel({
         nombre: args.fields.nombre,
@@ -80,14 +96,22 @@ const addProveedorResolver = (root, args, context) => __awaiter(void 0, void 0, 
         provincia: args.fields.provincia,
         cp: args.fields.cp,
         pais: args.fields.pais,
-        email: args.fields.email,
+        email: String(args.fields.email).toLowerCase(),
         nombreContacto: args.fields.contacto,
     });
     const resultado = yield updatedProv.save();
     if (resultado.id) {
-        return { message: "Proveedor añadido correctamente", successful: true, data: resultado };
+        return {
+            message: "Proveedor añadido correctamente",
+            successful: true,
+            data: resultado,
+        };
     }
-    return { message: "No se ha podido añadir el proveedor", successful: false, data: null };
+    return {
+        message: "No se ha podido añadir el proveedor",
+        successful: false,
+        data: null,
+    };
 });
 exports.addProveedorResolver = addProveedorResolver;
 const deleteProveedorResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
@@ -96,11 +120,16 @@ const deleteProveedorResolver = (root, args, context) => __awaiter(void 0, void 
     if (!isQueryValidId) {
         return { message: "ID de proveedor inválido", successful: false };
     }
-    const deletedProd = yield db.ProveedorDBController.CollectionModel.deleteOne({ _id: args._id });
+    const deletedProd = yield db.ProveedorDBController.CollectionModel.deleteOne({
+        _id: args._id,
+    });
     if (deletedProd.deletedCount > 0) {
         return { message: "Proveedor eliminado correctamente", successful: true };
     }
-    return { message: "No se ha podido eliminar el proveedor", successful: false };
+    return {
+        message: "No se ha podido eliminar el proveedor",
+        successful: false,
+    };
 });
 exports.deleteProveedorResolver = deleteProveedorResolver;
 const updateProveedorResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
@@ -119,12 +148,15 @@ const updateProveedorResolver = (root, args, context) => __awaiter(void 0, void 
         provincia: args.proveedor.provincia,
         cp: args.proveedor.cp,
         pais: args.proveedor.pais,
-        email: args.proveedor.email,
+        email: String(args.proveedor.email).toLowerCase(),
     };
     const resultadoUpdate = yield db.ProveedorDBController.CollectionModel.updateOne({ _id: args._id }, { $set: updatedProv });
     if (resultadoUpdate.modifiedCount > 0) {
         return { message: "Proveedor actualizado correctamente", successful: true };
     }
-    return { message: "No se ha podido actualizar el proveedor", successful: false };
+    return {
+        message: "No se ha podido actualizar el proveedor",
+        successful: false,
+    };
 });
 exports.updateProveedorResolver = updateProveedorResolver;

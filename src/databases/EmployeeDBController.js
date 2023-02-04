@@ -27,7 +27,7 @@ class EmployeeDBController {
                     nombre: Empleado.nombre,
                     apellidos: Empleado.apellidos,
                     dni: Empleado.dni,
-                    email: Empleado.email,
+                    email: String(Empleado.email).toLowerCase(),
                     rol: Empleado.rol,
                     hashPassword: hashedPassword,
                     fechaAlta: Empleado.fechaAlta || new Date(Date.now()),
@@ -35,13 +35,15 @@ class EmployeeDBController {
                 const empleadoExistente = yield this.CollectionModel.exists({
                     $or: [
                         { dni: Empleado.dni },
-                        { email: Empleado.email }
-                    ]
+                        { email: String(Empleado.email).toLowerCase() },
+                    ],
                 });
                 if (empleadoExistente) {
                     throw `El empleado con correo ${Empleado.email} y/o DNI ${Empleado.dni} ya existe`;
                 }
-                yield employeeToAdd.save().catch(() => { return false; });
+                yield employeeToAdd.save().catch(() => {
+                    return false;
+                });
                 return true;
             }
             catch (err) {
@@ -53,7 +55,9 @@ class EmployeeDBController {
     UpdateEmployee(Empleado, password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const empleadoEnDb = yield this.CollectionModel.exists({ _id: Empleado._id });
+                const empleadoEnDb = yield this.CollectionModel.exists({
+                    _id: Empleado._id,
+                });
                 if (empleadoEnDb === null) {
                     return false;
                 }
@@ -78,7 +82,7 @@ class EmployeeDBController {
                     apellidos: Empleado.apellidos || (emp === null || emp === void 0 ? void 0 : emp.apellidos),
                     dni: Empleado.dni || (emp === null || emp === void 0 ? void 0 : emp.dni),
                     rol: Empleado.rol || (emp === null || emp === void 0 ? void 0 : emp.rol),
-                    hashedPassword: hashedPassword
+                    hashedPassword: hashedPassword,
                 };
                 const resultadoUpdate = yield this.CollectionModel.updateOne({ _id: Empleado._id }, { $set: updatedEmpleado });
                 if (resultadoUpdate.modifiedCount > 0) {

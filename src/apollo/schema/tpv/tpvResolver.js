@@ -17,18 +17,26 @@ const apollo_server_express_1 = require("apollo-server-express");
 const database_1 = require("../../../databases/database");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const tpvResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
-    if ((!args.find.nombre && !args.find._id))
-        throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
+    if (!args.find.nombre && !args.find._id)
+        throw new apollo_server_express_1.UserInputError("Argumentos inválidos: Find no puede estar vacío");
     const db = database_1.Database.Instance();
     if (!args.find.empleadoId) {
         if (args.find._id) {
-            return yield db.TPVDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+            return yield db.TPVDBController.CollectionModel.findOne({
+                _id: args.find._id,
+            }).exec();
         }
-        return yield db.TPVDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+        return yield db.TPVDBController.CollectionModel.findOne({
+            nombre: args.find.nombre,
+        }).exec();
     }
-    const empleado = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.find.empleadoId });
+    const empleado = yield db.EmployeeDBController.CollectionModel.findOne({
+        _id: args.find.empleadoId,
+    });
     if (args.find.nombre) {
-        const tpv = yield db.TPVDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+        const tpv = yield db.TPVDBController.CollectionModel.findOne({
+            nombre: args.find.nombre,
+        }).exec();
         if (tpv) {
             if (empleado) {
                 const empleadoClean = {
@@ -36,7 +44,7 @@ const tpvResolver = (parent, args, context, info) => __awaiter(void 0, void 0, v
                     nombre: empleado.nombre,
                     apellidos: empleado.apellidos,
                     rol: empleado.rol,
-                    email: empleado.email,
+                    email: String(empleado.email).toLowerCase(),
                     dni: empleado.dni,
                 };
                 tpv.enUsoPor = empleadoClean;
@@ -46,7 +54,9 @@ const tpvResolver = (parent, args, context, info) => __awaiter(void 0, void 0, v
         return undefined;
     }
     if (args.find._id) {
-        const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+        const tpv = yield db.TPVDBController.CollectionModel.findOne({
+            _id: args.find._id,
+        }).exec();
         if (tpv) {
             if (empleado) {
                 const empleadoClean = {
@@ -54,7 +64,7 @@ const tpvResolver = (parent, args, context, info) => __awaiter(void 0, void 0, v
                     nombre: empleado.nombre,
                     apellidos: empleado.apellidos,
                     rol: empleado.rol,
-                    email: empleado.email,
+                    email: String(empleado.email).toLowerCase(),
                     dni: empleado.dni,
                 };
                 tpv.enUsoPor = empleadoClean;
@@ -63,19 +73,25 @@ const tpvResolver = (parent, args, context, info) => __awaiter(void 0, void 0, v
         }
         return undefined;
     }
-    return yield db.TPVDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+    return yield db.TPVDBController.CollectionModel.findOne({
+        _id: args.find._id,
+    }).exec();
 });
 exports.tpvResolver = tpvResolver;
 const tpvsResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     const db = database_1.Database.Instance();
-    if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
+    if (args.find === null ||
+        !args.find ||
+        (Object.keys(args.find).length === 0 && args.find.constructor === Object)) {
         const tpv = yield db.TPVDBController.CollectionModel.find({})
             .limit(150)
             .exec();
         return tpv;
     }
     if (args.find) {
-        const tpv = yield db.TPVDBController.CollectionModel.find({ libre: args.find.libre })
+        const tpv = yield db.TPVDBController.CollectionModel.find({
+            libre: args.find.libre,
+        })
             .limit(150)
             .exec();
         return tpv;
@@ -101,25 +117,47 @@ const transferirTpvResolver = (root, args, context) => __awaiter(void 0, void 0,
     if (!secret) {
         throw "No se ha encontrado la clave privada del JWT";
     }
-    const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV });
+    const tpv = yield db.TPVDBController.CollectionModel.findOne({
+        _id: args.idTPV,
+    });
     if (!tpv) {
         return { message: "TPV no encontrada", token: null, successful: false };
     }
     if (tpv.libre)
-        return { message: "No se puede transferir una TPV que no está en uso", token: null, successful: false };
-    const empleadoRemitente = yield db.EmployeeDBController.CollectionModel.findOne({ _id: tpv.enUsoPor._id });
+        return {
+            message: "No se puede transferir una TPV que no está en uso",
+            token: null,
+            successful: false,
+        };
+    const empleadoRemitente = yield db.EmployeeDBController.CollectionModel.findOne({
+        _id: tpv.enUsoPor._id,
+    });
     if (!empleadoRemitente) {
-        return { message: "Empleado remitente no encontrado", token: null, successful: false };
+        return {
+            message: "Empleado remitente no encontrado",
+            token: null,
+            successful: false,
+        };
     }
-    const empleadoDestinatario = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.idEmpleadoDestinatario });
+    const empleadoDestinatario = yield db.EmployeeDBController.CollectionModel.findOne({
+        _id: args.idEmpleadoDestinatario,
+    });
     if (!empleadoDestinatario) {
-        return { message: "Empleado destinatario no encontrado", token: null, successful: false };
+        return {
+            message: "Empleado destinatario no encontrado",
+            token: null,
+            successful: false,
+        };
     }
     const tpvs = yield db.TPVDBController.CollectionModel.find({ libre: false });
     for (let index = 0; index < tpvs.length; index++) {
         const tpv = tpvs[index];
         if (tpv.enUsoPor._id === args.idEmpleadoDestinatario) {
-            return { message: "El empleado destinatario está usando otra TPV", successful: false, token: null };
+            return {
+                message: "El empleado destinatario está usando otra TPV",
+                successful: false,
+                token: null,
+            };
         }
     }
     const empleado = {
@@ -127,19 +165,33 @@ const transferirTpvResolver = (root, args, context) => __awaiter(void 0, void 0,
         nombre: empleadoDestinatario.nombre,
         apellidos: empleadoDestinatario.apellidos,
         rol: empleadoDestinatario.rol,
-        email: empleadoDestinatario.email,
+        email: String(empleadoDestinatario.email).toLowerCase(),
         dni: empleadoDestinatario.dni,
     };
     const res = yield db.TPVDBController.CollectionModel.updateOne({ _id: args.idTPV }, { enUsoPor: empleado });
     if (res.modifiedCount <= 0) {
-        return { message: "No se ha podido transferir la TPV", successful: false, token: null };
+        return {
+            message: "No se ha podido transferir la TPV",
+            successful: false,
+            token: null,
+        };
     }
-    const payload = { _id: empleadoRemitente._id, nombre: empleadoRemitente.nombre, apellidos: empleadoRemitente.apellidos, email: empleadoRemitente.email, rol: empleadoRemitente.rol };
+    const payload = {
+        _id: empleadoRemitente._id,
+        nombre: empleadoRemitente.nombre,
+        apellidos: empleadoRemitente.apellidos,
+        email: String(empleadoRemitente.email).toLowerCase(),
+        rol: empleadoRemitente.rol,
+    };
     const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
     const token = jsonwebtoken_1.default.sign(payload, secret, {
-        expiresIn: 3600 * Number(jwtHoursDuration)
+        expiresIn: 3600 * Number(jwtHoursDuration),
     });
-    return { message: "TPV transferida correctamente", successful: true, token: `Bearer ${token}` };
+    return {
+        message: "TPV transferida correctamente",
+        successful: true,
+        token: `Bearer ${token}`,
+    };
 });
 exports.transferirTpvResolver = transferirTpvResolver;
 const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void 0, function* () {
@@ -148,15 +200,22 @@ const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void
     if (!secret) {
         throw "No se ha encontrado la clave privada del JWT";
     }
-    const empleado = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.idEmpleado });
+    const empleado = yield db.EmployeeDBController.CollectionModel.findOne({
+        _id: args.idEmpleado,
+    });
     if (!empleado) {
         return { token: null, successful: false };
     }
-    const tpvEnUsoPorEmpleado = yield db.TPVDBController.CollectionModel.findOne({ libre: false, "enUsoPor._id": args.idEmpleado });
-    if (!tpvEnUsoPorEmpleado) {
+    const tpvEnUsoPorEmpleado = yield db.TPVDBController.CollectionModel.findOne({
+        libre: false,
+        "enUsoPor._id": args.idEmpleado,
+    });
+    if (tpvEnUsoPorEmpleado) {
         return { token: null, successful: false };
     }
-    const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV });
+    const tpv = yield db.TPVDBController.CollectionModel.findOne({
+        _id: args.idTPV,
+    });
     if (!tpv) {
         return { token: null, successful: false };
     }
@@ -167,7 +226,7 @@ const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void
         nombre: empleado.nombre,
         apellidos: empleado.apellidos,
         rol: empleado.rol,
-        email: empleado.email,
+        email: String(empleado.email).toLowerCase(),
         dni: empleado.dni,
     };
     const tpvUpdate = {
@@ -178,14 +237,21 @@ const ocupyTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void
         fechaApertura: String(Date.now()),
     };
     yield tpv.updateOne(tpvUpdate);
-    const payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol, TPV: tpv._id };
+    const payload = {
+        _id: empleado._id,
+        nombre: empleado.nombre,
+        apellidos: empleado.apellidos,
+        email: String(empleado.email).toLowerCase(),
+        rol: empleado.rol,
+        TPV: tpv._id,
+    };
     const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
     const token = jsonwebtoken_1.default.sign(payload, secret, {
-        expiresIn: 3600 * Number(jwtHoursDuration)
+        expiresIn: 3600 * Number(jwtHoursDuration),
     });
     return {
         token: `Bearer ${token}`,
-        successful: true
+        successful: true,
     };
 });
 exports.ocupyTpvResolver = ocupyTpvResolver;
@@ -195,32 +261,42 @@ const freeTpvResolver = (root, args, context) => __awaiter(void 0, void 0, void 
     if (!secret) {
         throw "No se ha encontrado la clave privada del JWT";
     }
-    const empleado = yield db.EmployeeDBController.CollectionModel.findOne({ _id: args.idEmpleado }).exec();
+    const empleado = yield db.EmployeeDBController.CollectionModel.findOne({
+        _id: args.idEmpleado,
+    }).exec();
     if (!empleado) {
-        throw new apollo_server_express_1.UserInputError('Empleado no encontrado');
+        throw new apollo_server_express_1.UserInputError("Empleado no encontrado");
     }
-    const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.idTPV }).exec();
+    const tpv = yield db.TPVDBController.CollectionModel.findOne({
+        _id: args.idTPV,
+    }).exec();
     if (!tpv)
-        throw new apollo_server_express_1.UserInputError('TPV no encontrada');
+        throw new apollo_server_express_1.UserInputError("TPV no encontrada");
     if (tpv.libre)
-        throw new apollo_server_express_1.UserInputError('TPV actualmente ocupada por otro empleado');
+        throw new apollo_server_express_1.UserInputError("TPV actualmente ocupada por otro empleado");
     const empleadoClean = {
         _id: empleado._id,
         nombre: empleado.nombre,
         apellidos: empleado.apellidos,
         rol: empleado.rol,
-        email: empleado.email,
-        dni: empleado.dni
+        email: String(empleado.email).toLowerCase(),
+        dni: empleado.dni,
     };
     yield tpv.updateOne({ libre: true, enUsoPor: empleadoClean });
-    const payload = { _id: empleado._id, nombre: empleado.nombre, apellidos: empleado.apellidos, email: empleado.email, rol: empleado.rol };
+    const payload = {
+        _id: empleado._id,
+        nombre: empleado.nombre,
+        apellidos: empleado.apellidos,
+        email: String(empleado.email).toLowerCase(),
+        rol: empleado.rol,
+    };
     const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
     const token = jsonwebtoken_1.default.sign(payload, secret, {
-        expiresIn: 3600 * Number(jwtHoursDuration)
+        expiresIn: 3600 * Number(jwtHoursDuration),
     });
     return {
         token: `Bearer ${token} `,
-        successful: true
+        successful: true,
     };
 });
 exports.freeTpvResolver = freeTpvResolver;

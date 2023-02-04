@@ -19,18 +19,24 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cierreTpvResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     if (!args.find.nombre && !args.find._id)
-        throw new apollo_server_express_1.UserInputError('Argumentos inválidos: Find no puede estar vacío');
+        throw new apollo_server_express_1.UserInputError("Argumentos inválidos: Find no puede estar vacío");
     const db = database_1.Database.Instance();
     if (args.find.nombre) {
-        return yield db.TPVDBController.CollectionModel.findOne({ nombre: args.find.nombre }).exec();
+        return yield db.TPVDBController.CollectionModel.findOne({
+            nombre: args.find.nombre,
+        }).exec();
     }
-    return yield db.TPVDBController.CollectionModel.findOne({ _id: args.find._id }).exec();
+    return yield db.TPVDBController.CollectionModel.findOne({
+        _id: args.find._id,
+    }).exec();
 });
 exports.cierreTpvResolver = cierreTpvResolver;
 const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = database_1.Database.Instance();
-        if (args.find === null || !args.find || Object.keys(args.find).length === 0 && args.find.constructor === Object) {
+        if (args.find === null ||
+            !args.find ||
+            (Object.keys(args.find).length === 0 && args.find.constructor === Object)) {
             const cierres = yield db.CierreTPVDBController.CollectionModel.find({})
                 .sort({ apertura: -1 })
                 .limit(args.limit || 200)
@@ -39,7 +45,9 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
         }
         if (args.find.apertura) {
             const apertura = new Date(args.find.apertura);
-            const cierres = yield db.CierreTPVDBController.CollectionModel.find({ apertura: apertura })
+            const cierres = yield db.CierreTPVDBController.CollectionModel.find({
+                apertura: apertura,
+            })
                 .sort({ apertura: -1 })
                 .limit(args.limit || 200)
                 .exec();
@@ -64,22 +72,22 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
                         tpv: tpv._id,
                         cierre: {
                             $gte: fechaInicial,
-                            $lt: fechaFinal
-                        }
+                            $lt: fechaFinal,
+                        },
                     };
                 }
                 else {
                     filtro = {
                         $or: [
                             { "abiertoPor.nombre": args.find.query },
-                            { "abiertoPor.email": args.find.query },
+                            { "abiertoPor.email": String(args.find.query).toLowerCase() },
                             { "cerradoPor.nombre": args.find.query },
-                            { "cerradoPor.email": args.find.query }
+                            { "cerradoPor.email": String(args.find.query).toLowerCase() },
                         ],
                         cierre: {
                             $gte: fechaInicial,
-                            $lt: fechaFinal
-                        }
+                            $lt: fechaFinal,
+                        },
                     };
                 }
                 const cierres = yield db.CierreTPVDBController.CollectionModel.find(filtro)
@@ -92,17 +100,17 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
                 let filtro;
                 if (tpv) {
                     filtro = {
-                        tpv: tpv._id
+                        tpv: tpv._id,
                     };
                 }
                 else {
                     filtro = {
                         $or: [
                             { "abiertoPor.nombre": args.find.query },
-                            { "abiertoPor.email": args.find.query },
+                            { "abiertoPor.email": String(args.find.query).toLowerCase() },
                             { "cerradoPor.nombre": args.find.query },
-                            { "cerradoPor.email": args.find.query }
-                        ]
+                            { "cerradoPor.email": String(args.find.query).toLowerCase() },
+                        ],
                     };
                 }
                 const cierres = yield db.CierreTPVDBController.CollectionModel.find(filtro)
@@ -118,8 +126,8 @@ const cierreTpvsResolver = (parent, args, context, info) => __awaiter(void 0, vo
             const cierres = yield db.CierreTPVDBController.CollectionModel.find({
                 cierre: {
                     $gte: fechaInicial,
-                    $lt: fechaFinal
-                }
+                    $lt: fechaFinal,
+                },
             })
                 .sort({ apertura: -1 })
                 .limit(args.limit || 200)
@@ -141,7 +149,7 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
                 message: "Error en servidor: clave privada JWT no encontrada",
                 successful: false,
                 token: null,
-                cierre: null
+                cierre: null,
             };
         }
         const db = database_1.Database.Instance();
@@ -151,21 +159,27 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
                 message: "Empleado no ecnontrado en el sistema",
                 successful: false,
                 token: null,
-                cierre: null
+                cierre: null,
             };
         }
-        const tpv = yield db.TPVDBController.CollectionModel.findOne({ _id: args.cierre.tpv, libre: false, "enUsoPor._id": empleadoCerrando._id }).exec();
+        const tpv = yield db.TPVDBController.CollectionModel.findOne({
+            _id: args.cierre.tpv,
+            libre: false,
+            "enUsoPor._id": empleadoCerrando._id,
+        }).exec();
         if (!tpv) {
             return {
                 message: "Este empleado no está usando esta TPV en este momento",
                 successful: false,
                 token: null,
-                cierre: null
+                cierre: null,
             };
         }
         const fechaApertura = new Date().setTime(Number(tpv.fechaApertura));
         const fechaActual = Date.now();
-        const ventas = yield db.VentasDBController.CollectionModel.find({ "createdAt": { $gte: fechaApertura, $lte: fechaActual } }).exec();
+        const ventas = yield db.VentasDBController.CollectionModel.find({
+            createdAt: { $gte: fechaApertura, $lte: fechaActual },
+        }).exec();
         const res = yield db.CierreTPVDBController.CollectionModel.create({
             tpv: args.cierre.tpv,
             abiertoPor: tpv.abiertoPor,
@@ -181,20 +195,26 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
             ventasTotales: args.cierre.ventasTotales,
             dineroRetirado: args.cierre.dineroRetirado,
             fondoDeCaja: args.cierre.dineroRealEnCaja - args.cierre.dineroRetirado,
-            nota: args.cierre.nota || ""
+            nota: args.cierre.nota || "",
         });
         if (res.errors) {
             return {
                 message: "No se ha podido añadir el cierre de caja",
                 successful: false,
                 token: null,
-                cierre: null
+                cierre: null,
             };
         }
-        const payload = { _id: empleadoCerrando._id, nombre: empleadoCerrando.nombre, apellidos: empleadoCerrando.apellidos, email: empleadoCerrando.email, rol: empleadoCerrando.rol };
+        const payload = {
+            _id: empleadoCerrando._id,
+            nombre: empleadoCerrando.nombre,
+            apellidos: empleadoCerrando.apellidos,
+            email: String(empleadoCerrando.email).toLowerCase(),
+            rol: empleadoCerrando.rol,
+        };
         const jwtHoursDuration = process.env.JWT_HOURS_DURATION || 1;
         const token = jsonwebtoken_1.default.sign(payload, secret, {
-            expiresIn: 3600 * Number(jwtHoursDuration)
+            expiresIn: 3600 * Number(jwtHoursDuration),
         });
         const tpvUpdated = yield db.TPVDBController.CollectionModel.updateOne({ _id: tpv._id }, { libre: true, abiertoPor: null, enUsoPor: null, fechaApertura: null });
         if (tpvUpdated.modifiedCount <= 0) {
@@ -202,14 +222,14 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
                 message: "No se ha podido liberar la TPV",
                 successful: false,
                 token: `Bearer ${token}`,
-                cierre: res
+                cierre: res,
             };
         }
         return {
             message: "Cierre añadido correctamente",
             successful: true,
             token: `Bearer ${token}`,
-            cierre: res
+            cierre: res,
         };
     }
     catch (err) {
@@ -217,7 +237,7 @@ const addCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 0, 
             message: err,
             successful: false,
             token: null,
-            cierre: null
+            cierre: null,
         };
     }
 });
@@ -228,7 +248,9 @@ const deleteCierreTpvResolver = (root, args, context) => __awaiter(void 0, void 
     if (!isQueryValidId) {
         return { message: "ID de cierre inválido", successful: false };
     }
-    const deletedProd = yield db.CierreTPVDBController.CollectionModel.deleteOne({ _id: args._id });
+    const deletedProd = yield db.CierreTPVDBController.CollectionModel.deleteOne({
+        _id: args._id,
+    });
     if (deletedProd.deletedCount > 0) {
         return { message: "Cierre eliminado correctamente", successful: true };
     }
