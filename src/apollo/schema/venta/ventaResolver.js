@@ -215,11 +215,21 @@ const ventasResolver = (parent, args, context, info) => __awaiter(void 0, void 0
                 { "productos.proveedor": { $regex: query, $options: "i" } },
                 { "productos.familia": { $regex: query, $options: "i" } },
                 { "vendidoPor.nombre": { $regex: query, $options: "i" } },
-                { "vendidoPor.email": { $regex: query, $options: "i" } },
+                {
+                    "vendidoPor.email": {
+                        $regex: String(query).toLowerCase(),
+                        $options: "i",
+                    },
+                },
                 { "vendidoPor.dni": { $regex: query, $options: "i" } },
                 { "vendidoPor.rol": { $regex: query, $options: "i" } },
                 { "modificadoPor.nombre": { $regex: query, $options: "i" } },
-                { "modificadoPor.email": { $regex: query, $options: "i" } },
+                {
+                    "modificadoPor.email": {
+                        $regex: String(query).toLowerCase(),
+                        $options: "i",
+                    },
+                },
                 { "modificadoPor.dni": { $regex: query, $options: "i" } },
                 { "modificadoPor.rol": { $regex: query, $options: "i" } },
                 { tipo: { $regex: query, $options: "i" } },
