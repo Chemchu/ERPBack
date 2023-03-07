@@ -1,8 +1,7 @@
-# The file must be called ".env" without the cotation marks
-################## IMPORTANT: NEVER UPLOAD YOUR KEYS TO GITHUB ############################
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
 
-PORT=0000 # Server port number
-MONGO_URI=mongodb://xxx.xxx.x.xxx:xxxxx/
-DATABASE_NAME="databasename" # Simple string
-JWT_SECRET="jwt_super_secret"
-JWT_HOURS_DURATION=9999 # Simple integer
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+# DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
