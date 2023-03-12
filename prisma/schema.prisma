@@ -1,397 +1,251 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["auth", "public"]
 }
 
-model audit_log_entries {
-  instance_id String?   @db.Uuid
-  id          String    @id @db.Uuid
-  payload     Json?     @db.Json
-  created_at  DateTime? @db.Timestamptz(6)
-  ip_address  String    @default("") @db.VarChar(64)
-
-  @@index([instance_id], map: "audit_logs_instance_id_idx")
-  @@schema("auth")
+model cierres {
+  tpv_id                  String   @db.Uuid
+  caja_inicial            Float    @db.Real
+  caja_final              Float    @db.Real
+  ventas_efectivo         Float    @db.Real
+  ventas_tarjeta          Float    @db.Real
+  dinero_esperado_en_caja Float    @db.Real
+  dinero_real_en_caja     Float    @db.Real
+  dinero_retirado_de_caja Float    @db.Real
+  dinero_dejado_en_caja   Float    @db.Real
+  fecha_apertura          DateTime @default(now()) @db.Timestamptz(6)
+  fecha_cierre            DateTime @default(now()) @db.Timestamptz(6)
+  id                      String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  tpvs                    tpvs     @relation(fields: [tpv_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model identities {
-  id              String
-  user_id         String    @db.Uuid
-  identity_data   Json
-  provider        String
-  last_sign_in_at DateTime? @db.Timestamptz(6)
-  created_at      DateTime? @db.Timestamptz(6)
-  updated_at      DateTime? @db.Timestamptz(6)
-  email           String?   @default(dbgenerated("lower((identity_data ->> 'email'::text))"))
-  users           users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([provider, id])
-  @@index([email])
-  @@index([user_id])
-  @@schema("auth")
+model clientes {
+  id               String             @id @db.Uuid
+  nombre           String
+  nif              String             @unique
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  direccion_id     String             @db.Uuid
+  direcciones      direcciones        @relation(fields: [direccion_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  devoluciones     devoluciones[]
+  ventas           ventas[]
+  ventas_devueltas ventas_devueltas[]
 }
 
-model instances {
-  id              String    @id @db.Uuid
-  uuid            String?   @db.Uuid
-  raw_base_config String?
-  created_at      DateTime? @db.Timestamptz(6)
-  updated_at      DateTime? @db.Timestamptz(6)
-
-  @@schema("auth")
+model codigos_de_barra {
+  ean_id              String                @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  producto_id         String                @db.Uuid
+  ean                 String                @unique
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  productos           productos             @relation(fields: [producto_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productos_devueltos productos_devueltos[]
+  productos_mermados  productos_mermados[]
+  productos_vendidos  productos_vendidos[]
 }
 
-model mfa_amr_claims {
-  session_id            String   @db.Uuid
-  created_at            DateTime @db.Timestamptz(6)
-  updated_at            DateTime @db.Timestamptz(6)
-  authentication_method String
-  id                    String   @id(map: "amr_id_pk") @db.Uuid
-  sessions              sessions @relation(fields: [session_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@unique([session_id, authentication_method], map: "mfa_amr_claims_session_id_authentication_method_pkey")
-  @@schema("auth")
+model devoluciones {
+  id                  String                @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  venta_original_id   String                @db.Uuid
+  dinero_devuelto     Float                 @db.Real
+  tpv_id              String                @db.Uuid
+  cliente_id          String?               @db.Uuid
+  empleado_id         String                @db.Uuid
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  clientes            clientes?             @relation(fields: [cliente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  empleados           empleados             @relation(fields: [empleado_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tpvs                tpvs                  @relation(fields: [tpv_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ventas_devueltas    ventas_devueltas      @relation(fields: [venta_original_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productos_devueltos productos_devueltos[]
+  productos_mermados  productos_mermados[]
 }
 
-model mfa_challenges {
-  id          String      @id @db.Uuid
-  factor_id   String      @db.Uuid
-  created_at  DateTime    @db.Timestamptz(6)
-  verified_at DateTime?   @db.Timestamptz(6)
-  ip_address  String      @db.Inet
-  mfa_factors mfa_factors @relation(fields: [factor_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mfa_challenges_auth_factor_id_fkey")
-
-  @@schema("auth")
+model direcciones {
+  id            String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  calle         String
+  codigo_postal String
+  telefono      String?
+  created_at    DateTime      @default(now()) @db.Timestamptz(6)
+  clientes      clientes[]
+  proveedores   proveedores[]
 }
 
-model mfa_factors {
-  id             String           @id @db.Uuid
-  user_id        String           @db.Uuid
-  friendly_name  String?
-  factor_type    factor_type
-  status         factor_status
-  created_at     DateTime         @db.Timestamptz(6)
-  updated_at     DateTime         @db.Timestamptz(6)
-  secret         String?
-  mfa_challenges mfa_challenges[]
-  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([user_id, created_at], map: "factor_id_created_at_idx")
-  @@schema("auth")
+model empleados {
+  nombre                              String
+  apeliidos                           String
+  email                               String             @unique
+  dni                                 String             @unique
+  rol                                 String             @default("CAJERO")
+  created_at                          DateTime           @default(now()) @db.Timestamptz(6)
+  id                                  String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  devoluciones                        devoluciones[]
+  mermas                              mermas[]
+  tpvs_tpvs_abierto_por_idToempleados tpvs[]             @relation("tpvs_abierto_por_idToempleados")
+  tpvs_tpvs_usado_por_idToempleados   tpvs[]             @relation("tpvs_usado_por_idToempleados")
+  ventas                              ventas[]
+  ventas_devueltas                    ventas_devueltas[]
 }
 
-model refresh_tokens {
-  instance_id String?   @db.Uuid
-  id          BigInt    @id @default(autoincrement())
-  token       String?   @unique(map: "refresh_tokens_token_unique") @db.VarChar(255)
-  user_id     String?   @db.VarChar(255)
-  revoked     Boolean?
-  created_at  DateTime? @db.Timestamptz(6)
-  updated_at  DateTime? @db.Timestamptz(6)
-  parent      String?   @db.VarChar(255)
-  session_id  String?   @db.Uuid
-  sessions    sessions? @relation(fields: [session_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([instance_id])
-  @@index([instance_id, user_id])
-  @@index([parent])
-  @@index([session_id, revoked])
-  @@index([token])
-  @@schema("auth")
+model mermas {
+  id                String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  empleado_id       String    @db.Uuid
+  coste_productos   Float     @db.Real
+  ventas_perdidas   Float     @db.Real
+  beneficio_perdido Float     @db.Real
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+  empleados         empleados @relation(fields: [empleado_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model saml_providers {
-  id                String        @id @db.Uuid
-  sso_provider_id   String        @db.Uuid
-  entity_id         String        @unique
-  metadata_xml      String
-  metadata_url      String?
-  attribute_mapping Json?
-  created_at        DateTime?     @db.Timestamptz(6)
-  updated_at        DateTime?     @db.Timestamptz(6)
-  sso_providers     sso_providers @relation(fields: [sso_provider_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([sso_provider_id])
-  @@schema("auth")
+model productos {
+  nombre              String                @unique
+  familia             String?
+  alta                Boolean               @default(true)
+  cantidad            Int                   @default(0) @db.SmallInt
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  id                  String                @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  precio_compra       Float                 @db.Real
+  precio_venta        Float                 @db.Real
+  iva                 Float                 @db.Real
+  margen              Float                 @db.Real
+  proveedor_id        String?               @db.Uuid
+  codigos_de_barra    codigos_de_barra[]
+  proveedores         proveedores?          @relation(fields: [proveedor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productos_devueltos productos_devueltos[]
+  productos_mermados  productos_mermados[]
+  productos_vendidos  productos_vendidos[]
 }
 
-model saml_relay_states {
-  id              String        @id @db.Uuid
-  sso_provider_id String        @db.Uuid
-  request_id      String
-  for_email       String?
-  redirect_to     String?
-  from_ip_address String?       @db.Inet
-  created_at      DateTime?     @db.Timestamptz(6)
-  updated_at      DateTime?     @db.Timestamptz(6)
-  sso_providers   sso_providers @relation(fields: [sso_provider_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+model productos_devueltos {
+  precio_compra     Float            @default(0) @db.Real
+  precio_venta      Float            @default(0) @db.Real
+  iva               Float            @default(10) @db.Real
+  margen            Float            @default(0) @db.Real
+  cantidad_devuelta Int              @default(0) @db.SmallInt
+  created_at        DateTime         @default(now()) @db.Timestamptz(6)
+  producto_id       String           @db.Uuid
+  precio_final      Float            @db.Real
+  codigo_de_barras  String           @db.Uuid
+  proveedor_id      String?          @db.Uuid
+  devolucion_id     String           @db.Uuid
+  descuento         Float            @db.Real
+  codigos_de_barra  codigos_de_barra @relation(fields: [codigo_de_barras], references: [ean_id], onDelete: NoAction, onUpdate: NoAction)
+  devoluciones      devoluciones     @relation(fields: [devolucion_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productos         productos        @relation(fields: [producto_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  proveedores       proveedores?     @relation(fields: [proveedor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([for_email])
-  @@index([sso_provider_id])
-  @@schema("auth")
+  @@id([producto_id, devolucion_id])
 }
 
-model schema_migrations {
-  version String @id @db.VarChar(255)
+model productos_mermados {
+  precio_compra       Float            @default(0) @db.Real
+  precio_venta        Float            @default(0) @db.Real
+  iva                 Float            @default(10) @db.Real
+  margen              Float            @default(0) @db.Real
+  cantidad_mermada    Int              @default(0) @db.SmallInt
+  created_at          DateTime         @default(now()) @db.Timestamptz(6)
+  producto_id         String           @db.Uuid
+  codigo_de_barras_id String           @db.Uuid
+  proveedor_id        String?          @db.Uuid
+  merma_id            String           @db.Uuid
+  motivo_merma        String
+  codigos_de_barra    codigos_de_barra @relation(fields: [codigo_de_barras_id], references: [ean_id], onDelete: NoAction, onUpdate: NoAction)
+  devoluciones        devoluciones     @relation(fields: [merma_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productos           productos        @relation(fields: [producto_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  proveedores         proveedores?     @relation(fields: [proveedor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@schema("auth")
+  @@id([producto_id, merma_id])
 }
 
-model sessions {
-  id             String           @id @db.Uuid
-  user_id        String           @db.Uuid
-  created_at     DateTime?        @db.Timestamptz(6)
-  updated_at     DateTime?        @db.Timestamptz(6)
-  factor_id      String?          @db.Uuid
-  aal            aal_level?
-  not_after      DateTime?        @db.Timestamptz(6)
-  mfa_amr_claims mfa_amr_claims[]
-  refresh_tokens refresh_tokens[]
-  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+model productos_vendidos {
+  producto_id      String           @db.Uuid
+  venta_id         String           @db.Uuid
+  precio_compra    Float            @db.Real
+  precio_venta     Float            @db.Real
+  precio_final     Float            @db.Real
+  cantidad_vendida Int
+  descuento        Float            @db.Real
+  iva              Float            @db.Real
+  margen           Float            @db.Real
+  created_at       DateTime         @default(now()) @db.Timestamptz(6)
+  codigo_barras_id String           @db.Uuid
+  proveedor_id     String?          @db.Uuid
+  codigos_de_barra codigos_de_barra @relation(fields: [codigo_barras_id], references: [ean_id], onDelete: NoAction, onUpdate: NoAction)
+  productos        productos        @relation(fields: [producto_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  proveedores      proveedores?     @relation(fields: [proveedor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ventas           ventas           @relation(fields: [venta_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([user_id])
-  @@index([user_id, created_at], map: "user_id_created_at_idx")
-  @@schema("auth")
+  @@id([producto_id, venta_id])
 }
 
-model sso_domains {
-  id              String        @id @db.Uuid
-  sso_provider_id String        @db.Uuid
-  domain          String
-  created_at      DateTime?     @db.Timestamptz(6)
-  updated_at      DateTime?     @db.Timestamptz(6)
-  sso_providers   sso_providers @relation(fields: [sso_provider_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([sso_provider_id])
-  @@schema("auth")
+model proveedores {
+  id                  String                @id @db.Uuid
+  nombre              String                @unique
+  cif                 String                @unique
+  direccion           String                @db.Uuid
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  productos           productos[]
+  productos_devueltos productos_devueltos[]
+  productos_mermados  productos_mermados[]
+  productos_vendidos  productos_vendidos[]
+  direcciones         direcciones           @relation(fields: [direccion], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model sso_providers {
-  id                String              @id @db.Uuid
-  resource_id       String?
-  created_at        DateTime?           @db.Timestamptz(6)
-  updated_at        DateTime?           @db.Timestamptz(6)
-  saml_providers    saml_providers[]
-  saml_relay_states saml_relay_states[]
-  sso_domains       sso_domains[]
-
-  @@schema("auth")
+model tpvs {
+  id                                       String             @id @db.Uuid
+  nombre                                   String             @unique
+  libre                                    Boolean            @default(true)
+  created_at                               DateTime           @default(now()) @db.Timestamptz(6)
+  usado_por_id                             String?            @db.Uuid
+  abierto_por_id                           String?            @db.Uuid
+  caja_inicial                             Float              @db.Real
+  cierres                                  cierres[]
+  devoluciones                             devoluciones[]
+  empleados_tpvs_abierto_por_idToempleados empleados?         @relation("tpvs_abierto_por_idToempleados", fields: [abierto_por_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  empleados_tpvs_usado_por_idToempleados   empleados?         @relation("tpvs_usado_por_idToempleados", fields: [usado_por_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ventas                                   ventas[]
+  ventas_devueltas                         ventas_devueltas[]
 }
 
-model users {
-  instance_id                 String?       @db.Uuid
-  id                          String        @id @db.Uuid
-  aud                         String?       @db.VarChar(255)
-  role                        String?       @db.VarChar(255)
-  email                       String?       @db.VarChar(255)
-  encrypted_password          String?       @db.VarChar(255)
-  email_confirmed_at          DateTime?     @db.Timestamptz(6)
-  invited_at                  DateTime?     @db.Timestamptz(6)
-  confirmation_token          String?       @db.VarChar(255)
-  confirmation_sent_at        DateTime?     @db.Timestamptz(6)
-  recovery_token              String?       @db.VarChar(255)
-  recovery_sent_at            DateTime?     @db.Timestamptz(6)
-  email_change_token_new      String?       @db.VarChar(255)
-  email_change                String?       @db.VarChar(255)
-  email_change_sent_at        DateTime?     @db.Timestamptz(6)
-  last_sign_in_at             DateTime?     @db.Timestamptz(6)
-  raw_app_meta_data           Json?
-  raw_user_meta_data          Json?
-  is_super_admin              Boolean?
-  created_at                  DateTime?     @db.Timestamptz(6)
-  updated_at                  DateTime?     @db.Timestamptz(6)
-  phone                       String?       @unique
-  phone_confirmed_at          DateTime?     @db.Timestamptz(6)
-  phone_change                String?       @default("")
-  phone_change_token          String?       @default("") @db.VarChar(255)
-  phone_change_sent_at        DateTime?     @db.Timestamptz(6)
-  confirmed_at                DateTime?     @default(dbgenerated("LEAST(email_confirmed_at, phone_confirmed_at)")) @db.Timestamptz(6)
-  email_change_token_current  String?       @default("") @db.VarChar(255)
-  email_change_confirm_status Int?          @default(0) @db.SmallInt
-  banned_until                DateTime?     @db.Timestamptz(6)
-  reauthentication_token      String?       @default("") @db.VarChar(255)
-  reauthentication_sent_at    DateTime?     @db.Timestamptz(6)
-  is_sso_user                 Boolean       @default(false)
-  deleted_at                  DateTime?     @db.Timestamptz(6)
-  identities                  identities[]
-  mfa_factors                 mfa_factors[]
-  sessions                    sessions[]
-
-  @@index([instance_id])
-  @@schema("auth")
+model ventas {
+  id                    String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  numero_factura        BigInt               @unique @default(autoincrement())
+  dinero_efectivo       Float                @db.Real
+  dinero_tarjeta        Float                @db.Real
+  precio_venta_total    Float                @db.Real
+  precio_venta_pagado   Float                @db.Real
+  cambio                Float                @db.Real
+  cliente_id            String?              @db.Uuid
+  empleado_id           String               @db.Uuid
+  tipo_pago             String               @default("EFECTIVO")
+  descuento_sobre_total Float                @db.Real
+  descuento_porcentaje  Float                @db.Real
+  tpv_id                String               @db.Uuid
+  created_at            DateTime             @default(now()) @db.Timestamptz(6)
+  productos_vendidos    productos_vendidos[]
+  clientes              clientes?            @relation(fields: [cliente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  empleados             empleados            @relation(fields: [empleado_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tpvs                  tpvs                 @relation(fields: [tpv_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model Albaran {
-  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  numFactura       String             @unique
-  valorTotal       Float
-  createdAt        DateTime           @default(now()) @db.Timestamptz(0)
-  updatedAt        DateTime           @db.Timestamptz(0)
-  proveedorId      String             @db.Uuid
-  Proveedor        Proveedor          @relation(fields: [proveedorId], references: [id])
-  ProductoComprado ProductoComprado[]
-
-  @@schema("public")
-}
-
-model Cliente {
-  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nombreCompleto String  @unique
-  nif            String  @unique
-  telefono       String? @unique
-  direccion      String?
-  pais           String?
-  codigoPostal   String?
-  Venta          Venta[]
-
-  @@schema("public")
-}
-
-model Contacto {
-  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nombre       String
-  dni          String?
-  email        String?
-  telefono     String?
-  direccion    String?
-  pais         String?
-  codigoPostal String?
-  proveedorId  String?    @db.Uuid
-  Proveedor    Proveedor? @relation(fields: [proveedorId], references: [id])
-
-  @@schema("public")
-}
-
-model Producto {
-  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nombre       String    @unique
-  familia      String
-  proveedorId  String    @db.Uuid
-  codigosEan   String[]  @unique
-  precioCompra Float
-  precioVenta  Float
-  iva          Float
-  cantidad     Float     @default(0)
-  alta         Boolean   @default(true)
-  createdAt    DateTime  @default(now()) @db.Timestamptz(0)
-  updatedAt    DateTime  @db.Timestamptz(0)
-  Proveedor    Proveedor @relation(fields: [proveedorId], references: [id])
-
-  @@schema("public")
-}
-
-model ProductoComprado {
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nombre           String    @unique
-  familia          String
-  proveedorId      String    @db.Uuid
-  codigosEan       String[]  @unique
-  precioCompra     Float
-  iva              Float
-  dto              Float
-  cantidadComprada Float     @default(0)
-  albaranId        String?   @db.Uuid
-  createdAt        DateTime  @default(now()) @db.Timestamptz(0)
-  updatedAt        DateTime  @db.Timestamptz(0)
-  Albaran          Albaran?  @relation(fields: [albaranId], references: [id])
-  Proveedor        Proveedor @relation(fields: [proveedorId], references: [id])
-
-  @@schema("public")
-}
-
-model ProductoVendido {
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nombre           String    @unique
-  familia          String
-  proveedorId      String    @db.Uuid
-  codigosEan       String[]  @unique
-  precioCompra     Float
-  precioVenta      Float
-  precioVentaFinal Float
-  iva              Float
-  dto              Float
-  cantidadVendida  Float     @default(0)
-  alta             Boolean   @default(true)
-  ventaId          String?   @db.Uuid
-  Proveedor        Proveedor @relation(fields: [proveedorId], references: [id])
-  Venta            Venta?    @relation(fields: [ventaId], references: [id])
-
-  @@schema("public")
-}
-
-model Proveedor {
-  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nombre           String             @unique
-  cif              String             @unique
-  telefono         String?
-  direccion        String?
-  pais             String?
-  codigoPostal     String?
-  Albaran          Albaran[]
-  Contacto         Contacto[]
-  Producto         Producto[]
-  ProductoComprado ProductoComprado[]
-  ProductoVendido  ProductoVendido[]
-
-  @@schema("public")
-}
-
-model Tpv {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nombre    String   @unique
-  libre     Boolean
-  createdAt DateTime @default(now()) @db.Timestamptz(0)
-  updatedAt DateTime @db.Timestamptz(0)
-  Venta     Venta[]
-
-  @@schema("public")
-}
-
-model Venta {
-  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clienteId        String            @db.Uuid
-  tipo             String
-  valorTotalSinDto Float
-  valorTotalPagado Float
-  pagadoEnEfectivo Float
-  pagadoEnTarjeta  Float
-  cambio           Float
-  dtoPorcentaje    Float
-  dtoDinero        Float
-  createdAt        DateTime          @default(now()) @db.Timestamptz(0)
-  updatedAt        DateTime          @db.Timestamptz(0)
-  tpvId            String            @db.Uuid
-  ProductoVendido  ProductoVendido[]
-  Cliente          Cliente           @relation(fields: [clienteId], references: [id])
-  Tpv              Tpv               @relation(fields: [tpvId], references: [id])
-
-  @@schema("public")
-}
-
-enum aal_level {
-  aal1
-  aal2
-  aal3
-
-  @@schema("auth")
-}
-
-enum factor_status {
-  unverified
-  verified
-
-  @@schema("auth")
-}
-
-enum factor_type {
-  totp
-  webauthn
-
-  @@schema("auth")
+model ventas_devueltas {
+  id                   String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  numero_factura       BigInt         @unique @default(autoincrement())
+  dinero_efectivo      Float          @db.Real
+  dinero_tarjeta       Float          @db.Real
+  precio_venta_total   Float          @db.Real
+  precio_venta_pagado  Float          @db.Real
+  cambio               Float          @db.Real
+  cliente_id           String?        @db.Uuid
+  vendedor             String         @db.Uuid
+  tipo_pago            String         @default("EFECTIVO")
+  descuento_valor      Float          @db.Real
+  descuento_porcentaje Float          @db.Real
+  tpv_id               String         @db.Uuid
+  created_at           DateTime       @default(now()) @db.Timestamptz(6)
+  devoluciones         devoluciones[]
+  clientes             clientes?      @relation(fields: [cliente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tpvs                 tpvs           @relation(fields: [tpv_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  empleados            empleados      @relation(fields: [vendedor], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
