@@ -193,7 +193,7 @@ model proveedores {
 }
 
 model tpvs {
-  id                                       String             @id @db.Uuid
+  id                                       String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   nombre                                   String             @unique
   libre                                    Boolean            @default(true)
   created_at                               DateTime           @default(now()) @db.Timestamptz(6)
