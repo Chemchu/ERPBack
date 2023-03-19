@@ -1,4 +1,3 @@
--- Policies 
 alter table empleados
   enable row level security;
 

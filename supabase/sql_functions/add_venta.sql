@@ -15,14 +15,14 @@ CREATE TYPE venta_a_procesar as (
   dinero_efectivo NUMERIC(10, 2), 
   dinero_tarjeta NUMERIC(10, 2), 
   cambio NUMERIC(10, 2), 
-  tipo_pago VARCHAR(30), 
+  tipo_pago text, 
   descuento_sobre_total NUMERIC(10, 2), 
   descuento_porcentaje NUMERIC(10, 2)
 );
 CREATE 
 OR REPLACE FUNCTION public.crear_venta(venta venta_a_procesar) RETURNS UUID AS $$ DECLARE nueva_venta_id UUID;
-producto_nombre VARCHAR(20);
-producto_familia VARCHAR(20);
+producto_nombre text;
+producto_familia text;
 producto_precio_compra NUMERIC(10, 2);
 producto_precio_venta NUMERIC(10, 2);
 producto_iva NUMERIC(10, 2);
