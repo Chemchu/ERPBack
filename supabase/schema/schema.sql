@@ -34,7 +34,7 @@ create table public.direcciones (
 
 create table public.mermas (
   id uuid default uuid_generate_v4() primary key,
-  empleado_id uuid references public.empleados (id),
+  empleado_id uuid references public.empleados (id) not null,
   coste_productos real not null,
   ventas_perdidas real not null,
   beneficio_perdido real not null,
@@ -42,7 +42,7 @@ create table public.mermas (
 );
 
 create table public.cierres (
-  tpv_id uuid references public.tpvs (id),
+  tpv_id uuid references public.tpvs (id) not null,
   caja_inicial real not null,
   caja_final real not null,
   ventas_efectivo real not null,
@@ -61,14 +61,14 @@ create table public.clientes (
   nombre text not null,
   nif text not null,
   created_at timestamp default now() not null,
-  direccion_id uuid references public.direcciones (id)
+  direccion_id uuid references public.direcciones (id) not null
 );
 
 create table public.proveedores (
   id uuid default uuid_generate_v4() primary key,
   nombre text not null,
   cif text not null,
-  direccion uuid references public.direcciones (id),
+  direccion uuid references public.direcciones (id) not null,
   created_at timestamp default now() not null
 );
 
@@ -80,12 +80,12 @@ create table public.ventas_devueltas (
   precio_venta_total real not null,
   precio_venta_pagado real not null,
   cambio real not null,
-  cliente_id uuid references public.clientes (id),
-  vendedor uuid references public.empleados (id),
+  cliente_id uuid references public.clientes (id) not null,
+  vendedor_id uuid references public.empleados (id) not null,
   tipo_pago text not null,
   descuento_valor real not null,
   descuento_porcentaje real not null,
-  tpv_id uuid references public.tpvs (id),
+  tpv_id uuid references public.tpvs (id) not null,
   created_at timestamp default now() not null
 );
 
@@ -105,17 +105,17 @@ create table public.productos (
 
 create table public.devoluciones (
   id uuid default uuid_generate_v4() primary key,
-  venta_original_id uuid references public.ventas_devueltas (id),
+  venta_original_id uuid references public.ventas_devueltas (id) not null,
   dinero_devuelto real not null,
-  tpv_id uuid references public.tpvs (id),
+  tpv_id uuid references public.tpvs (id) not null,
   cliente_id uuid references public.clientes (id),
-  empleado_id uuid references public.empleados (id),
+  empleado_id uuid references public.empleados (id) not null,
   created_at timestamp default now() not null
 );
 
 create table public.codigos_de_barra (
   ean_id uuid default uuid_generate_v4() primary key,
-  producto_id uuid references public.productos (id),
+  producto_id uuid references public.productos (id) not null,
   ean text not null,
   created_at timestamp default now() not null
 );
@@ -160,11 +160,11 @@ create table public.ventas (
   precio_venta_pagado real not null,
   cambio real not null,
   cliente_id uuid references public.clientes (id),
-  empleado_id uuid references public.empleados (id),
+  empleado_id uuid references public.empleados (id) not null,
   tipo_pago text not null,
   descuento_sobre_total real not null,
   descuento_porcentaje real not null,
-  tpv_id uuid references public.tpvs (id),
+  tpv_id uuid references public.tpvs (id) not null,
   created_at timestamp default now() not null
 );
 

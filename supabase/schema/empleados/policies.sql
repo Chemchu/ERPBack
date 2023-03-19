@@ -19,5 +19,7 @@ begin
 end;
 $$ language plpgsql security definer;
 create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_nuevo_empleado();
+  after update on auth.users
+  for each row 
+  when (NEW.confirmed_at IS NOT NULL AND OLD.confirmed_at IS NULL)
+  execute procedure public.handle_nuevo_empleado();
