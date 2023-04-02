@@ -13,13 +13,13 @@ create policy "Los usuarios pueden actualizar sus propios perfiles." on empleado
 create function public.handle_nuevo_empleado()
 returns trigger as $$
 begin
-  insert into public.empleados (id, nombre, apellidos)
-  values (new.id, new.raw_user_meta_data->>'nombre', new.raw_user_meta_data->>'apellidos');
+  insert into public.empleados (id, nombre, apellidos, email)
+  values (new.id, new.email, new.email, new.email);
   return new;
 end;
 $$ language plpgsql security definer;
 create trigger on_auth_user_created
   after update on auth.users
   for each row 
-  when (NEW.confirmed_at IS NOT NULL AND OLD.confirmed_at IS NULL)
+  when (NEW.confirmed_at IS NOT NULL AND OLD.confirmed_at IS NULL) -- ---> Puede que de error esto
   execute procedure public.handle_nuevo_empleado();

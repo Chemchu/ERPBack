@@ -5,8 +5,8 @@ create table public.empleados (
   nombre text not null,
   apellidos text not null,
   email text unique not null,
-  dni text unique not null,
-  rol text not null,
+  dni text unique,
+  rol text,
   created_at timestamp with time zone default now() not null,
   updated_at timestamp with time zone default now() not null,
 
