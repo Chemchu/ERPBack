@@ -10,16 +10,26 @@ create policy "Los empleados pueden insertar en sus propios perfiles." on emplea
 create policy "Los usuarios pueden actualizar sus propios perfiles." on empleados
   for update using (auth.uid() = id);
 
-create function public.handle_nuevo_empleado()
+create function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.empleados (id, nombre, apellidos, email)
-  values (new.id, new.email, new.email, new.email);
+  IF NOT EXISTS (SELECT 1 FROM public.empleados) THEN
+    INSERT INTO public.empleados (id, nombre, apellidos, email, rol)
+    VALUES (NEW.id, NEW.email, NEW.email, NEW.email, 'Administrador');
+  ELSE
+    insert into public.empleados (id, nombre, apellidos, email, rol)
+    values (new.id, new.email, new.email, new.email, 'Cajero');
+  END if;
   return new;
 end;
 $$ language plpgsql security definer;
-create trigger on_auth_user_created
-  after update on auth.users
-  for each row 
-  when (NEW.confirmed_at IS NOT NULL AND OLD.confirmed_at IS NULL) -- ---> Puede que de error esto
-  execute procedure public.handle_nuevo_empleado();
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT
+    ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_new_user();
+-- create trigger on_auth_user_created
+--   after update on auth.users
+--   for each row 
+--   when (NEW.confirmed_at IS NOT NULL AND OLD.confirmed_at IS NULL) -- ---> Puede que de error esto
+--   execute procedure public.handle_nuevo_empleado();
