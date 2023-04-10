@@ -15,10 +15,10 @@ returns trigger as $$
 begin
   IF NOT EXISTS (SELECT 1 FROM public.empleados) THEN
     INSERT INTO public.empleados (id, nombre, apellidos, email, rol)
-    VALUES (NEW.id, NEW.email, NEW.email, NEW.email, 'Administrador');
+    VALUES (NEW.id, 'Admin', 'Admin', NEW.email, 'Administrador');
   ELSE
-    insert into public.empleados (id, nombre, apellidos, email, rol)
-    values (new.id, new.email, new.email, new.email, 'Cajero');
+    insert into public.empleados (id, nombre, apellidos, email, rol, dni)
+    values (new.id, new.raw_user_meta_data->>'nombre'::TEXT, new.raw_user_meta_data->>'apellidos'::TEXT, new.email, new.raw_user_meta_data->>'rol'::TEXT, new.raw_user_meta_data->>'dni'::TEXT);
   END if;
   return new;
 end;
