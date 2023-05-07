@@ -116,7 +116,7 @@ create table public.devoluciones (
 create table public.codigos_de_barra (
   ean_id uuid default uuid_generate_v4() primary key,
   producto_id uuid references public.productos (id) not null,
-  ean text not null,
+  ean text not null unique,
   created_at timestamp default now() not null
 );
 
