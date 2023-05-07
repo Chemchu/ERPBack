@@ -13,7 +13,6 @@ create policy "Only authenticated users can access ventas_devueltas table." on p
 
 -- Enable RLS on the cierres table
 alter table public.cierres enable row level security;
-
 -- Create a policy that grants only authenticated access to the cierres table
 create policy "Only authenticated users can access cierres" on public.cierres for all -- all means all operations (select, insert, update, delete)
 to authenticated -- only authenticated users can access the cierres table
