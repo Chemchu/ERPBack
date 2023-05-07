@@ -33,3 +33,15 @@ CREATE TRIGGER on_auth_user_created
 --   for each row 
 --   when (NEW.confirmed_at IS NOT NULL AND OLD.confirmed_at IS NULL) -- ---> Puede que de error esto
 --   execute procedure public.handle_nuevo_empleado();
+
+-- Enable RLS on proveedores table
+alter table public.proveedores enable row level security;
+-- Create a policy that grants only authenticated access to the proveedores table
+create policy "Only authenticated users can access proveedores table." on public.proveedores for all to authenticated using (true);
+
+-- Enable RLS on the clientes table
+alter table public.clientes enable row level security;
+-- Create a policy that grants only authenticated access to the clientes table
+create policy "Only authenticated users can access clientes" on public.clientes for all -- all means all operations (select, insert, update, delete)
+to authenticated -- only authenticated users can access the clientes table
+using (true);
