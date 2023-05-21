@@ -22,3 +22,6 @@ using (true);
 alter table public.tpvs enable row level security;
 -- Create a policy that grants only authenticated access to the tpvs table
 create policy "Only authenticated users can access tpvs table." on public.tpvs for all to authenticated using (true);
+
+-- Bucket policies
+(bucket_id = 'avatars'::text)
