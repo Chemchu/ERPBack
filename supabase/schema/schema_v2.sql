@@ -41,6 +41,7 @@ CREATE TABLE "productos_vendidos"(
 );
 ALTER TABLE
     "productos_vendidos" ADD PRIMARY KEY("producto_id", "venta_id");
+
 CREATE TABLE "proveedores"(
     "id" UUID DEFAULT uuid_generate_v4() NOT NULL,
     "direccion_id" UUID NOT NULL,
@@ -140,8 +141,6 @@ CREATE TABLE "ofertas"(
 );
 ALTER TABLE
     "ofertas" ADD PRIMARY KEY("id");
-ALTER TABLE
-    "ofertas" ADD PRIMARY KEY("producto_id");
 ALTER TABLE
     "ofertas" ADD CONSTRAINT "ofertas_nombre_oferta_unique" UNIQUE("nombre_oferta");
 CREATE TABLE "ofertas_aplicadas"(
