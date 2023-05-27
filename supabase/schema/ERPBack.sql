@@ -183,9 +183,21 @@ CREATE TABLE "ventas" (
   "id" uuid PRIMARY KEY NOT NULL,
   "cierre_id" uuid NOT NULL,
   "empleado_id" uuid NOT NULL,
+  "cliente_id" uuid NOT NULL,
   "pagado_efectivo" numeric NOT NULL,
   "pagado_tarjeta" numeric NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "clientes" (
+  "id" uuid PRIMARY KEY NOT NULL,
+  "nombre" text NOT NULL,
+  "apellidos" text NOT NULL,
+  "nif" text UNIQUE NOT NULL,
+  "direccion" text NOT NULL,
+  "codigo_postal" text NOT NULL,
+  "email_id" uuid,
+  "telefono_id" uuid 
 );
 
 CREATE TABLE "cierres" (
@@ -260,3 +272,169 @@ ALTER TABLE "productos_vendidos" ADD FOREIGN KEY ("producto_id") REFERENCES "pro
 ALTER TABLE "emails" ADD FOREIGN KEY ("id") REFERENCES "proveedores" ("email_id");
 
 ALTER TABLE "telefonos" ADD FOREIGN KEY ("id") REFERENCES "proveedores" ("telefono_id");
+
+ALTER TABLE "ventas" ADD FOREIGN KEY ("cliente_id") REFERENCES "clientes" ("id")
+
+-- Enable RLS on clientes table
+alter table public.clientes enable row level security;
+-- Create a policy that grants only authenticated access to the clientes table
+create policy "Only authenticated users can access clientes table." on public.clientes for all to authenticated using (true);
+
+-- Enable RLS on productos table
+alter table public.productos enable row level security;
+-- Create a policy that grants only authenticated access to the productos table
+create policy "Only authenticated users can access productos table." on public.productos for all to authenticated using (true);
+
+-- Enable RLS on codigos_de_barra table
+alter table public.codigos_de_barra enable row level security;
+-- Create a policy that grants only authenticated access to the codigos_de_barra table
+create policy "Only authenticated users can access codigos_de_barra table." on public.codigos_de_barra for all to authenticated using (true);
+
+-- Enable RLS on productos_devueltos table
+alter table public.productos_devueltos enable row level security;
+-- Create a policy that grants only authenticated access to the productos_devueltos table
+create policy "Only authenticated users can access productos_devueltos table." on public.productos_devueltos for all to authenticated using (true);
+
+-- Enable RLS on productos_mermados table
+alter table public.productos_mermados enable row level security;
+-- Create a policy that grants only authenticated access to the productos_mermados table
+create policy "Only authenticated users can access productos_mermados table." on public.productos_mermados for all to authenticated using (true);
+
+-- Enable RLS on productos_vendidos table
+alter table public.productos_vendidos enable row level security;
+-- Create a policy that grants only authenticated access to the productos_vendidos table
+create policy "Only authenticated users can access productos_vendidos table." on public.productos_vendidos for all to authenticated using (true);
+
+-- Enable RLS on the ventas table
+alter table public.ventas enable row level security;
+-- Create a policy that grants only authenticated access to the ventas table
+create policy "Only authenticated users can access ventas" on public.ventas for all -- all means all operations (select, insert, update, delete)
+to authenticated -- only authenticated users can access the ventas table
+using (true);
+
+-- Enable RLS on the cierres table
+alter table public.cierres enable row level security;
+-- Create a policy that grants only authenticated access to the cierres table
+create policy "Only authenticated users can access cierres" on public.cierres for all -- all means all operations (select, insert, update, delete)
+to authenticated -- only authenticated users can access the cierres table
+using (true);
+
+-- Enable RLS on terminales_de_ventas table
+alter table public.terminales_de_ventas enable row level security;
+-- Create a policy that grants only authenticated access to the terminales_de_ventas table
+create policy "Only authenticated users can access terminales_de_ventas table." on public.terminales_de_ventas for all to authenticated using (true);
+
+-- Bucket policies
+(bucket_id = 'avatars'::text)
+
+
+alter table public.empleados
+  enable row level security;
+
+create policy "Los empleados son visibles por todos." on empleados
+  for select using (true);
+
+create policy "Los empleados pueden insertar en sus propios perfiles." on empleados
+  for insert with check (auth.uid() = id);
+
+create policy "Los usuarios pueden actualizar sus propios perfiles." on empleados
+  for update using (auth.uid() = id);
+
+create function public.handle_new_user()
+returns trigger as $$
+declare 
+  email_id uuid;
+  new_id uuid;
+begin
+  new_id := uuid_generate_v4();
+
+  insert into emails (id, entidad_id, valor) values (new_id, NEW.id, NEW.email)
+  returning id into email_id
+  IF NOT EXISTS (SELECT 1 FROM public.empleados) THEN
+    INSERT INTO public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
+    VALUES (NEW.id, 'Admin', 'Admin', email_id, 'Administrador', 'Administrador', 'Administrador');
+  ELSE
+    insert into public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
+    values (new.id, new.raw_user_meta_data->>'nombre'::TEXT, new.raw_user_meta_data->>'apellidos'::TEXT, email_id, new.raw_user_meta_data->>'rol'::TEXT,
+    new.raw_user_meta_data->>'username'::TEXT, new.raw_user_meta_data->>'dni'::TEXT);
+  END if;
+  return new;
+end;
+$$ language plpgsql security definer;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT
+    ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_new_user();
+
+-- Enable RLS on proveedores table
+alter table public.proveedores enable row level security;
+-- Create a policy that grants only authenticated access to the proveedores table
+create policy "Only authenticated users can access proveedores table." on public.proveedores for all to authenticated using (true);
+
+-- Enable RLS on the clientes table
+alter table public.clientes enable row level security;
+-- Create a policy that grants only authenticated access to the clientes table
+create policy "Only authenticated users can access clientes" on public.clientes for all -- all means all operations (select, insert, update, delete)
+to authenticated -- only authenticated users can access the clientes table
+using (true);
+
+-- Enable RLS on inventarios table
+alter table public.inventarios enable row level security;
+-- Create a policy that grants only authenticated access to the inventarios table
+create policy "Only authenticated users can access inventarios table." on public.inventarios for all to authenticated using (true);
+
+-- Enable RLS on pedidos table
+alter table public.pedidos enable row level security;
+-- Create a policy that grants only authenticated access to the pedidos table
+create policy "Only authenticated users can access pedidos table." on public.pedidos for all to authenticated using (true);
+
+-- Enable RLS on productos_pedidos table
+alter table public.productos_pedidos enable row level security;
+-- Create a policy that grants only authenticated access to the productos_pedidos table
+create policy "Only authenticated users can access productos_pedidos table." on public.productos_pedidos for all to authenticated using (true);
+
+-- Enable RLS on ofertas table
+alter table public.ofertas enable row level security;
+-- Create a policy that grants only authenticated access to the ofertas table
+create policy "Only authenticated users can access ofertas table." on public.ofertas for all to authenticated using (true);
+
+-- Enable RLS on tiendas table
+alter table public.tiendas enable row level security;
+-- Create a policy that grants only authenticated access to the tiendas table
+create policy "Only authenticated users can access tiendas table." on public.tiendas for all to authenticated using (true);
+
+-- Enable RLS on empresas table
+alter table public.empresas enable row level security;
+-- Create a policy that grants only authenticated access to the empresas table
+create policy "Only authenticated users can access empresas table." on public.empresas for all to authenticated using (true);
+
+-- Enable RLS on empleados_tiendas table
+alter table public.empleados_tiendas enable row level security;
+-- Create a policy that grants only authenticated access to the empleados_tiendas table
+create policy "Only authenticated users can access empleados_tiendas table." on public.empleados_tiendas for all to authenticated using (true);
+
+-- Enable RLS on paises table
+alter table public.paises enable row level security;
+-- Create a policy that grants only authenticated access to the paises table
+create policy "Only authenticated users can access paises table." on public.paises for all to authenticated using (true);
+
+-- Enable RLS on telefonos table
+alter table public.telefonos enable row level security;
+-- Create a policy that grants only authenticated access to the telefonos table
+create policy "Only authenticated users can access telefonos table." on public.telefonos for all to authenticated using (true);
+
+-- Enable RLS on emails table
+alter table public.emails enable row level security;
+-- Create a policy that grants only authenticated access to the emails table
+create policy "Only authenticated users can access emails table." on public.emails for all to authenticated using (true);
+
+-- Enable RLS on ofertas_aplicadas table
+alter table public.ofertas_aplicadas enable row level security;
+-- Create a policy that grants only authenticated access to the ofertas_aplicadas table
+create policy "Only authenticated users can access ofertas_aplicadas table." on public.ofertas_aplicadas for all to authenticated using (true);
+
+-- Enable RLS on ofertas_devueltas table
+alter table public.ofertas_devueltas enable row level security;
+-- Create a policy that grants only authenticated access to the ofertas_devueltas table
+create policy "Only authenticated users can access ofertas_devueltas table." on public.ofertas_devueltas for all to authenticated using (true);
