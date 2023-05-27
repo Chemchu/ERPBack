@@ -201,6 +201,10 @@ CREATE TABLE "cierres" (
   "en_uso" boolean NOT NULL
 );
 
+CREATE UNIQUE INDEX ON "ventas" ("id", "empleado_id", "cierre_id");
+
+CREATE UNIQUE INDEX ON "cierres" ("id", "empleado_id", "terminal_id");
+
 ALTER TABLE "pedidos" ADD FOREIGN KEY ("proveedor_id") REFERENCES "proveedores" ("id");
 
 ALTER TABLE "productos_pedidos" ADD FOREIGN KEY ("pedido_id") REFERENCES "pedidos" ("id");
