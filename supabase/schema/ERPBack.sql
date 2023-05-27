@@ -273,7 +273,7 @@ ALTER TABLE "emails" ADD FOREIGN KEY ("id") REFERENCES "proveedores" ("email_id"
 
 ALTER TABLE "telefonos" ADD FOREIGN KEY ("id") REFERENCES "proveedores" ("telefono_id");
 
-ALTER TABLE "ventas" ADD FOREIGN KEY ("cliente_id") REFERENCES "clientes" ("id")
+ALTER TABLE "ventas" ADD FOREIGN KEY ("cliente_id") REFERENCES "clientes" ("id");
 
 -- Enable RLS on clientes table
 alter table public.clientes enable row level security;
