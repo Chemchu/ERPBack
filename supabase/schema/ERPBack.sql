@@ -422,7 +422,7 @@ declare
   email_id uuid;
   new_id uuid;
 begin
-  new_id := uuid_generate_v4();
+  new_id := gen_random_uuid();
 
   insert into emails (id, entidad_id, valor) values (new_id, NEW.id, NEW.email)
   returning id into email_id;
