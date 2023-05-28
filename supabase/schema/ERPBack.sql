@@ -425,7 +425,7 @@ begin
   new_id := uuid_generate_v4();
 
   insert into emails (id, entidad_id, valor) values (new_id, NEW.id, NEW.email)
-  returning id into email_id
+  returning id into email_id;
   IF NOT EXISTS (SELECT 1 FROM public.empleados) THEN
     INSERT INTO public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
     VALUES (NEW.id, 'Admin', 'Admin', email_id, 'Administrador', 'Administrador', 'Administrador');
