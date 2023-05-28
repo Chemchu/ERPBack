@@ -325,6 +325,10 @@ alter table public.terminales_de_ventas enable row level security;
 create policy "Only authenticated users can access terminales_de_ventas table." on public.terminales_de_ventas for all to authenticated using (true);
 
 -- Bucket policies
+insert into storage.buckets
+  (id, name)
+values
+  ('avatars', 'avatars');
 (bucket_id = 'avatars'::text)
 
 
@@ -339,33 +343,6 @@ create policy "Los empleados pueden insertar en sus propios perfiles." on emplea
 
 create policy "Los usuarios pueden actualizar sus propios perfiles." on empleados
   for update using (auth.uid() = id);
-
-create function public.handle_new_user()
-returns trigger as $$
-declare 
-  email_id uuid;
-  new_id uuid;
-begin
-  new_id := uuid_generate_v4();
-
-  insert into emails (id, entidad_id, valor) values (new_id, NEW.id, NEW.email)
-  returning id into email_id
-  IF NOT EXISTS (SELECT 1 FROM public.empleados) THEN
-    INSERT INTO public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
-    VALUES (NEW.id, 'Admin', 'Admin', email_id, 'Administrador', 'Administrador', 'Administrador');
-  ELSE
-    insert into public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
-    values (new.id, new.raw_user_meta_data->>'nombre'::TEXT, new.raw_user_meta_data->>'apellidos'::TEXT, email_id, new.raw_user_meta_data->>'rol'::TEXT,
-    new.raw_user_meta_data->>'username'::TEXT, new.raw_user_meta_data->>'dni'::TEXT);
-  END if;
-  return new;
-end;
-$$ language plpgsql security definer;
-CREATE TRIGGER on_auth_user_created
-    AFTER INSERT
-    ON auth.users
-    FOR EACH ROW
-    EXECUTE FUNCTION public.handle_new_user();
 
 -- Enable RLS on proveedores table
 alter table public.proveedores enable row level security;
@@ -438,3 +415,30 @@ create policy "Only authenticated users can access ofertas_aplicadas table." on 
 alter table public.ofertas_devueltas enable row level security;
 -- Create a policy that grants only authenticated access to the ofertas_devueltas table
 create policy "Only authenticated users can access ofertas_devueltas table." on public.ofertas_devueltas for all to authenticated using (true);
+
+create function public.handle_new_user()
+returns trigger as $$
+declare 
+  email_id uuid;
+  new_id uuid;
+begin
+  new_id := uuid_generate_v4();
+
+  insert into emails (id, entidad_id, valor) values (new_id, NEW.id, NEW.email)
+  returning id into email_id
+  IF NOT EXISTS (SELECT 1 FROM public.empleados) THEN
+    INSERT INTO public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
+    VALUES (NEW.id, 'Admin', 'Admin', email_id, 'Administrador', 'Administrador', 'Administrador');
+  ELSE
+    insert into public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
+    values (new.id, new.raw_user_meta_data->>'nombre'::TEXT, new.raw_user_meta_data->>'apellidos'::TEXT, email_id, new.raw_user_meta_data->>'rol'::TEXT,
+    new.raw_user_meta_data->>'username'::TEXT, new.raw_user_meta_data->>'dni'::TEXT);
+  END if;
+  return new;
+end;
+$$ language plpgsql security definer;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT
+    ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_new_user();
