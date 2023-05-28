@@ -227,19 +227,12 @@ ALTER TABLE "terminales_de_ventas" ADD FOREIGN KEY ("tienda_id") REFERENCES "tie
 
 ALTER TABLE "empleados" ADD FOREIGN KEY ("pais_id") REFERENCES "paises" ("id");
 
-ALTER TABLE "telefonos" ADD FOREIGN KEY ("entidad_id") REFERENCES "tiendas" ("id");
-
-ALTER TABLE "emails" ADD FOREIGN KEY ("entidad_id") REFERENCES "tiendas" ("id");
-
 ALTER TABLE "cierres" ADD FOREIGN KEY ("terminal_id") REFERENCES "terminales_de_ventas" ("id");
 
 ALTER TABLE "ventas" ADD FOREIGN KEY ("cierre_id") REFERENCES "cierres" ("id");
 
 ALTER TABLE "productos_vendidos" ADD FOREIGN KEY ("venta_id") REFERENCES "ventas" ("id");
 
-ALTER TABLE "emails" ADD FOREIGN KEY ("id") REFERENCES "empleados" ("email_id");
-
-ALTER TABLE "telefonos" ADD FOREIGN KEY ("id") REFERENCES "empleados" ("telefono_id");
 
 ALTER TABLE "empleados_tiendas" ADD FOREIGN KEY ("empleado_id") REFERENCES "empleados" ("id");
 
@@ -268,10 +261,6 @@ ALTER TABLE "ofertas" ADD FOREIGN KEY ("producto_id") REFERENCES "productos" ("i
 ALTER TABLE "productos_mermados" ADD FOREIGN KEY ("producto_id") REFERENCES "productos" ("id");
 
 ALTER TABLE "productos_vendidos" ADD FOREIGN KEY ("producto_id") REFERENCES "productos" ("id");
-
-ALTER TABLE "emails" ADD FOREIGN KEY ("id") REFERENCES "proveedores" ("email_id");
-
-ALTER TABLE "telefonos" ADD FOREIGN KEY ("id") REFERENCES "proveedores" ("telefono_id");
 
 ALTER TABLE "ventas" ADD FOREIGN KEY ("cliente_id") REFERENCES "clientes" ("id");
 
@@ -424,7 +413,7 @@ declare
 begin
   new_id := gen_random_uuid();
 
-  insert into emails (id, entidad_id, valor) values (new_id, NEW.id, NEW.email)
+  insert into public.emails (id, entidad_id, valor) values (new_id, NEW.id, NEW.email)
   returning id into email_id;
   IF NOT EXISTS (SELECT 1 FROM public.empleados) THEN
     INSERT INTO public.empleados (id, nombre, apellidos, email_id, rol, username, nif)
