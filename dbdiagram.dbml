@@ -1,0 +1,263 @@
+// DONE
+Table "productos" {
+  "id" uuid [pk, not null]
+  "nombre" text [unique, not null]
+  "familia" text [not null]
+  "iva" numeric [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+// DONE
+Table "productos_en_tienda" {
+  "id" uuid [pk, not null]
+  "precio_compra" numeric [not null]
+  "precio_venta" numeric [not null]
+  "cantidad" int4 [not null]
+  "alta" bool [not null]
+  "producto_id" uuid [not null]
+  "tienda_id" uuid [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+
+  indexes {
+    (producto_id, tienda_id) [unique]
+  }
+}
+
+// DONE
+Table "codigos_barras" {
+  "codigo" text [not null]
+  "producto_id" uuid [not null]
+  "cantidad" int4 [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+
+  indexes {
+    (codigo, producto_id) [unique]
+  }
+}
+
+// TODO
+Table "ofertas" {
+  "id" uuid [pk, not null]
+  "nombre" text [not null]
+  "descripcion" text
+  // "producto_tienda_id" uuid [not null]
+  "fecha_inicio" date [not null]
+  "fecha_fin" date [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+
+  // indexes {
+  //   (producto_tienda_id) [unique]
+  // }
+}
+
+// DONE
+Table "tiendas" {
+  "id" uuid [pk, not null]
+  "nombre" text [unique, not null]
+  "empresa_id" uuid [not null]
+  "direccion_id" uuid [unique]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "productos_ventas" {
+  "producto_tienda_id" uuid [not null]
+  "venta_id" uuid [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+
+  indexes {
+    (producto_tienda_id, venta_id) [pk]
+  }
+}
+
+Table "ventas" {
+  "id" uuid [pk, not null]
+  "numero_factura" text [unique, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "productos_mermas" {
+  "id" uuid [pk, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "mermas" {
+  "id" uuid [pk, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "productos_devoluciones" {
+  "id" uuid [pk, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "devoluciones" {
+  "id" uuid [pk, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "proveedores" {
+  "id" uuid [pk, not null]
+  "nombre" text [not null]
+  "nif" text [unique, not null]
+  "email_id" uuid [unique]
+  "telefono_id" uuid [unique]
+  "direccion_id" uuid
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "productos_pedidos" {
+  "id" uuid [pk, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "pedidos" {
+  "id" uuid [pk, not null]
+  "numero_factura" text [unique, not null]
+  "fecha_pedido" date [not null]
+  "fecha_entrega" date [not null]
+  "estado" text [not null]
+  "observaciones" text
+  "proveedor_id" uuid [not null]
+  "tienda_id" uuid [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+// Table "historia_pedido" {
+// }
+
+Table "clientes" {
+  "id" uuid [pk, not null]
+  "nombre" text [not null]
+  "apellidos" text [not null]
+  "nif" text [unique, not null]
+  "direccion_id" uuid [unique]
+  "email_id" uuid [unique]
+  "telefono_id" uuid [unique]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "direcciones" {
+  "id" uuid [pk, not null]
+  "calle" text [not null]
+  "numero" text [not null]
+  "piso" text
+  "puerta" text
+  "codigo_postal" text [not null]
+  "ciudad" text [not null]
+  "provincia" text [not null]
+  "pais" text [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+// DONE
+Table "emails" {
+  "id" uuid [pk, not null]
+  "email" text [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+// DONE
+Table "telefonos" {
+  "id" uuid [pk, not null]
+  "telefono" text [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+// DONE
+Table "empleados" {
+  "id" uuid [pk, not null]
+  "username" text [unique, not null]
+  "nombre" text [not null]
+  "apellidos" text [not null]
+  "nif" text [unique, not null]
+  "rol" text [not null]
+  "descripcion" text
+  "fecha_nacimiento" date [not null]
+  "fecha_contratacion" date [not null]
+  "fecha_baja" date 
+  "email_id" uuid [unique]
+  "telefono_id" uuid [unique]
+  "direccion_id" uuid
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+// DONE
+Table "cierres" {
+  "id" uuid [pk, not null]
+  "dinero_inicial" numeric [not null]
+  "dinero_real" numeric [not null]
+  "dinero_retirado" numeric [not null]
+  "dinero_dejado_en_caja" numeric [not null]
+  "fecha_apertura" date [not null]
+  "fecha_cierre" date [not null]
+  "en_uso" bool [not null]
+  "terminal_id" uuid [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+// DONE
+Table "cajas" {
+  "id" uuid [pk, not null]
+  "nombre" text [unique, not null]
+  "tienda_id" uuid [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "inventario" {
+  "id" uuid [pk, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "empresas" {
+  "id" uuid [pk, not null]
+  "nombre" text [unique, not null]
+  "nif" text [unique, not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+}
+
+Table "productos_inventarios" {
+  "id" uuid [pk, not null]
+  // "producto_id" uuid [not null]
+  // "inventario_id" uuid [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+
+  indexes {
+    (producto_id, inventario_id) [unique]
+  }
+}
+
+Table "tiendas_empleados" {
+  "id" uuid [pk, not null]
+  // "tienda_id" uuid [not null]
+  // "empleado_id" uuid [not null]
+  "created_at" timestamptz [not null]
+  "updated_at" timestamptz [not null]
+
+  indexes {
+    (tienda_id, empleado_id) [unique]
+  }
+}

@@ -1,0 +1,15 @@
+Table "audit_logs" {
+  "id" uuid [pk, not null]
+  "tabla" text [not null]
+  "accion" text [not null]
+  "registro_id" uuid [not null]
+  "registro_before" jsonb [not null]
+  "registro_after" jsonb [not null]
+  "usuario_id" uuid [not null]
+  "ip" text [not null]
+  "navegador" text [not null]
+  "sistema_operativo" text [not null]
+  "dispositivo" text [not null]
+  "fecha" timestamptz [not null]
+  "created_at" timestamptz [not null]
+}
