@@ -3,22 +3,22 @@ Table "productos" {
   "id" uuid [pk, not null]
   "nombre" text [unique, not null]
   "familia" text [not null]
-  "iva" numeric [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "iva" numeric [not null, check: "iva" > 0 && "iva" <= 100]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
 Table "productos_en_tienda" {
   "id" uuid [pk, not null]
-  "precio_compra" numeric [not null]
-  "precio_venta" numeric [not null]
-  "cantidad" int4 [not null]
-  "alta" bool [not null]
-  "producto_id" uuid [not null]
-  "tienda_id" uuid [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "precio_compra" numeric [not null, check: "precio_compra" > 0]
+  "precio_venta" numeric [not null, check: "precio_venta" > 0]
+  "cantidad" int4 [not null, check: "cantidad" > 0]
+  "alta" bool [not null, default: true]
+  "producto_id" uuid [not null, ref: > productos.id]
+  "tienda_id" uuid [not null, ref: > tiendas.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 
   indexes {
     (producto_id, tienda_id) [unique]
@@ -28,84 +28,122 @@ Table "productos_en_tienda" {
 // DONE
 Table "codigos_barras" {
   "codigo" text [not null]
-  "producto_id" uuid [not null]
-  "cantidad" int4 [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "producto_id" uuid [not null, ref: > productos.id]
+  "cantidad" int4 [not null, check: "cantidad" > 0]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 
   indexes {
-    (codigo, producto_id) [unique]
+    (codigo, producto_id) [pk]
   }
 }
 
-// TODO
+// TODO: pensar en un mejor modelo para manejar las ofertas
 Table "ofertas" {
   "id" uuid [pk, not null]
   "nombre" text [not null]
   "descripcion" text
-  // "producto_tienda_id" uuid [not null]
+  "producto_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
+  "cantidad_para_oferta" int4 [not null]
+  "precio_oferta" numeric [not null]
   "fecha_inicio" date [not null]
-  "fecha_fin" date [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
-
-  // indexes {
-  //   (producto_tienda_id) [unique]
-  // }
+  "fecha_fin" date 
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
 Table "tiendas" {
   "id" uuid [pk, not null]
   "nombre" text [unique, not null]
-  "empresa_id" uuid [not null]
-  "direccion_id" uuid [unique]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "empresa_id" uuid [not null, ref: > empresas.id]
+  "direccion_id" uuid [unique, ref: > direcciones.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
 Table "productos_ventas" {
-  "producto_tienda_id" uuid [not null]
-  "venta_id" uuid [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "producto_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
+  "venta_id" uuid [not null, ref: > ventas.id]
+  "cantidad_vendida" int4 [not null, check: "cantidad_vendida" > 0]
+  "iva" numeric [not null, check: "iva" > 0 && "iva" <= 100]
+  "precio_compra" numeric [not null, check: "precio_compra" > 0]
+  "precio_venta" numeric [not null , check: "precio_venta" > 0]
+  "descuento" numeric [not null, default: 0, check: "descuento" >= 0 && "descuento" <= 100]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 
   indexes {
     (producto_tienda_id, venta_id) [pk]
   }
 }
 
+// DONE
 Table "ventas" {
   "id" uuid [pk, not null]
   "numero_factura" text [unique, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "empleados_id" uuid [not null, ref: > empleados.id]
+  "clientes_id" uuid [not null, ref: > clientes.id]
+  "pagado_efectivo" numeric [not null, check: "pagado_efectivo" >= 0]
+  "pagado_tarjeta" numeric [not null, check: "pagado_tarjeta" >= 0]
+  "cierre_id" uuid [not null, ref: > cierres.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
 Table "productos_mermas" {
-  "id" uuid [pk, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "merma_id" uuid [not null, ref: > mermas.id]
+  "producto_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
+  "iva" numeric [not null, check: "iva" > 0 && "iva" <= 100]
+  "precio_compra" numeric [not null, check: "precio_compra" > 0]
+  "precio_venta" numeric [not null, check: "precio_venta" > 0]
+  "cantidad" int4 [not null, check: "cantidad" > 0]
+  "motivo" text [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
+
+  indexes {
+    (merma_id, producto_tienda_id) [pk]
+  }
 }
 
+// DONE
 Table "mermas" {
   "id" uuid [pk, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "empleados_id" uuid [not null, ref: > empleados.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
 Table "productos_devoluciones" {
-  "id" uuid [pk, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "producto_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
+  "devolucion_id" uuid [not null, ref: > devoluciones.id]
+  "iva" numeric [not null, check: "iva" > 0 && "iva" <= 100]
+  "precio_compra" numeric [not null, check: "precio_compra" > 0]
+  "precio_venta" numeric [not null, check: "precio_venta" > 0]
+  "cantidad" int4 [not null, check: "cantidad" > 0]
+  "motivo" text [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
+
+  indexes {
+    (producto_tienda_id, devolucion_id) [pk]
+  }
 }
 
+// DONE
 Table "devoluciones" {
   "id" uuid [pk, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "empleados_id" uuid [not null, ref: > empleados.id]
+  "clientes_id" uuid [not null, ref: > clientes.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
 Table "proveedores" {
   "id" uuid [pk, not null]
   "nombre" text [not null]
@@ -113,32 +151,42 @@ Table "proveedores" {
   "email_id" uuid [unique]
   "telefono_id" uuid [unique]
   "direccion_id" uuid
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
+// La tienda a la que va el producto es la tienda del pedido --> Hacer un trigger para que cuando se cree un pedido 
+// se cree un producto_pedido para cada producto de ese pedido y actualice productos_en_tienda
 Table "productos_pedidos" {
-  "id" uuid [pk, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "producto_id" uuid [not null]
+  "pedido_id" uuid [not null]
+  "precio_compra" numeric [not null, check: "precio_compra" > 0]
+  "cantidad_pedida" int4 [not null, check: "cantidad" > 0]
+  "cantidad_recibida" int4 [not null, check: "cantidad" > 0]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
+
+  indexes {
+    (producto_id, pedido_id) [pk]
+  }
 }
 
+// DONE
 Table "pedidos" {
   "id" uuid [pk, not null]
   "numero_factura" text [unique, not null]
-  "fecha_pedido" date [not null]
+  "fecha_pedido" date [not null, not null]
   "fecha_entrega" date [not null]
   "estado" text [not null]
   "observaciones" text
   "proveedor_id" uuid [not null]
   "tienda_id" uuid [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
-// Table "historia_pedido" {
-// }
-
+// DONE
 Table "clientes" {
   "id" uuid [pk, not null]
   "nombre" text [not null]
@@ -147,10 +195,11 @@ Table "clientes" {
   "direccion_id" uuid [unique]
   "email_id" uuid [unique]
   "telefono_id" uuid [unique]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
 Table "direcciones" {
   "id" uuid [pk, not null]
   "calle" text [not null]
@@ -161,24 +210,25 @@ Table "direcciones" {
   "ciudad" text [not null]
   "provincia" text [not null]
   "pais" text [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
 Table "emails" {
   "id" uuid [pk, not null]
-  "email" text [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "email" text [not null, check: "email" ~ '^.+@.+\..+$']
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
 Table "telefonos" {
   "id" uuid [pk, not null]
-  "telefono" text [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "prefijo" text [not null]
+  "telefono" text [not null, check: "telefono" ~ '^[0-9]+$']
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
@@ -190,29 +240,29 @@ Table "empleados" {
   "nif" text [unique, not null]
   "rol" text [not null]
   "descripcion" text
-  "fecha_nacimiento" date [not null]
+  "fecha_nacimiento" date [not null, check: "fecha_nacimiento" < 'now()']
   "fecha_contratacion" date [not null]
-  "fecha_baja" date 
-  "email_id" uuid [unique]
+  "fecha_baja" date [check: "fecha_baja" > 'now()']
+  "email_id" uuid [unique, not null]
   "telefono_id" uuid [unique]
   "direccion_id" uuid
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
 Table "cierres" {
   "id" uuid [pk, not null]
-  "dinero_inicial" numeric [not null]
-  "dinero_real" numeric [not null]
-  "dinero_retirado" numeric [not null]
-  "dinero_dejado_en_caja" numeric [not null]
+  "dinero_inicial" numeric [not null, check: "dinero_inicial" > 0]
+  "dinero_real" numeric [not null, check: "dinero_real" > 0]
+  "dinero_retirado" numeric [not null, check: "dinero_retirado" > 0]
+  "dinero_dejado_en_caja" numeric [not null, check: "dinero_dejado_en_caja" > 0]
   "fecha_apertura" date [not null]
   "fecha_cierre" date [not null]
   "en_uso" bool [not null]
-  "terminal_id" uuid [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "caja_id" uuid [not null, ref: > cajas.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
@@ -220,42 +270,54 @@ Table "cajas" {
   "id" uuid [pk, not null]
   "nombre" text [unique, not null]
   "tienda_id" uuid [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
+Table "productos_inventarios" {
+  "producto_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
+  "inventario_id" uuid [not null, ref: > inventario.id]
+  "cantidad_teorica" int4 [not null]
+  "cantidad_real" int4 [not null, check: "cantidad_real" >= 0]
+  "empleado_id" uuid [not null, ref: > empleados.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
+
+  indexes {
+    (producto_tienda_id, inventario_id) [pk]
+  }
+}
+
+// DONE
 Table "inventario" {
   "id" uuid [pk, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "descripcion" text [not null]
+  "inventario_cerrado" bool [not null, default: false]
+  "fecha_inicio" date [not null]
+  "fecha_fin" date
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
+// DONE
 Table "empresas" {
   "id" uuid [pk, not null]
   "nombre" text [unique, not null]
   "nif" text [unique, not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "ceo_id" uuid [not null, ref: > empleados.id]
+  "fecha_creacion" date [not null, check: "fecha_creacion" < 'now()']
+  "razon_social" text [not null]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
-Table "productos_inventarios" {
-  "id" uuid [pk, not null]
-  // "producto_id" uuid [not null]
-  // "inventario_id" uuid [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
-
-  indexes {
-    (producto_id, inventario_id) [unique]
-  }
-}
-
+// DONE
 Table "tiendas_empleados" {
-  "id" uuid [pk, not null]
-  // "tienda_id" uuid [not null]
-  // "empleado_id" uuid [not null]
-  "created_at" timestamptz [not null]
-  "updated_at" timestamptz [not null]
+  "tienda_id" uuid [not null, ref: > tiendas.id]
+  "empleado_id" uuid [not null, ref: > empleados.id]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 
   indexes {
     (tienda_id, empleado_id) [unique]
