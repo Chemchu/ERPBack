@@ -48,11 +48,11 @@ Table "ofertas" {
   "id" uuid [pk, not null]
   "nombre" text [not null]
   "descripcion" text
-  "producto_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
   "cantidad_para_oferta" int4 [not null]
   "precio_oferta" numeric [not null]
   "fecha_inicio" date [not null]
   "fecha_fin" date 
+  "producto_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
   "created_at" timestamptz [not null, default: `now()`]
   "updated_at" timestamptz [not null, default: `now()`]
 }
@@ -87,6 +87,30 @@ Table "productos_ventas" {
   indexes {
     (producto_tienda_id, venta_id) [pk]
   }
+}
+
+// TODO
+Table "ofertas_ventas" {
+  "id" uuid [pk, not null]
+  "producto_en_tienda_id" uuid [not null, ref: > productos_en_tienda.id]
+  "venta_id" uuid [not null, ref: > ventas.id]
+  "oferta_id" uuid [not null, ref: > ofertas.id]
+  "cantidad_de_ofertas_aplicadas" int4 [not null, note: "Indica la cantidad de veces que se ha aplicado la oferta"]
+  "cantidad_producto_por_oferta" int4 [not null, note: "Indica la cantidad de productos que se deben comprar para aplicar la oferta"]
+  "fecha_inicio" date [not null]
+  "fecha_fin" date 
+  // "cantidad_producto_por_oferta" int4 [not null, check: "cantidad_vendida" > 0]
+  "precio_por_oferta" numeric [not null, note: "Indica el precio de una oferta aplicada"]
+  "iva" numeric [not null, note: "IVA del producto en el momento de la venta"]
+  // "iva" numeric [not null, check: "iva" > 0 && "iva" <= 100]
+  "precio_compra" numeric [not null, note: "Precio de compra del producto en el momento de la venta"]
+  // "precio_compra" numeric [not null, check: "precio_compra" > 0]
+  "precio_venta" numeric [not null, note: "Precio de venta del producto en el momento de la venta"]
+  // "precio_venta" numeric [not null , check: "precio_venta" > 0]
+  "descuento" numeric [not null, default: 0, note: "Descuento aplicado al producto en el momento de la venta. Se mide en porcentaje"]
+  // "descuento" numeric [not null, default: 0, check: "descuento" >= 0 && "descuento" <= 100]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [not null, default: `now()`]
 }
 
 // DONE
